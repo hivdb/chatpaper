@@ -1,0 +1,12 @@
+The background knowledge docx file helps you understand the markdown file.
+Please answer my questions using the markdown file.
+
+answer the questions belonw one by one.
+use this format
+
+1. print each question
+2. then print your answer.
+
+"""
+{questions}
+"""

@@ -1,0 +1,33 @@
+# See below is my request
+
+Given a list of questions in "Questions" section below,
+try to answer them one by one using the paper content quoted in triple backticks.
+
+## For each question:
+
+Step 1: get the question, store as "question".
+Step 2: answer the question, store as 'answer'.
+Step 3: explain how you found the answer from the content in details, store as 'explain'.
+Step 4: cite at least two sentences where you find the information, store as 'sentences'.
+Step 5: rate your confidence in percentage for your "answer", store as 'confidence'.
+Step 6: format your answer as follows
+
+"""
+Question: <question>
+
+Answer: <answer>
+
+Explain: <explain>
+
+Sentences: <sentences>
+
+Confidence: <your confidence>
+"""
+
+Make sure you answer all the questions.
+
+After you answered all the questions, show the total number of questions in format "#Questions <question number>"
+
+## Questions:
+
+{question}

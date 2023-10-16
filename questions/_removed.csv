@@ -1,0 +1,5 @@
+id,question,main category,sub category,remove reason
+2501,What methods were used for HIV sequencing?,Sequence information,Sequencing method,not a clear question
+4401,How many different regimens were received by individuals in the paper?,Treatment information,Regimen,
+4402,How many different regimens were received by individuals in the paper who underwent sequencing?,Treatment information,Regimen,
+2201,Does the paper report lists of mutations for sequenced HIV isolates?,Sequence information,Mutation,Individual or one group

@@ -1,0 +1,18 @@
+id,question
+2,Does the paper contain/report HIV-1 sequences?
+3,Does the paper contain/report HIV-2 sequences?
+5,Is this a review paper?
+6,Does the paper contain GenBank accession numbers?
+7,What are the Genbank accession numbers?
+8,In which country were the patients recruited?
+9,In which year were the sequence samples obtained?
+10,When was the study conducted?
+11,Were the samples obtained from plasma?
+12,Is the paper using NGS sequencing method?
+13,Does the paper have phenotypic/in vitro susceptibility test results?
+14,How many sequences were obtained from ARV-naive patients?
+15,How many sequences were obtained from ARV-experienced patients?
+16,Does the study report data from clinical trials?
+18,How many patients are described in the study?
+19,How many sequences are reported in the study?
+20,Which genes were describe in the study?

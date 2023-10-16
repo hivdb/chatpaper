@@ -1,0 +1,280 @@
+---
+title: "GPT-4 vs Claude"
+output: html_document
+---
+
+Report generated at: `r format(as.POSIXct(Sys.time(), format = "%y%m%d %H:%M"), "%m/%d/%Y %I:%M %p")` PDT
+
+
+```{r setup, include=FALSE}
+
+library(dplyr)
+library(tidyr)
+library(stringr)
+
+library(plotly)
+library(ggplot2)
+library(gridExtra)
+library(ggbeeswarm)
+library(viridis)
+library(ggpubr)
+library(cowplot)
+library(grid)
+library(knitr)
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  dev = c("svg")
+)
+
+source("./lib/datatables.R", chdir = TRUE)
+```
+
+## Basic summary
+
+### Total number of agree with Human
+
+```{r agreement}
+
+df = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/summarize_agreement.csv')
+styledDT(df)
+```
+
+### Agree with Human only
+
+```{r agree-detail}
+
+df = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/summarize_agree_detail.csv')
+df = df %>% select(1, 2)
+styledDT(df)
+```
+
+## Human answer (Ground truth) and AI agree with Human
+
+### Boolean questions
+
+```{r gt-bool}
+
+df = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/summarize_by_question.csv', check.names = FALSE)
+human_result = read.csv('../papers/analysis/summarize_ground_truth.csv', check.names = FALSE)
+
+df = inner_join(df, human_result)
+
+df = df %>%
+  filter(
+    question_type == "Boolean"
+  ) %>%
+  rename(
+    "ID"="question_id",
+    ) %>%
+  select(
+    "ID", "question",
+    "# GT_Yes", "% GT_Yes",
+    "# gpt-4_base", "% gpt-4_base",
+    "# claude_base", "% claude_base") %>%
+  arrange(
+    "ID", "question",
+    "# GT_Yes", "% GT_Yes",
+    "# gpt-4_base", "% gpt-4_base",
+    "# claude_base", "% claude_base") %>%
+  rename(
+    "# Yes<sub>H<sub>"="# GT_Yes",
+    "% Yes<sub>H<sub>"="% GT_Yes",
+    "# C<sub>gpt4<sub>"="# gpt-4_base",
+    "% C<sub>gpt4<sub>"="% gpt-4_base",
+    "# C<sub>claude<sub>"="# claude_base",
+    "% C<sub>claude<sub>"="% claude_base"
+  )
+styledDT(df, 60)
+```
+
+### Numerical questions
+```{r gt-num}
+
+df = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/summarize_by_question.csv', check.names = FALSE)
+human_result = read.csv('../papers/analysis/summarize_ground_truth.csv', check.names = FALSE)
+
+df = inner_join(df, human_result)
+
+df = df %>%
+  filter(
+    question_type == "Numerical"
+  ) %>%
+  rename(
+    "ID"="question_id",
+    ) %>%
+  select(
+    "ID", "question",
+    "# GT_nonzero", "% GT_nonzero",
+    "# gpt-4_base", "% gpt-4_base",
+    "# claude_base", "% claude_base") %>%
+  arrange(
+    "ID", "question",
+    "# GT_nonzero", "% GT_nonzero",
+    "# gpt-4_base", "% gpt-4_base",
+    "# claude_base", "% claude_base") %>%
+  rename(
+    "# Nonzero<sub>H<sub>"="# GT_nonzero",
+    "% Nonzero<sub>H<sub>"="% GT_nonzero",
+    "# C<sub>gpt4<sub>"="# gpt-4_base",
+    "% C<sub>gpt4<sub>"="% gpt-4_base",
+    "# C<sub>claude<sub>"="# claude_base",
+    "% C<sub>claude<sub>"="% claude_base"
+  )
+
+styledDT(df, 60)
+```
+
+### Categorical questions
+```{r gt-cat}
+
+df = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/summarize_by_question.csv', check.names = FALSE)
+human_result = read.csv('../papers/analysis/summarize_ground_truth.csv', check.names = FALSE)
+
+df = inner_join(df, human_result)
+
+df = df %>%
+  filter(
+    question_type == "Categorical"
+  ) %>%
+  rename(
+    "ID"="question_id",
+    ) %>%
+  select(
+    "ID", "question",
+    "# GT_nonzero", "% GT_nonzero",
+    "# gpt-4_base", "% gpt-4_base",
+    "# claude_base", "% claude_base") %>%
+  arrange(
+    "ID", "question",
+    "# GT_nonzero", "% GT_nonzero",
+    "# gpt-4_base", "% gpt-4_base",
+    "# claude_base", "% claude_base") %>%
+  rename(
+    "# Nonzero<sub>H<sub>"="# GT_nonzero",
+    "% Nonzero<sub>H<sub>"="% GT_nonzero",
+    "# C<sub>gpt4<sub>"="# gpt-4_base",
+    "% C<sub>gpt4<sub>"="% gpt-4_base",
+    "# C<sub>claude<sub>"="# claude_base",
+    "% C<sub>claude<sub>"="% claude_base"
+  )
+styledDT(df, 60)
+```
+
+## Boolean questions, Human x AI agreement
+
+```{r base-bool}
+df = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/gpt-4_base.compare.bool.csv', check.names = FALSE)
+df2 = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/claude_base.compare.bool.csv', check.names = FALSE)
+
+df = df %>%
+  rename(
+    "ID"="question_id") %>%
+  rename("Y<sub>H</sub>Y<sub>gpt4</sub>"='YY') %>%
+  rename("Y<sub>H</sub>N<sub>gpt4</sub>"='YN') %>%
+  rename("N<sub>H</sub>Y<sub>gpt4</sub>"='NY') %>%
+  rename("N<sub>H</sub>N<sub>gpt4</sub>"='NN')
+
+df2 = df2 %>%
+  rename(
+    "ID"="question_id") %>%
+  rename("Y<sub>H</sub>Y<sub>claude</sub>"='YY') %>%
+  rename("Y<sub>H</sub>N<sub>claude</sub>"='YN') %>%
+  rename("N<sub>H</sub>Y<sub>claude</sub>"='NY') %>%
+  rename("N<sub>H</sub>N<sub>claude</sub>"='NN')
+
+df = df %>% inner_join(df2, by=c('ID'='ID', 'question'='question'))
+
+styledDT(df, 60)
+
+```
+
+## Numerical questions, Human x AI agreement
+
+```{r base-num}
+df = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/gpt-4_base.compare.num.csv', check.names = FALSE)
+df2 = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/claude_base.compare.num.csv', check.names = FALSE)
+
+
+df = df %>%
+  rename(
+    "ID"="question_id",
+    "Agree\n<sub>gpt4</sub>"="Agree",
+    "Disagree\n<sub>gpt4</sub>"="Disagree",
+    "NA<sub>H</sub>\n!NA<sub>gpt4</sub>"="human_NA",
+    "!NA<sub>H</sub>\nNA<sub>gpt4</sub>"="AI_NA")
+df2 = df2 %>%
+  rename(
+    "ID"="question_id",
+    "Agree\n<sub>claude</sub>"="Agree",
+    "Disagree\n<sub>claude</sub>"="Disagree",
+    "NA<sub>H</sub>\n!NA<sub>claude</sub>"="human_NA",
+    "!NA<sub>H</sub>\nNA<sub>claude</sub>"="AI_NA")
+
+df = df %>% inner_join(df2, by=c('ID'='ID', 'question'='question'))
+
+styledDT(df, 60)
+
+```
+
+
+## Categorical questions, Human x AI agreement
+
+
+```{r base-cat}
+df = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/gpt-4_base.compare.cat.csv', check.names = FALSE)
+df2 = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/claude_base.compare.cat.csv', check.names = FALSE)
+
+df = df %>%
+  rename(
+    "ID"="question_id",
+    "Agree\n<sub>gpt4</sub>"="Agree",
+    "Partial Agree\n<sub>gpt4</sub>"="Partial agree",
+    "Disagree\n<sub>gpt4</sub>"="Disagree",
+    "NA<sub>H</sub>\n!NA<sub>gpt4</sub>"="human_NA",
+    "!NA<sub>H</sub>\nNA<sub>gpt4</sub>"="AI_NA")
+
+df2 = df2 %>%
+  rename(
+    "ID"="question_id",
+    "Agree\n<sub>claude</sub>"="Agree",
+    "Partial Agree\n<sub>claude</sub>"="Partial agree",
+    "Disagree\n<sub>claude</sub>"="Disagree",
+    "NA<sub>H</sub>\n!NA<sub>claude</sub>"="human_NA",
+    "!NA<sub>H</sub>\nNA<sub>claude</sub>"="AI_NA")
+
+df = df %>% inner_join(df2, by=c('ID'='ID', 'question'='question'))
+
+
+styledDT(df, 60)
+```
+
+## Paper
+
+```{r paper}
+
+df = read.csv('../papers/analysis/GPT-4_vs_Claude/summary/summarize_by_paper.csv', check.names = FALSE)
+
+df = df %>%
+  rename(
+    "# C<sub>gpt4<sub>"="# gpt-4_base",
+    "% C<sub>gpt4<sub>"="% gpt-4_base",
+    "# C<sub>claude<sub>"="# claude_base",
+    "% C<sub>claude<sub>"="% claude_base"
+  )
+
+styledDT(df, 60)
+
+```
+
+## Figure by question
+
+```{r figure-by-question, out.width = '200%'}
+include_graphics("../papers/analysis/GPT-4_vs_Claude/figure/by_question.png")
+```
+
+## Figure by paper
+
+```{r figure-by-paper, out.width = '200%'}
+include_graphics("../papers/analysis/GPT-4_vs_Claude/figure/by_paper.png")
+```

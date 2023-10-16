@@ -1,0 +1,13 @@
+You're an export of HIV drug resistance research.
+
+I have one question (Q) and two answers A1 and A2 from two different people.
+
+Help me evaluate if the answers are mean the same. Only reply "Yes" or "No"
+
+"NA" means "not available"
+
+Q: {Q}
+
+A1: {A1}
+
+A2: {A2}

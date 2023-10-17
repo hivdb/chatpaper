@@ -65,5 +65,5 @@ DEFAULT_OPTIONS = {
     'questions': 'all',
     'embedding?': False,
     'multiple_questions?': True,
-    'cheatsheet?': True,
+    # 'cheatsheet?': False,
 }

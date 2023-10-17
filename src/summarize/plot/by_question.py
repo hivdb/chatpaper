@@ -41,31 +41,49 @@ def plot_by_question(
         for i, j in zip(df_list, data_file_list)
     ]
 
+    # Get the column headers
     df = df_list[0]
 
     for i in df_list[1:]:
-        df = df.merge(i, on='question_id')
-
+        df = df.merge(i, on=['question_id', 'question_type'])
     header = list(df.head())
     # assert (len(header) == 3)
 
-    df = df.sort_values(by=header, ascending=[False]*len(header))
+    df.reset_index(inplace=True)
+    df_grouped = df.sort_values(by=header, ascending=[False]*len(header))
+    del df_grouped['question_type']
+    df_grouped.set_index('question_id', inplace=True)
+    draw_context['df_grouped'] = df_grouped
 
-    draw_context['df_grouped'] = df
+    df_typed = {name: group for name, group in df.groupby('question_type')}
+    for name in df_typed.keys():
+        d = df_typed[name]
+        del d['question_type']
+        d.set_index('question_id', inplace=True)
+        header1 = header[0]
+        header2 = header[1]
+        d['diff'] = d[header1] - d[header2]
+        d = d.sort_values(
+            by=['diff'], ascending=[False])
+        d.drop('diff', axis=1, inplace=True)
+        df_typed[name] = d
+
+    draw_context['df_grouped_by_type'] = df_typed
 
     COLORS = [
-        '#072F5F',
+        # '#072F5F',
         '#1261A0',
         '#3895D3',
         '#58CCED',
-        '#58CCED',
+        '#7ad6f0',
+        '#7ad6f0',
     ]
 
     draw_context['colors'] = COLORS
 
     statistics = {}
 
-    for i, (category, values) in enumerate(df.items()):
+    for i, (category, values) in enumerate(df_grouped.items()):
         statistics[category] = {
             'iqr25': round(values.quantile(0.25) * 100),
             'median': round(values.median() * 100),
@@ -82,22 +100,26 @@ def plot_by_question(
         figure_path / 'grouped_question.png')
     draw_compare_plot(draw_context, split=True)
 
-    draw_context['df_grouped'] = df.sort_values(
-        by=['question_id'], ascending=[True])
     draw_context['figure_path'] = (
-        figure_path / 'ordered_question.png')
-    draw_compare_plot(draw_context)
+        figure_path / 'typed_question.png')
+    draw_compare_plot(draw_context, question_type=True)
 
-    header1 = header[0]
-    header2 = header[1]
-    df['diff'] = df[header1] - df[header2]
-    df = df.sort_values(
-        by=['diff'], ascending=[False])
-    df.drop('diff', axis=1, inplace=True)
-    draw_context['df_grouped'] = df
-    draw_context['figure_path'] = (
-        figure_path / 'ordered_diff.png')
-    draw_compare_plot(draw_context)
+    # draw_context['df_grouped'] = df.sort_values(
+    #     by=['question_id'], ascending=[True])
+    # draw_context['figure_path'] = (
+    #     figure_path / 'ordered_question.png')
+    # draw_compare_plot(draw_context)
+
+    # header1 = header[0]
+    # header2 = header[1]
+    # df['diff'] = df[header1] - df[header2]
+    # df = df.sort_values(
+    #     by=['diff'], ascending=[False])
+    # df.drop('diff', axis=1, inplace=True)
+    # draw_context['df_grouped'] = df
+    # draw_context['figure_path'] = (
+    #     figure_path / 'ordered_diff.png')
+    # draw_compare_plot(draw_context)
 
 
 def group_by_question_id(df):
@@ -105,6 +127,7 @@ def group_by_question_id(df):
     WANTED_COLUMNS = [
         'question_id',
         "agree?",
+        'question_type',
     ]
 
     df = df[WANTED_COLUMNS]
@@ -115,10 +138,10 @@ def group_by_question_id(df):
     df['agree?'] = df['agree?'].str.rstrip('?')
     df['agree?'] = df['agree?'].map({'yes': 1, 'no': 0})
 
-    return df.groupby('question_id').mean()
+    return df.groupby(['question_id', 'question_type']).mean()
 
 
-def draw_compare_plot(draw_context, split=False):
+def draw_compare_plot(draw_context, split=False, question_type=False):
     df_grouped = draw_context['df_grouped']
 
     if split:
@@ -131,6 +154,18 @@ def draw_compare_plot(draw_context, split=False):
                 draw_context, df, axes[idx], max_label, split=True)
         fig.subplots_adjust(hspace=0.5)
         # axes[3, 1].remove()
+
+    elif question_type:
+        fig, axes = plt.subplots(3, 1, figsize=(20, 20))
+        df_grouped = draw_context['df_grouped_by_type']
+        # groups = get_df_group_by_type(df_grouped)
+
+        max_label = 38
+        for idx, (name, df) in enumerate(df_grouped.items()):
+            draw_compare_plot_with_legend(
+                draw_context, df, axes[idx], max_label, split=True,
+                figure_name=name)
+        fig.subplots_adjust(hspace=0.5)
     else:
         fig, ax = plt.subplots(1, 1, figsize=(25, 8))
         draw_compare_plot_with_legend(
@@ -147,7 +182,7 @@ def draw_compare_plot(draw_context, split=False):
 
 
 def draw_compare_plot_with_legend(
-        draw_context, df_grouped, ax, max_label, split=True):
+        draw_context, df_grouped, ax, max_label, split=True, figure_name=None):
 
     # num_bars = len(df_grouped)
     num_groups = len(df_grouped.columns)
@@ -200,13 +235,18 @@ def draw_compare_plot_with_legend(
         for i in labels:
             stat = draw_context['statistics'][i]
             new_labels[i] = (
-                f"{i[:-1] if i[-1] == '?' else i.replace('_', ' ').capitalize()}: "
+                f"{i[:-1] if i[-1] == '?' else i.replace('_', ' ').upper()}: "
                 f"{stat['median']}% ({stat['iqr25']}%, {stat['iqr75']}%)")
 
         ax.legend(handles, [new_labels.get(label, label) for label in labels])
 
     ax.margins(x=0.05)
     ax.set_xlim([0, max_label + 1])
+
+    if figure_name:
+        ax.text(
+            0.95, 1.05, figure_name,
+            transform=ax.transAxes, ha='right', va='bottom', fontsize=12)
 
 
 def get_df_group_list(df_grouped):

@@ -73,46 +73,112 @@ def compare_ai_mode_diff(save_path, data_file_list):
 
     dump_csv(save_path / 'mode_disagree.csv', report)
 
-    get_change_report(save_path, report, question_ids)
+    get_change_report(save_path, grouped, question_ids)
 
     get_top_3_improve(save_path, improve)
     get_top_3_worse(save_path, worse)
 
 
-def get_change_report(save_path, report, question_ids):
+def get_change_report(save_path, grouped, question_ids):
 
     improve_count = defaultdict(int)
     worse_count = defaultdict(int)
+    no_change = defaultdict(int)
 
-    for question_id, ques_list in group_records_by(
-            report, ['question_id']).items():
-        for q in ques_list:
-            agreement = [
-                True if j.lower() == 'yes' else False
-                for i, j in q.items()
-                if i.endswith('agree?') and i != 'same agree?'
-            ]
+    for (paper, question_id), rows in grouped.items():
 
-            if len(agreement) != 2:
-                continue
+        agreement = [
+            True if i['agree?'].lower().startswith('yes') else False
+            for i in rows
+        ]
 
-            if agreement[0] and not agreement[1]:
-                worse_count[question_id] += 1
-            elif not agreement[0] and agreement[1]:
-                improve_count[question_id] += 1
+        if len(agreement) != 2:
+            continue
+
+        if agreement[0] and not agreement[1]:
+            worse_count[question_id] += 1
+        elif not agreement[0] and agreement[1]:
+            improve_count[question_id] += 1
+        elif agreement[0] and agreement[1]:
+            no_change[question_id] += 1
 
     report = []
     for question_id in question_ids:
-        report.append({
+        row = {
             'question_id': question_id,
+            '# no change': no_change.get(question_id, 0),
             '# improve': improve_count.get(question_id, 0),
             '# worse': worse_count.get(question_id, 0),
             '# diff': (
                 improve_count.get(question_id, 0) -
                 worse_count.get(question_id, 0))
-        })
+        }
+        row['# net change'] = row['# improve'] + row['# worse']
+
+        report.append(row)
 
     dump_csv(save_path / 'mode_disagree_summary.csv', report)
+    plot_disagree(save_path / 'mode_disagree_summary.png', report)
+
+
+def plot_disagree(save_path, report):
+    import matplotlib.pyplot as plt
+    from matplotlib.ticker import PercentFormatter
+
+    fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+    report.sort(key=lambda x: x['# no change'] + x['# worse'], reverse=True)
+
+    group_labels = [
+        f'Q{i["question_id"]}'
+        for i in report
+    ]
+
+    bar_positions = []
+    for pos, row in enumerate(report):
+        bar_positions.append(pos)
+        pos = pos - 0.2
+
+        ax.bar(
+            pos,
+            row['# no change'] / 60,
+            width=0.2,
+            color='#1261A0'
+        )
+        ax.bar(
+            pos,
+            row['# worse'] / 60,
+            bottom=row['# no change'] / 60,
+            width=0.2,
+            color='#7B12A1',
+        )
+
+        pos += 0.2
+        ax.bar(
+            pos,
+            row['# no change'] / 60,
+            width=0.2,
+            color='#3895D3'
+        )
+        ax.bar(
+            pos,
+            row['# improve'] / 60,
+            bottom=row['# no change'] / 60,
+            width=0.2,
+            color='#1295A1',
+        )
+
+    ax.set_xticks(bar_positions, group_labels)
+    ax.set_xticklabels(group_labels, rotation=90)
+
+    ax.yaxis.set_major_formatter(PercentFormatter(1))
+
+    ax.set_yticks([0, 0.5, 1])
+    ax.set_ylim(0, 1.2)
+
+    ax.margins(x=0.05)
+    ax.set_xlim([-1, 60])
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
 
 
 def get_top_3_improve(save_path, improve):

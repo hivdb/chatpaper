@@ -14,6 +14,7 @@ from src.cleanup import cleanup_question  # noqa
 from src.chat.chat_history import fix_chat_history_question  # noqa
 from src.chat.chat_history import fix_chat_history_run_number  # noqa
 from src.chat.chat_history import remove_chat_history_run_number_and_qid  # noqa
+from src.prepare_eval_file.shuffle import shuffle_by_paper
 
 
 MODES = {
@@ -22,6 +23,7 @@ MODES = {
     'Update human answer': update_human_answer,
     'Prepare eval file': prepare_eval_file,
     'Prepare claude eval file': prepare_claude_eval_file,
+    'Shuffle': shuffle_by_paper,
     'Summarize & Visualize': summarize,
     # 'Fix Chat history': fix_chat_history_question
     # 'Fix Chat history': fix_chat_history_run_number,

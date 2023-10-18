@@ -18,4 +18,4 @@ def validate(data_file_list):
 
         check_human_boolean_eval(f)
 
-        check_NA(f)
+        # check_NA(f)

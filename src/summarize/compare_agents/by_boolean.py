@@ -16,39 +16,35 @@ def compare_boolean_questions(table, save_path):
         question_id = rows[0]['question_id']
 
         human_answer = [
-            (i['human_answer'], i['human_NA'])
+            i['human_answer']
+            #  i['human_NA'])
             for i in rows
         ]
 
         AI_answer = [
-            (i['AI_answer'], i['AI_NA'])
+            i['AI_answer']
             for i in rows
         ]
 
         human_answer = [
-            (
-                1 if (
-                    (i.lower() == 'yes') or
-                    (i.lower().startswith('yes,'))
-                ) else 0,
-                1 if (
-                    j.lower() == 'yes'
-                ) else 0
-            )
-            for i, j in human_answer
+            # (
+            1 if (
+                (i.lower() == 'yes') or
+                (i.lower().startswith('yes,'))
+            ) else 0
+                # 1 if (
+                #     j.lower() == 'yes'
+                # ) else 0
+            # )
+            for i in human_answer
         ]
 
         AI_answer = [
-            (
-                1 if (
-                    (i.lower() == 'yes') or
-                    (i.lower().startswith('yes,'))
-                ) else 0,
-                1 if (
-                    j.lower() == 'yes'
-                ) else 0
-            )
-            for i, j in AI_answer
+            1 if (
+                (i.lower() == 'yes') or
+                (i.lower().startswith('yes,'))
+            ) else 0
+            for i in AI_answer
         ]
 
         cont_table = get_triple_cont_table(human_answer, AI_answer)
@@ -62,7 +58,7 @@ def compare_boolean_questions(table, save_path):
         true_positive = cont_table['H_Y_AI_Y']
         positive = sum([
             cont_table[f'H_{i}_AI_Y']
-            for i in ['Y', 'N', 'NA']
+            for i in ['Y', 'N']
         ])
 
         if positive > 0:
@@ -95,10 +91,22 @@ def plot_ppv(figure_path, table):
 
     table_data = [
         pd.DataFrame({
-            i['question_id']: ['$Yes_{AI}$', '$No_{AI}$', '$NA_{AI}$'],
-            '$Yes_{H}$': [i['H_Y_AI_Y'], i['H_Y_AI_N'], i['H_Y_AI_NA']],
-            '$No_{H}$': [i['H_N_AI_Y'], i['H_N_AI_N'], i['H_N_AI_NA']],
-            '$NA_{H}$': [i['H_NA_AI_Y'], i['H_NA_AI_N'], i['H_NA_AI_NA']],
+            i['question_id']: [
+                '$Yes_{AI}$',
+                '$No_{AI}$',
+                # '$NA_{AI}$'
+                ],
+            '$Yes_{H}$': [
+                i['H_Y_AI_Y'],
+                i['H_Y_AI_N'],
+                # i['H_Y_AI_NA']
+                ],
+            '$No_{H}$': [
+                i['H_N_AI_Y'],
+                i['H_N_AI_N'],
+                # i['H_N_AI_NA']
+                ],
+            # '$NA_{H}$': [i['H_NA_AI_Y'], i['H_NA_AI_N'], i['H_NA_AI_NA']],
         })
         for i in table
     ]
@@ -146,33 +154,33 @@ def draw_ppv_table(figure_path, tables, ppv_values):
 
 def get_triple_cont_table(human_answer, ai_answer):
     report = {}
-    for i, j in permutations(['Y', 'N', 'NA'], 2):
+    for i, j in permutations(['Y', 'N'], 2):
         report[f"H_{i}_AI_{j}"] = 0
-    for i in ['Y', 'N', 'NA']:
+    for i in ['Y', 'N']:
         report[f"H_{i}_AI_{i}"] = 0
 
-    for (i1, i2), (j1, j2) in zip(human_answer, ai_answer):
-        if i2 or j2:
-            if i2 and j2:
-                report['H_NA_AI_NA'] += 1
-            if i2:
-                if j1:
-                    report['H_NA_AI_Y'] += 1
-                else:
-                    report['H_NA_AI_N'] += 1
-            else:
-                if i1:
-                    report['H_Y_AI_NA'] += 1
-                else:
-                    report['H_N_AI_NA'] += 1
+    for i1, j1 in zip(human_answer, ai_answer):
+        # if i2 or j2:
+        #     if i2 and j2:
+        #         report['H_NA_AI_NA'] += 1
+        #     if i2:
+        #         if j1:
+        #             report['H_NA_AI_Y'] += 1
+        #         else:
+        #             report['H_NA_AI_N'] += 1
+        #     else:
+        #         if i1:
+        #             report['H_Y_AI_NA'] += 1
+        #         else:
+        #             report['H_N_AI_NA'] += 1
+        # else:
+        if i1 and j1:
+            report['H_Y_AI_Y'] += 1
+        elif i1:
+            report['H_Y_AI_N'] += 1
+        elif j1:
+            report['H_N_AI_Y'] += 1
         else:
-            if i1 and j1:
-                report['H_Y_AI_Y'] += 1
-            elif i1:
-                report['H_Y_AI_N'] += 1
-            elif j1:
-                report['H_N_AI_Y'] += 1
-            else:
-                report['H_N_AI_N'] += 1
+            report['H_N_AI_N'] += 1
 
     return report

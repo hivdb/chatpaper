@@ -52,6 +52,8 @@ def merge_eval_files(test_set_path_list):
                 excel2csv(j, j.stem)
 
         for j in (i / 'evaluation').iterdir():
+            if 'human_answer' in j.name:
+                continue
             if j.suffix == '.csv':
                 result[j.name].extend(load_csv(j))
 
@@ -95,64 +97,64 @@ def analyze(test_set_path):
         ],
         additional_func=[get_stdev])
 
-    summarize_eval(
-        'GPT-4-extract', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_100.csv'),
-        ])
+    # summarize_eval(
+    #     'GPT-4-extract', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_100.csv'),
+    #     ])
 
-    summarize_eval(
-        'GPT-4-help2', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_101.csv'),
-        ])
+    # summarize_eval(
+    #     'GPT-4-help2', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_101.csv'),
+    #     ])
 
-    summarize_eval(
-        'GPT-4-help3', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_103.csv'),
-        ])
+    # summarize_eval(
+    #     'GPT-4-help3', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_103.csv'),
+    #     ])
 
-    summarize_eval(
-        'GPT-4-RAG', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_200.csv'),
-        ])
+    # summarize_eval(
+    #     'GPT-4-RAG', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_200.csv'),
+    #     ])
 
-    summarize_eval(
-        'GPT-4-cheatsheet2', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_200.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_201.csv'),
-        ])
+    # summarize_eval(
+    #     'GPT-4-cheatsheet2', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_200.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_201.csv'),
+    #     ])
 
     summarize_eval(
         'Shuffle', [
             Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base.shuffle_paper.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper.csv'),
         ]
     )
 
+    # # summarize_eval(
+    # #     'GPT-4-version', [
+    # #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    # #         Path(test_set_path / 'analysis' / 'gpt-4_base_old.csv'),
+    # #     ])
+
     # summarize_eval(
-    #     'GPT-4-version', [
-    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-    #         Path(test_set_path / 'analysis' / 'gpt-4_base_old.csv'),
+    #     'Claude', [
+    #         Path(test_set_path / 'analysis' / 'claude_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'claude_guide.csv'),
     #     ])
 
-    summarize_eval(
-        'Claude', [
-            Path(test_set_path / 'analysis' / 'claude_base.csv'),
-            Path(test_set_path / 'analysis' / 'claude_guide.csv'),
-        ])
-
-    summarize_eval(
-        'GPT-4_vs_Claude',
-        [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'claude_base.csv'),
-        ])
+    # summarize_eval(
+    #     'GPT-4_vs_Claude',
+    #     [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'claude_base.csv'),
+    #     ])
 
     # summarize_eval(
     #     'GPT-4_base_embed', [

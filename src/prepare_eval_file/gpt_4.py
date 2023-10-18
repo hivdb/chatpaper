@@ -6,7 +6,7 @@ from src.table import group_records_by
 from .translate_answer.get_human_answer import get_human_answer
 from .translate_answer.get_question_type import get_question_type
 from .translate_answer.translate_AI_NA import translate_AI_NA
-from .translate_answer.translate_human_NA import translate_human_NA
+# from .translate_answer.translate_human_NA import translate_human_NA
 from .translate_answer.translate_AI_reply import translate_AI_reply
 from .translate_answer.get_AI_reply import get_AI_reply
 # from .translate_answer.reduce_AI_reply import reduce_AI_reply
@@ -36,7 +36,6 @@ def gen_eval_file_for_testset(test_set_folder, run_number):
     eval_table = []
 
     for f, name in get_chat_history(test_set_folder / 'Papers'):
-
         report = load_csv(f)
 
         report = [
@@ -88,8 +87,13 @@ def gen_eval_file_for_testset(test_set_folder, run_number):
         key = dict(key)
 
         for i, j in group_records_by(table, ['paper']).items():
+            if run_number >= 100:
+                continue
             if len(j) != 60 and 'embed' not in key['chat_mode']:
                 print(i, len(j), key['chat_mode'], run_number)
+
+        if 'embed' in key['chat_mode']:
+            continue
 
         if run_number == 1:
             file_name = f"{key['model']}_{key['chat_mode']}.csv"
@@ -125,9 +129,6 @@ def gen_eval_file_by_model(file_path, report):
             'correct_sentences?',
             'confidence',
         ])
-
-    if 'base.csv' in file_path.name:
-        shuffle_by_paper(file_path)
 
     return report
 

@@ -4,7 +4,7 @@ from src.preset import QUESTION_PATH
 
 def get_question_type(report):
 
-    questions = load_csv(QUESTION_PATH / 'Set0.csv')
+    questions = load_csv(QUESTION_PATH / 'Set1.csv')
     question_types = {
         i['id']: i['type']
         for i in questions

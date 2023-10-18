@@ -61,7 +61,7 @@ DEFAULT_OPTIONS = {
     'auto_mode': True,
     'papers': 'all',
     'file_format': 'checked.md',
-    # 'question_set': 'Set0',
+    # 'question_set': 'Set1',
     'questions': 'all',
     'embedding?': False,
     'multiple_questions?': True,

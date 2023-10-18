@@ -97,6 +97,13 @@ def analyze(test_set_path):
         ],
         additional_func=[get_stdev])
 
+    summarize_eval(
+        'Shuffle', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper.csv'),
+        ]
+    )
+
     # summarize_eval(
     #     'GPT-4-extract', [
     #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
@@ -130,13 +137,6 @@ def analyze(test_set_path):
     #         Path(test_set_path / 'analysis' / 'gpt-4_guide_201.csv'),
     #     ])
 
-    summarize_eval(
-        'Shuffle', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper.csv'),
-        ]
-    )
-
     # # summarize_eval(
     # #     'GPT-4-version', [
     # #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
@@ -168,35 +168,35 @@ def analyze(test_set_path):
     #         Path(test_set_path / 'analysis' / 'gpt-4_embed_guide.csv'),
     #     ])
 
-    eval_files = [
-        Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-        Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
-        Path(test_set_path / 'analysis' / 'claude_base.csv'),
-        Path(test_set_path / 'analysis' / 'claude_guide.csv'),
-        # Path(test_set_path / 'analysis' / 'gpt-4_embed.csv'),
-        # Path(test_set_path / 'analysis' / 'gpt-4_embed_guide.csv'),
-    ]
+    # eval_files = [
+    #     Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #     Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
+    #     Path(test_set_path / 'analysis' / 'claude_base.csv'),
+    #     Path(test_set_path / 'analysis' / 'claude_guide.csv'),
+    #     # Path(test_set_path / 'analysis' / 'gpt-4_embed.csv'),
+    #     # Path(test_set_path / 'analysis' / 'gpt-4_embed_guide.csv'),
+    # ]
 
-    compare_agreement(
-        test_set_path / 'analysis' / 'compare_mode_agreement.csv',
-        eval_files)
+    # compare_agreement(
+    #     test_set_path / 'analysis' / 'compare_mode_agreement.csv',
+    #     eval_files)
 
-    summarize_by_question(
-        test_set_path / 'analysis' / 'compare_mode_agreement.csv')
+    # summarize_by_question(
+    #     test_set_path / 'analysis' / 'compare_mode_agreement.csv')
 
-    summarize_by_paper(
-        test_set_path / 'analysis' / 'compare_mode_agreement.csv')
+    # summarize_by_paper(
+    #     test_set_path / 'analysis' / 'compare_mode_agreement.csv')
 
-    compare_ai_mode_diff(
-        test_set_path / 'analysis',
-        eval_files)
+    # compare_ai_mode_diff(
+    #     test_set_path / 'analysis',
+    #     eval_files)
 
-    check_NA_correct_rate(
-        test_set_path / 'analysis' / 'check_NA_correct_rate.csv',
-        eval_files
-    )
+    # check_NA_correct_rate(
+    #     test_set_path / 'analysis' / 'check_NA_correct_rate.csv',
+    #     eval_files
+    # )
 
-    merge_disagree(test_set_path / 'analysis')
+    # merge_disagree(test_set_path / 'analysis')
 
 
 def get_stdev(summary_path):

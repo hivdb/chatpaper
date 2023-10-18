@@ -3,6 +3,8 @@ from src.file_format import dump_csv
 from collections import defaultdict
 from operator import itemgetter
 from src.table import group_records_by
+import matplotlib.pyplot as plt
+from matplotlib.ticker import PercentFormatter
 
 
 def compare_ai_mode_diff(save_path, data_file_list):
@@ -122,8 +124,6 @@ def get_change_report(save_path, grouped, question_ids):
 
 
 def plot_disagree(save_path, report):
-    import matplotlib.pyplot as plt
-    from matplotlib.ticker import PercentFormatter
 
     fig, ax = plt.subplots(1, 1, figsize=(25, 8))
     report.sort(key=lambda x: x['# no change'] + x['# worse'], reverse=True)
@@ -140,14 +140,13 @@ def plot_disagree(save_path, report):
 
         ax.bar(
             pos,
-            row['# no change'] / 60,
+            (row['# no change'] + row['# worse']) / 60,
             width=0.2,
             color='#1261A0'
         )
         ax.bar(
             pos,
-            row['# worse'] / 60,
-            bottom=row['# no change'] / 60,
+            - row['# worse'] / 60,
             width=0.2,
             color='#7B12A1',
         )
@@ -155,17 +154,18 @@ def plot_disagree(save_path, report):
         pos += 0.2
         ax.bar(
             pos,
-            row['# no change'] / 60,
+            (row['# no change'] + row['# improve']) / 60,
             width=0.2,
             color='#3895D3'
         )
         ax.bar(
             pos,
-            row['# improve'] / 60,
-            bottom=row['# no change'] / 60,
+            - row['# improve'] / 60,
             width=0.2,
-            color='#1295A1',
+            color='#04D95C',
         )
+
+    ax.axhline(0, color='black', linewidth=0.5)
 
     ax.set_xticks(bar_positions, group_labels)
     ax.set_xticklabels(group_labels, rotation=90)
@@ -173,7 +173,7 @@ def plot_disagree(save_path, report):
     ax.yaxis.set_major_formatter(PercentFormatter(1))
 
     ax.set_yticks([0, 0.5, 1])
-    ax.set_ylim(0, 1.2)
+    ax.set_ylim(-0.5, 1.2)
 
     ax.margins(x=0.05)
     ax.set_xlim([-1, 60])

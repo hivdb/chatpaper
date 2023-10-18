@@ -27,18 +27,18 @@ id,question,main category,sub category,ambiguous,type
 2701,Does the paper report samples obtain from infants and/or children?,Sequence information,Individual characteristics,,Boolean
 2702,Were any of the individuals in the paper in a clinical trial?,Sequence information,Individual characteristics,,Boolean
 2703,Were all of the individuals in the paper in a clinical trial?,Sequence information,Individual characteristics,,Boolean
-3101,IHow many individuals in the paper had samples obtained for HIV sequencing?,Patient basic information,,,Numerical
+3101,How many individuals in the paper had samples obtained for HIV sequencing?,Patient basic information,,,Numerical
 3102,Did all of the individuals in the paper undergo HIV sequencing?,Patient basic information,,What do we mean all patients?,Boolean
 4101,Does the paper report HIV sequences from individuals who were ART-naive?,Treatment information,naive and experienced,,Boolean
 4102,Does the paper report HIV sequences from individuals who had previously received ARV drugs?,Treatment information,naive and experienced,PrEP as naive,Boolean
 4103,Does the paper report HIV sequences from individuals who were ART-naive and from persons who were ART-experienced?,Treatment information,naive and experienced,,Boolean
 4104,How many samples in the paper were obtained from ART-naive individuals?,Treatment information,naive and experienced,,Numerical
-4105,Does the paper provide complete ART history information for all of the individuals in the study?,Treatment information,naive and experienced,Individual or a group,Boolean
-4201,Does the paper report information on the prevalence of transmitted HIV drug resistance?,Treatment information,PDR and TDR,,Boolean
-4202,Does the paper report information on the prevalence of pretreatment HIV drug resistance?,Treatment information,PDR and TDR,,Boolean
+4105,Does the paper provide complete ART history for all of the individuals in the study?,Treatment information,naive and experienced,Individual or a group,Boolean
+4201,Does the paper report the prevalence of transmitted HIV drug resistance?,Treatment information,PDR and TDR,,Boolean
+4202,Does the paper report the prevalence of pretreatment HIV drug resistance?,Treatment information,PDR and TDR,,Boolean
 4301,Which drug classes were received by individuals in the paper?,Treatment information,Drug class,Before or After genotyping,Categorical
-4302,Does the paper report information on individuals who received integrase inhibitors?,Treatment information,Drug class,Before or After genotyping,Boolean
-4303,Does the paper report information on individuals who received protease inhibitors?,Treatment information,Drug class,Before or After genotyping,Boolean
+4302,Does the paper report individuals who received integrase inhibitors?,Treatment information,Drug class,Before or After genotyping,Boolean
+4303,Does the paper report individuals who received protease inhibitors?,Treatment information,Drug class,Before or After genotyping,Boolean
 4304,Did all of the individuals in the paper receive the same ART?,Treatment information,Drug class,,Boolean
 4305,Were the individuals in the paper INSTI-naive?,Treatment information,Drug class,,Boolean
 4403,How many individuals in the paper received more than one ART regimen?,Treatment information,Regimen,,Numerical

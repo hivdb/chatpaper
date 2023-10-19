@@ -44,13 +44,14 @@ def compare_ai_mode_diff(save_path, data_file_list):
             'question': rows[0]['question'],
             'question_type': rows[0]['question_type'],
             'human_answer': rows[0]['human_answer'],
-            'human_NA': rows[0]['human_NA'],
+            # 'human_NA': rows[0]['human_NA'],
             'same agree?': 'Yes' if len(set(agreement)) == 1 else 'No'
         }
 
         for i in rows:
             report_row[f"{i['chat_mode']} AI_reply"] = i['AI_reply']
-            report_row[f"{i['chat_mode']} AI_NA"] = i['AI_NA']
+            report_row[f"{i['chat_mode']} AI_answer"] = i['AI_answer']
+            # report_row[f"{i['chat_mode']} AI_NA"] = i['AI_NA']
             report_row[f"{i['chat_mode']} agree?"] = i['agree?']
 
         report.append(report_row)

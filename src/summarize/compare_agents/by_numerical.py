@@ -28,15 +28,15 @@ def compare_numerical_questions(table, save_path):
             for i in rows
         ]
 
-        AI_NA = [
-            1 if i['AI_NA'].lower().strip() == 'yes' else 0
-            for i in rows
-        ]
+        # AI_NA = [
+        #     1 if i['AI_NA'].lower().strip() == 'yes' else 0
+        #     for i in rows
+        # ]
 
-        human_na = [
-            1 if i.lower().startswith('na') else 0
-            for i in human_answer
-        ]
+        # human_na = [
+        #     1 if i.lower().startswith('na') else 0
+        #     for i in human_answer
+        # ]
 
         agreement = [
             i['agree?']
@@ -52,29 +52,30 @@ def compare_numerical_questions(table, save_path):
             for i in agreement if i
         ])
 
-        human_na_disagree = len([
-            i
-            for i, j in zip(human_na, agreement)
-            if not j and i
-        ])
+        # human_na_disagree = len([
+        #     i
+        #     for i, j in zip(human_na, agreement)
+        #     if not j and i
+        # ])
 
-        AI_NA_disagree = len([
-            i
-            for i, j in zip(AI_NA, agreement)
-            if not j and i
-        ])
+        # AI_NA_disagree = len([
+        #     i
+        #     for i, j in zip(AI_NA, agreement)
+        #     if not j and i
+        # ])
 
         disagree = (
-            len(agreement) - agree - human_na_disagree -
-            AI_NA_disagree)
+            len(agreement) - agree)
+            # - human_na_disagree -
+            # AI_NA_disagree)
 
         rec = {
             'question_id': question_id,
             'question': question,
             'Agree': agree,
             'Disagree': disagree,
-            'human_NA': human_na_disagree,
-            'AI_NA': AI_NA_disagree,
+            # 'human_NA': human_na_disagree,
+            # 'AI_NA': AI_NA_disagree,
         }
         report.append(rec)
 

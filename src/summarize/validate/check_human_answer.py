@@ -12,17 +12,17 @@ def check_human_answer(f):
 
         paper_path = paper_main_path / paper
         human_answer = get_human_answers(paper_path / 'human_answer.csv')
-        human_na = get_human_NA(paper_path / 'human_answer.csv')
+        # human_na = get_human_NA(paper_path / 'human_answer.csv')
 
         if i['human_answer'] != human_answer[i['question_id']]:
             print(
                 f'Error: human answer changed, '
                 f'{f} {paper}, {i["question_id"]}')
 
-        if i['human_NA'] != human_na[i['question_id']]:
-            print(
-                f'Error: human NA changed, '
-                f'{f} {paper}, {i["question_id"]}')
+        # if i['human_NA'] != human_na[i['question_id']]:
+        #     print(
+        #         f'Error: human NA changed, '
+        #         f'{f} {paper}, {i["question_id"]}')
 
     qids = human_answer.keys()
 

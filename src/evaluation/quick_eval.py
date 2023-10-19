@@ -5,31 +5,32 @@ def quick_eval(record):
     result = ''
 
     human_answer = record['human_answer'].lower().strip()
-    human_NA = record['human_NA'].lower().strip() == 'yes'
+    # human_NA = record['human_NA'].lower().strip() == 'yes'
     ai_answer = record['AI_answer'].lower().strip()
     ai_reply = record['AI_reply'].lower().strip()
-    ai_NA = record['AI_NA'].lower().strip() == 'yes'
+    # ai_NA = record['AI_NA'].lower().strip() == 'yes'
 
     if human_answer == ai_reply:
         result = 'Yes'
     elif human_answer == ai_answer:
         result = 'Yes'
-    elif human_NA and ai_NA:
-        result = 'Yes'
+    # elif human_NA and ai_NA:
+    #     result = 'Yes'
     elif record['question_type'] == 'Boolean':
         result = quick_eval_boolean(
-            human_answer, human_NA, ai_answer, ai_reply, ai_NA)
+            # human_answer, human_NA, ai_answer, ai_reply, ai_NA)
+            human_answer, ai_answer, ai_reply)
     elif record['question_type'] == 'Numerical':
         result = quick_eval_numerical(
-            human_answer, human_NA, ai_answer, ai_reply, ai_NA)
+            human_answer, ai_answer, ai_reply)
     elif record['question_type'] == 'Categorical':
         result = quick_eval_categorical(
-            human_answer, human_NA, ai_answer, ai_reply, ai_NA)
+            human_answer, ai_answer, ai_reply)
 
     record['agree?'] = result
 
 
-def quick_eval_boolean(human_answer, human_NA, ai_answer, ai_reply, ai_NA):
+def quick_eval_boolean(human_answer, ai_answer, ai_NA):
 
     if human_answer.startswith('yes') and ai_answer.startswith('yes'):
         return 'Yes'
@@ -51,7 +52,7 @@ def quick_eval_boolean(human_answer, human_NA, ai_answer, ai_reply, ai_NA):
     return ''
 
 
-def quick_eval_categorical(human_answer, human_NA, ai_answer, ai_reply, ai_NA):
+def quick_eval_categorical(human_answer, ai_answer, ai_reply):
 
     if human_answer in ai_reply:
         return 'Yes'
@@ -59,13 +60,13 @@ def quick_eval_categorical(human_answer, human_NA, ai_answer, ai_reply, ai_NA):
     if human_answer in ai_answer:
         return 'Yes'
 
-    if not human_NA and ai_NA:
-        return 'No'
+    # if not human_NA and ai_NA:
+    #     return 'No'
 
     return ''
 
 
-def quick_eval_numerical(human_answer, human_NA, ai_answer, ai_reply, ai_NA):
+def quick_eval_numerical(human_answer, ai_answer, ai_reply):
 
     human_answer = human_answer.split(',')[0].strip()
 

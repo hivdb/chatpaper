@@ -54,7 +54,7 @@ def update_human_answer():
                 'id': i['question_id'],
                 'question': i['question'],
                 'answer': i['human_answer'],
-                'NA': i['human_NA'],
+                # 'NA': i['human_NA'],
             }
             for i in paper_info[paper_name]
         ]

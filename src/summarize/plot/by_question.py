@@ -110,16 +110,16 @@ def plot_by_question(
     #     figure_path / 'ordered_question.png')
     # draw_compare_plot(draw_context)
 
-    # header1 = header[0]
-    # header2 = header[1]
-    # df['diff'] = df[header1] - df[header2]
-    # df = df.sort_values(
-    #     by=['diff'], ascending=[False])
-    # df.drop('diff', axis=1, inplace=True)
-    # draw_context['df_grouped'] = df
-    # draw_context['figure_path'] = (
-    #     figure_path / 'ordered_diff.png')
-    # draw_compare_plot(draw_context)
+    header1 = header[0]
+    header2 = header[1]
+    df_grouped['diff'] = df_grouped[header1] - df_grouped[header2]
+    df_grouped = df_grouped.sort_values(
+        by=['diff'], ascending=[False])
+    df_grouped.drop('diff', axis=1, inplace=True)
+    draw_context['df_grouped'] = df_grouped
+    draw_context['figure_path'] = (
+        figure_path / 'ordered_diff.png')
+    draw_compare_plot(draw_context)
 
 
 def group_by_question_id(df):
@@ -229,16 +229,17 @@ def draw_compare_plot_with_legend(
     ax.set_yticks([0, 0.5, 1])
     ax.set_ylim(0, 1.2)
 
-    if not split:
-        handles, labels = plt.gca().get_legend_handles_labels()
-        new_labels = {}
-        for i in labels:
-            stat = draw_context['statistics'][i]
-            new_labels[i] = (
-                f"{i[:-1] if i[-1] == '?' else i.replace('_', ' ').upper()}: "
-                f"{stat['median']}% ({stat['iqr25']}%, {stat['iqr75']}%)")
+    # if not split:
+    handles, labels = plt.gca().get_legend_handles_labels()
+    new_labels = {}
+    for i in labels:
+        # stat = draw_context['statistics'][i]
+        new_labels[i] = (
+            f"{i[:-1] if i[-1] == '?' else i.replace('_', ' ').upper()}"
+            #: f"{stat['median']}% ({stat['iqr25']}%, {stat['iqr75']}%)"
+            )
 
-        ax.legend(handles, [new_labels.get(label, label) for label in labels])
+    ax.legend(handles, [new_labels.get(label, label) for label in labels])
 
     ax.margins(x=0.05)
     ax.set_xlim([0, max_label + 1])

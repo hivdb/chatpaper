@@ -50,6 +50,13 @@ def plot_by_question(
     # assert (len(header) == 3)
 
     df.reset_index(inplace=True)
+    df['question_type'] = df['question_type'].replace({
+        'Categorical': 'List',
+        'Numerical': 'Number',
+    })
+    df.set_index('question_id', 'question_type', inplace=True)
+
+    df.reset_index(inplace=True)
     df_grouped = df.sort_values(by=header, ascending=[False]*len(header))
     del df_grouped['question_type']
     df_grouped.set_index('question_id', inplace=True)
@@ -156,15 +163,27 @@ def draw_compare_plot(draw_context, split=False, question_type=False):
         # axes[3, 1].remove()
 
     elif question_type:
-        fig, axes = plt.subplots(3, 1, figsize=(20, 20))
-        df_grouped = draw_context['df_grouped_by_type']
-        # groups = get_df_group_by_type(df_grouped)
+        fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+        df_typed = draw_context['df_grouped_by_type']
+        df_grouped = []
+        plot_num = []
 
-        max_label = 38
-        for idx, (name, df) in enumerate(df_grouped.items()):
-            draw_compare_plot_with_legend(
-                draw_context, df, axes[idx], max_label, split=True,
-                figure_name=name)
+        line_pos = 0
+        for name, df in df_typed.items():
+            df_grouped.append(df)
+            num_items = len(df)
+            plot_num.append((
+                name,
+                num_items + line_pos,
+                line_pos + num_items // 2))
+            line_pos = num_items + line_pos
+
+        df_grouped = pd.concat(df_grouped)
+
+        draw_compare_plot_with_legend(
+            draw_context, df_grouped, ax, len(df_grouped), split=False,
+            plot_line=plot_num
+            )
         fig.subplots_adjust(hspace=0.5)
     else:
         fig, ax = plt.subplots(1, 1, figsize=(25, 8))
@@ -182,7 +201,8 @@ def draw_compare_plot(draw_context, split=False, question_type=False):
 
 
 def draw_compare_plot_with_legend(
-        draw_context, df_grouped, ax, max_label, split=True, figure_name=None):
+        draw_context, df_grouped, ax, max_label,
+        split=True, plot_line={}):
 
     # num_bars = len(df_grouped)
     num_groups = len(df_grouped.columns)
@@ -212,6 +232,13 @@ def draw_compare_plot_with_legend(
         if i == 1:
             ax.set_xticks(bar_positions, group_labels)
             ax.set_xticklabels(group_labels, rotation=90)
+
+    for name, pos, text_pos in plot_line:
+        ax.axvline(x=pos + 0.5, color='grey', linestyle='--')
+        plt.text(
+            text_pos, 1.1,
+            name,
+            ha='center', va='bottom')
 
         # for bar in bars:
         #     yval = bar.get_height()
@@ -243,11 +270,6 @@ def draw_compare_plot_with_legend(
 
     ax.margins(x=0.05)
     ax.set_xlim([0, max_label + 1])
-
-    if figure_name:
-        ax.text(
-            0.95, 1.05, figure_name,
-            transform=ax.transAxes, ha='right', va='bottom', fontsize=12)
 
 
 def get_df_group_list(df_grouped):

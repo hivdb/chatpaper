@@ -62,3 +62,19 @@ def embedding_markdown(
         n_dim=1536
     )
     return vectordb
+
+
+def embedding_cheatsheet(
+        file_path, index_folder):
+
+    docs = MarkdownParagraphLoader(file_path).load()
+
+    embeddings = OpenAIEmbeddings()
+
+    vectordb = DocArrayHnswSearch.from_documents(
+        docs,
+        embeddings,
+        work_dir=index_folder,
+        n_dim=1536
+    )
+    return vectordb

@@ -29,3 +29,8 @@ def embedding_azure(model, text):
     openai.api_version = os.getenv('AZURE_OPEN_AI_API_VERSION')
 
     engine = os.getenv('AZURE_EMBEDDING_ID')
+
+    return openai.Embedding.create(
+        input=[text],
+        model=model,
+        engine=engine)['data'][0]['embedding']

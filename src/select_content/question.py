@@ -11,16 +11,16 @@ def load_questions(file_path):
 
     for i in load_csv(file_path):
         if 'use' in i:
-            if i['use'] != 'yes':
+            if i['use'].lower() != 'yes':
                 continue
         question = i['question'].strip()
         cheatsheet = i.get('cheatsheet', '').strip()
         prompt = i.get('prompt', '').strip()
 
         if prompt:
-            questions[i['id']] = f"{prompt} {question}"
+            questions[i['id']] = f"{prompt}\n\n\n{question}"
         elif cheatsheet:
-            questions[i['id']] = f"{cheatsheet} {question}"
+            questions[i['id']] = f"{cheatsheet}\n\n\n{question}"
         else:
             questions[i['id']] = question
 
@@ -31,6 +31,9 @@ def list_question_set(folder=QUESTION_PATH):
 
     result = []
     for i in folder.iterdir():
+        if i.name.startswith('.'):
+            continue
+
         if i.suffix not in ('.csv'):
             continue
 

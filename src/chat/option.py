@@ -107,7 +107,7 @@ def select_chat_mode():
             question_template = select_question_template(multi_questions=True)
 
     w_cheatsheet = choose_cheatsheet_mode()
-    cheatsheet = load_prompt_template('cheatsheet2')
+    cheatsheet = load_prompt_template('cheatsheet')
 
     if (question_mode, embedding_mode) not in CHAT_MODE_LIST:
         raise Exception(f'{question_mode}, {embedding_mode} not supported')
@@ -147,7 +147,9 @@ def select_chat_mode():
         'one_question_per_req?': not multi_question,
         'embedding?': embedding_mode,
         'cheatsheet?': w_cheatsheet,
-        'cheatsheet': cheatsheet,
+        'cheatsheet': cheatsheet if w_cheatsheet else '',
+        'remove_sent?': choose_remove_sentence() if w_cheatsheet else False,
+        'append_sent?': choose_append_sentence() if w_cheatsheet else False,
         'chat_func': chat_func,
         'chat_mode': ', '.join([
             question_mode, embedding_mode, cheatsheet_mode]),
@@ -175,6 +177,38 @@ def choose_auto_mode(
 
     if 'auto_mode' in DEFAULT_OPTIONS:
         return DEFAULT_OPTIONS['auto_mode']
+
+    result = yes_no_dialog(
+        title=title,
+        text=desc,
+        ).run()
+
+    return result
+
+
+@check_selection()
+def choose_remove_sentence(
+        title="Remove sentence from cheatsheet",
+        desc="Remove sentence from cheatsheet?"):
+
+    if 'replace_sent?' in DEFAULT_OPTIONS:
+        return DEFAULT_OPTIONS['replace_sent?']
+
+    result = yes_no_dialog(
+        title=title,
+        text=desc,
+        ).run()
+
+    return result
+
+
+@check_selection()
+def choose_append_sentence(
+        title="Append sentence to cheatsheet",
+        desc="Append sentence to cheatsheet?"):
+
+    if 'append_sent?' in DEFAULT_OPTIONS:
+        return DEFAULT_OPTIONS['append_sent?']
 
     result = yes_no_dialog(
         title=title,

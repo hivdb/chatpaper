@@ -4,6 +4,7 @@ from .filter_question import get_unanswered
 from src.logs import logger
 from src.checksum import get_md5
 from openai.error import Timeout
+import warnings
 
 
 def try_map_reduce(questions, chat_context):
@@ -100,6 +101,8 @@ def process_one_question(unanswered, part, chat_context):
     if not unanswered:
         return
 
+    unanswered = get_question_prompt(unanswered, chat_context)
+
     prompts = []
 
     if chat_context['cheatsheet?']:
@@ -145,6 +148,8 @@ def process_multi_questions(unanswered, part, chat_context, retry_time=10):
         unanswered, part['batch_content'],
         chat_context['chat_history'],
         chat_context['run_number'])
+
+    unanswered = get_question_prompt(unanswered, chat_context)
 
     while len(unanswered) > 0 and retry_time:
         process_questions(part, unanswered, chat_context)
@@ -201,3 +206,57 @@ def process_questions(part, questions, chat_context):
     chat_context['chat_history'].log(resp, questions)
 
     return resp
+
+
+def get_question_prompt(questions, chat_context):
+
+    if chat_context['remove_sent?']:
+        return remove_instruction(questions, chat_context)
+    elif chat_context['append_sent?']:
+        return append_instruction(questions, chat_context)
+
+    return questions
+
+
+def remove_instruction(questions, chat_context):
+
+    cheatsheet = chat_context['cheatsheet']
+
+    new_questions = {}
+    for qid, q in questions.items():
+        if '\n\n\n' not in q:
+            raise Exception(f"{qid}. {q} doesn't contain instruction")
+        instr, q = q.split('\n\n\n')
+
+        for j in instr.split('\n'):
+            j = j.strip()
+            if j not in cheatsheet:
+                warnings.warn(f"{qid}. {q} instruction not found. {j}")
+            cheatsheet = cheatsheet.replace(j, '')
+
+        new_questions[qid] = q
+
+    chat_context['cheatsheet'] = cheatsheet
+
+    return new_questions
+
+
+def append_instruction(questions, chat_context):
+
+    cheatsheet = chat_context['cheatsheet']
+
+    cheatsheet += '\n\n## Additional information\n\n'
+
+    new_questions = {}
+    for qid, q in questions.items():
+        if '\n\n\n' not in q:
+            raise Exception(f"{qid}. {q} doesn't contain instruction")
+        instr, q = q.split('\n\n\n')
+
+        cheatsheet += f'\n{instr}\n'
+
+        new_questions[qid] = q
+
+    chat_context['cheatsheet'] = cheatsheet
+
+    return new_questions

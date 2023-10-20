@@ -329,6 +329,31 @@ def fix_chat_history_run_number(run_number=1):
         dump_csv(chat_history_file, table)
 
 
+def remove_chat_history_run_number(run_number=100):
+
+    test_set = select_test_set() / 'Papers'
+
+    for i in test_set.iterdir():
+        if not i.is_dir():
+            continue
+
+        history_folder = i / 'chat_history'
+        if not history_folder.exists():
+            # TODO give warning
+            continue
+
+        chat_history_file = history_folder / 'chat_history.csv'
+
+        table = load_csv(chat_history_file)
+        table = [
+            i
+            for i in table
+            if int(i.get('run_number', '')) != run_number
+        ]
+
+        dump_csv(chat_history_file, table)
+
+
 def remove_chat_history_run_number_and_qid(run_number=102, question_id=[
         4305,]):
 

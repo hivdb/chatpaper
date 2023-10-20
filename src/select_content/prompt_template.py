@@ -26,9 +26,11 @@ def list_prompt_template(multi_questions, folder=PROMPT_TEMPLATE_PATH):
         if not i.suffix.lower() == '.txt':
             continue
 
-        if i.stem.lower() in RESEREVED_TEMPLATE:
+        if i.name.startswith('_'):
             continue
 
+        if i.stem.lower() in RESEREVED_TEMPLATE:
+            continue
 
         if multi_questions != ('multi_questions' in i.name):
             continue

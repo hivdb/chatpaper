@@ -104,20 +104,21 @@ def analyze(test_set_path):
         ]
     )
 
-    # summarize_eval(
-    #     'GPT-4-extract', [
-    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-    #         Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
-    #         Path(test_set_path / 'analysis' / 'gpt-4_base_100.csv'),
-    #     ])
+    summarize_eval(
+        'GPT-4-extract', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_100.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_101.csv'),
+        ])
 
-
-    # summarize_eval(
-    #     'GPT-4-RAG', [
-    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-    #         Path(test_set_path / 'analysis' / 'gpt-4_base_200.csv'),
-    #     ])
-
+    summarize_eval(
+        'GPT-4-RAG', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_200.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_201.csv'),
+        ])
 
     # summarize_eval(
     #     'Claude', [

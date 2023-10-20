@@ -1,6 +1,7 @@
 from src.summarize.by_question import seperate_questions
 import re
 
+
 def translate_AI_reply(table):
 
     questions = seperate_questions(table)
@@ -62,6 +63,46 @@ def by_categorical(questions):
         ai_answer = ''
 
         if i['AI_NA'] == 'Yes':
-            ai_answer = 'NA'
+            ai_answer = 'NULL'
 
         i['AI_answer'] = ai_answer
+
+        if i['question_id'] == '4301' and not i['AI_answer']:
+            i['AI_answer'] = parse_drug_class(i['AI_reply'])
+
+
+DRUG_CLASS = {
+    'NRTI': [
+        'nucleotide reverse transcriptase inhibitors'
+    ],
+    'NNRTI': [
+        'non nucleotide reverse transcriptase inhibitors'
+    ],
+    'PI': [
+        'protease inhibitor'
+    ],
+    'INSTI': [
+        'Integrase strand transfer inhibitor',
+        'Integrase inhibitor'
+    ],
+}
+
+
+def parse_drug_class(ai_reply):
+    ai_reply = ai_reply.lower()
+
+    answers = []
+
+    for k, v in DRUG_CLASS.items():
+        k = k.lower()
+        if k in ai_reply:
+            answers.append(k.upper())
+            continue
+
+        for i in v:
+            i = i.lower()
+            if i in ai_reply:
+                answers.append(k.upper())
+                break
+
+    return ', '.join(answers)

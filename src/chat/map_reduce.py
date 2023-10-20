@@ -103,6 +103,8 @@ def process_one_question(unanswered, part, chat_context):
 
     unanswered = get_question_prompt(unanswered, chat_context)
 
+    # print(chat_context['cheatsheet'])
+
     prompts = []
 
     if chat_context['cheatsheet?']:

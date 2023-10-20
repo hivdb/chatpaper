@@ -354,8 +354,8 @@ def remove_chat_history_run_number(run_number=100):
         dump_csv(chat_history_file, table)
 
 
-def remove_chat_history_run_number_and_qid(run_number=102, question_id=[
-        4305,]):
+def remove_chat_history_run_number_and_qid(run_number=101, question_id=[
+        2102,]):
 
     test_set = select_test_set() / 'Papers'
 

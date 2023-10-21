@@ -12,6 +12,7 @@ from .translate_answer.get_AI_reply import get_AI_reply
 # from .translate_answer.reduce_AI_reply import reduce_AI_reply
 
 from src.evaluation.quick_eval import quick_eval
+from src.evaluation.quick_eval import load_eval_db
 from .shuffle import shuffle_by_paper
 
 
@@ -27,11 +28,13 @@ def gen_eval_file(test_set_folder_list):
     # TODO, when to merge multiple paper data set?
 
     for t in test_set_folder_list:
-        for i in range(1, 300):
+        for i in range(1, 1000):
             gen_eval_file_for_testset(t, i)
 
 
 def gen_eval_file_for_testset(test_set_folder, run_number):
+
+    eval_db = load_eval_db(test_set_folder / 'evaluation' / 'eval_db.csv')
 
     eval_table = []
 
@@ -67,7 +70,7 @@ def gen_eval_file_for_testset(test_set_folder, run_number):
 
         # report = translate_human_NA(report)
 
-        [quick_eval(i) for i in report]
+        [quick_eval(i, eval_db) for i in report]
 
         report = simplify_chat_mode(report)
         report = simplify_model(report)

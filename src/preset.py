@@ -62,7 +62,7 @@ DEFAULT_OPTIONS = {
     'papers': 'all',
     'file_format': 'checked.md',
     # 'question_set': 'Set1',
-    'questions': 'all',
+    # 'questions': 'all',
     'embedding?': False,
     # 'multiple_questions?': True,
     # 'cheatsheet?': False,

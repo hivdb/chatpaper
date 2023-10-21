@@ -1,6 +1,48 @@
+from src.file_format import load_csv
+from src.table import group_records_by
+from collections import defaultdict
 
 
-def quick_eval(record):
+def load_eval_db(eval_db_path):
+    eval_db = load_csv(eval_db_path)
+
+    index = defaultdict(dict)
+
+    for qid, q in group_records_by(eval_db, ['paper', 'question_id']).items():
+
+        map = defaultdict(set)
+        for i in q:
+            reply = i['AI_reply']
+            answer = i['AI_answer']
+            map[reply].add(answer)
+
+        for i, j in map.items():
+            if len(j) != 1:
+                print('Check eval db consistency', qid, len(j))
+
+        map = defaultdict(set)
+        for i in q:
+            reply = i['AI_reply']
+            agree = i['agree?']
+            map[reply].add(agree)
+
+        for i, j in map.items():
+            if len(j) != 1:
+                print('Check eval db consistency', qid, len(j))
+
+        key = dict(qid)
+        index[key['question_id']][key['paper']] = defaultdict(dict)
+
+        for i in q:
+            reply = i['AI_reply']
+            answer = i['AI_answer']
+            agree = i['agree?']
+            index[key['question_id']][key['paper']][reply] = (answer, agree)
+
+    return index
+
+
+def quick_eval(record, eval_db):
 
     result = ''
 
@@ -9,6 +51,13 @@ def quick_eval(record):
     ai_answer = record['AI_answer'].lower().strip()
     ai_reply = record['AI_reply'].lower().strip()
     # ai_NA = record['AI_NA'].lower().strip() == 'yes'
+
+    index_result = eval_db[record['question_id']][record['paper']][ai_reply]
+
+    if index_result:
+        record['AI_answer'] = index_result[0]
+        record['agree?'] = index_result[1]
+        return
 
     if human_answer == ai_reply:
         result = 'Yes'

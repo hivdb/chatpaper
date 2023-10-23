@@ -32,6 +32,8 @@ def by_numerical(questions):
         report['% GT_nonzero'] = (
             f'{round(num_not_zero * 100 / len(human_answer))}%')
 
+        report['# same'] = len(set(human_answer))
+
         # TODO, show all results
         report_table.append(report)
 

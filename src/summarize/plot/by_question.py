@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 import numpy as np
+from src.file_format import load_csv
 
 
 # TODO, selection which to draw, and which file to draw
@@ -50,10 +51,10 @@ def plot_by_question(
     # assert (len(header) == 3)
 
     df.reset_index(inplace=True)
-    df['question_type'] = df['question_type'].replace({
-        'Categorical': 'List',
-        'Numerical': 'Number',
-    })
+    # df['question_type'] = df['question_type'].replace({
+    #     'Categorical': 'List',
+    #     'Numerical': 'Number',
+    # })
     df.set_index('question_id', 'question_type', inplace=True)
 
     df.reset_index(inplace=True)
@@ -62,20 +63,8 @@ def plot_by_question(
     df_grouped.set_index('question_id', inplace=True)
     draw_context['df_grouped'] = df_grouped
 
-    df_typed = {name: group for name, group in df.groupby('question_type')}
-    for name in df_typed.keys():
-        d = df_typed[name]
-        del d['question_type']
-        d.set_index('question_id', inplace=True)
-        header1 = header[0]
-        header2 = header[1]
-        d['diff'] = d[header1] - d[header2]
-        d = d.sort_values(
-            by=['diff'], ascending=[False])
-        d.drop('diff', axis=1, inplace=True)
-        df_typed[name] = d
-
-    draw_context['df_grouped_by_type'] = df_typed
+    draw_context['df_grouped_by_type'] = get_grouped_by_type(
+        df, data_file_list, header)
 
     # COLORS = [
     #     # '#072F5F',
@@ -139,6 +128,82 @@ def plot_by_question(
     draw_compare_plot(draw_context)
 
 
+def get_grouped_by_type(df, data_file_paths, header):
+
+    gt_path = data_file_paths[0].parent / 'summarize_ground_truth.csv'
+    ground_truth = pd.read_csv(gt_path)
+
+    df = df.merge(ground_truth, on=['question_id', 'question_type'])
+
+    df = {name: group for name, group in df.groupby('question_type')}
+
+    df_typed = []
+
+    for name in ['Boolean', 'Numerical', 'Categorical']:
+        df_sub = df[name]
+        if name == 'Boolean':
+            df_sub = df_sub[
+                ['question_id', header[0], header[1], '# GT_Yes']]
+
+            header1 = header[0]
+            header2 = header[1]
+            df_sub['diff'] = df_sub[header1] - df_sub[header2]
+
+            df_sub1 = df_sub[df_sub[header1] <= 0.75]
+            df_sub = df_sub[df_sub[header1] > 0.75]
+
+            df_sub1 = df_sub1.sort_values(
+                by=['diff'], ascending=[False])
+            df_sub1.drop('diff', axis=1, inplace=True)
+            df_sub1.drop('# GT_Yes', axis=1, inplace=True)
+
+            df_sub2 = df_sub[
+                (df_sub['# GT_Yes'] > 10) & (df_sub['# GT_Yes'] < 50)]
+
+            df_sub2 = df_sub2.sort_values(
+                by=['diff'], ascending=[False])
+            df_sub2.drop('diff', axis=1, inplace=True)
+            df_sub2.drop('# GT_Yes', axis=1, inplace=True)
+
+            df_sub3 = df_sub[
+                (df_sub['# GT_Yes'] <= 10) | (df_sub['# GT_Yes'] >= 50)]
+
+            df_sub3 = df_sub3.sort_values(
+                by=['diff'], ascending=[False])
+            df_sub3.drop('diff', axis=1, inplace=True)
+            df_sub3.drop('# GT_Yes', axis=1, inplace=True)
+
+            df_typed.append((name, df_sub2))
+            df_typed.append((name, df_sub3))
+            df_typed.append((name, df_sub1))
+
+        else:
+            df_sub = df_sub[
+                ['question_id', header[0], header[1], '# same']]
+
+            header1 = header[0]
+            header2 = header[1]
+            df_sub['diff'] = df_sub[header1] - df_sub[header2]
+
+            df_sub1 = df_sub[df_sub['# same'] < 10]
+            df_sub2 = df_sub[df_sub['# same'] >= 10]
+
+            df_sub1 = df_sub1.sort_values(
+                by=['diff'], ascending=[False])
+            df_sub1.drop('diff', axis=1, inplace=True)
+            df_sub1.drop('# same', axis=1, inplace=True)
+
+            df_sub2 = df_sub2.sort_values(
+                by=['diff'], ascending=[False])
+            df_sub2.drop('diff', axis=1, inplace=True)
+            df_sub2.drop('# same', axis=1, inplace=True)
+
+            df_typed.append((name, df_sub2))
+            df_typed.append((name, df_sub1))
+
+    return df_typed
+
+
 def group_by_question_id(df):
 
     WANTED_COLUMNS = [
@@ -179,16 +244,20 @@ def draw_compare_plot(draw_context, split=False, question_type=False):
         plot_num = []
 
         line_pos = 0
-        for name, df in df_typed.items():
+        for name, df in df_typed:
             df_grouped.append(df)
             num_items = len(df)
             plot_num.append((
-                name,
+                # name,
+                '',
                 num_items + line_pos,
                 line_pos + num_items // 2))
             line_pos = num_items + line_pos
 
+        plot_num.pop(-1)
+
         df_grouped = pd.concat(df_grouped)
+        df_grouped.set_index('question_id', inplace=True)
 
         draw_compare_plot_with_legend(
             draw_context, df_grouped, ax, len(df_grouped), split=False,

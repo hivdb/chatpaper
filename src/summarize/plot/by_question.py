@@ -89,7 +89,7 @@ def plot_by_question(
         '#1261A0',
         '#3895D3',
         '#58CCED',
-        # '#7ad6f0',
+        '#7ad6f0',
 
         '#963c32',
         '#ab625a',

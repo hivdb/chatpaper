@@ -1,0 +1,21 @@
+id,question,main category,sub category,ambiguous,type,cheatsheet,use
+1101,Does the paper report previously unpublished data?,paper category,,,Boolean,,Yes
+1102,Does the paper report HIV sequences?,paper category,,,Boolean,,Yes
+1103,Does the paper report the results of in vitro passage experiments?,paper category,,,Boolean,,Yes
+1104,Does the paper report in vitro antiretroviral susceptibility data?,paper category,,,Boolean,,Yes
+2101,Does the paper report GenBank accession numbers for sequenced HIV isolates?,Sequence information,Genbank,,Boolean,,Yes
+2102,Does the paper report GenBank accession numbers for sequenced HIV isolates other than those for laboratory HIV isolates?,Sequence information,Genbank,,Boolean,"If the sequences were submitted to GenBank, the paper may have GenBank accession numbers which are two letters followed by six numbers. The DNA Data Bank of Japan (DDBJ) and the European Nucleotide Archive (ENA) share their data with GenBank. GenBank accession numbers contain 2 letters followed by 6 numbers. We are not interested in the sequences or GenBank accession numbers of commonly used laboratory viruses such as HXB2 or NL43.",Yes
+2103,Which are the genbank accession numbers reported in the paper?,Sequence information,Genbank,,Categorical,,Yes
+2202,Does the paper report lists of mutations for individual sequenced HIV isolates?,Sequence information,Mutation,Individual or one group,Boolean,,Yes
+2301,Which HIV species were studied in the paper?,Sequence information,"Species, subtype, gene",,Categorical,,Yes
+2302,What were the subtypes of the sequenced viruses reported in the paper?,Sequence information,"Species, subtype, gene",,Categorical,,Yes
+2303,Which HIV genes were sequenced in the paper?,Sequence information,"Species, subtype, gene",,Categorical,,Yes
+2304,Does the paper report the results of HIV pol sequences?,Sequence information,"Species, subtype, gene",,Boolean,,Yes
+2401,Which geographic regions and/or countries were the sequences from in the paper?,Sequence information,Geolocation and date,,Categorical,,Yes
+2402,What years were the sequenced samples obtained in the paper?,Sequence information,Geolocation and date,,Categorical,,Yes
+2502,Was sequencing in the paper performed using Sanger sequencing?,Sequence information,Sequencing method,,Boolean,,Yes
+2503,Was sequencing in the paper performed using an NGS technology?,Sequence information,Sequencing method,,Boolean,,Yes
+2504,Were samples in the paper cloned prior to sequencing?,Sequence information,Sequencing method,,Boolean,,Yes
+2505,Did the samples in the paper undergo single genome sequencing?,Sequence information,Sequencing method,,Boolean,,Yes
+2506,Did the samples in the paper undergo molecular cloning?,Sequence information,Sequencing method,,Boolean,,Yes
+2601,Does the paper report the results of plasma HIV sequencing?,Sequence information,Sequence source,,Boolean,,Yes

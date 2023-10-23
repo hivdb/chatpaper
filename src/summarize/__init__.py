@@ -100,8 +100,33 @@ def analyze(test_set_path):
             Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_base_2.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_base_3.csv'),
+        ],
+        additional_func=[get_stdev])
+
+    summarize_eval(
+        'GPT-4-base_4times', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_2.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_3.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_base_4.csv'),
+        ],
+        additional_func=[get_stdev])
+
+    summarize_eval(
+        'GPT-4-base_one_multi', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_2.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_3.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
+        ],
+        additional_func=[get_stdev])
+
+    summarize_eval(
+        'GPT-4-base_3times_one_per', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_11.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_12.csv'),
+
         ],
         additional_func=[get_stdev])
 

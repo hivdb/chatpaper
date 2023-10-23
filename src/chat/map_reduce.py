@@ -152,6 +152,7 @@ def process_multi_questions(unanswered, part, chat_context, retry_time=10):
         chat_context['run_number'])
 
     unanswered = get_question_prompt(unanswered, chat_context)
+    # print(chat_context['cheatsheet'])
 
     while len(unanswered) > 0 and retry_time:
         process_questions(part, unanswered, chat_context)
@@ -227,8 +228,10 @@ def remove_instruction(questions, chat_context):
     new_questions = {}
     for qid, q in questions.items():
         if '\n\n\n' not in q:
-            raise Exception(f"{qid}. {q} doesn't contain instruction")
-        instr, q = q.split('\n\n\n')
+            warnings.warn(f"{qid}. {q} doesn't contain instruction")
+            instr, q = '', q
+        else:
+            instr, q = q.split('\n\n\n')
 
         for j in instr.split('\n'):
             j = j.strip()

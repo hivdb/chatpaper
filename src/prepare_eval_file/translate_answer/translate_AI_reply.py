@@ -89,20 +89,20 @@ DRUG_CLASS = {
 
 
 def parse_drug_class(ai_reply):
-    ai_reply = ai_reply.lower()
+    ai_reply = ai_reply
 
     answers = []
 
     for k, v in DRUG_CLASS.items():
-        k = k.lower()
+        k = k
         if k in ai_reply:
-            answers.append(k.upper())
+            answers.append(k)
             continue
 
         for i in v:
-            i = i.lower()
+            i = i
             if i in ai_reply:
-                answers.append(k.upper())
+                answers.append(k)
                 break
 
     return ', '.join(answers)

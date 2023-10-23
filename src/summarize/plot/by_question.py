@@ -140,6 +140,8 @@ def get_grouped_by_type(df, data_file_paths, header):
     df_typed = []
 
     for name in ['Boolean', 'Numerical', 'Categorical']:
+        if name not in df:
+            continue
         df_sub = df[name]
         if name == 'Boolean':
             df_sub = df_sub[

@@ -46,11 +46,7 @@ def quick_eval(record, eval_db):
 
     result = ''
 
-    human_answer = record['human_answer'].lower().strip()
-    # human_NA = record['human_NA'].lower().strip() == 'yes'
-    ai_answer = record['AI_answer'].lower().strip()
-    ai_reply = record['AI_reply'].lower().strip()
-    # ai_NA = record['AI_NA'].lower().strip() == 'yes'
+    ai_reply = record['AI_reply']
 
     index_result = eval_db[record['question_id']][record['paper']][ai_reply]
 
@@ -58,6 +54,12 @@ def quick_eval(record, eval_db):
         record['AI_answer'] = index_result[0]
         record['agree?'] = index_result[1]
         return
+
+    # human_NA = record['human_NA'].lower().strip() == 'yes'
+    ai_answer = record['AI_answer'].lower().strip()
+    human_answer = record['human_answer'].lower().strip()
+    ai_reply = ai_reply.lower()
+    # ai_NA = record['AI_NA'].lower().strip() == 'yes'
 
     if human_answer == ai_reply:
         result = 'Yes'

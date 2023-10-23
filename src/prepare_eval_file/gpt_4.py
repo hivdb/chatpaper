@@ -28,19 +28,20 @@ def gen_eval_file(test_set_folder_list):
     # TODO, when to merge multiple paper data set?
 
     for t in test_set_folder_list:
+        reports = []
+        for f, name in get_chat_history(t / 'Papers'):
+            reports.append((f, name, load_csv(f)))
+
+        eval_db = load_eval_db(t / 'evaluation' / 'eval_db.csv')
+
         for i in range(1, 1000):
-            gen_eval_file_for_testset(t, i)
+            gen_eval_file_for_testset(t, reports, eval_db, i)
 
 
-def gen_eval_file_for_testset(test_set_folder, run_number):
-
-    eval_db = load_eval_db(test_set_folder / 'evaluation' / 'eval_db.csv')
-
+def gen_eval_file_for_testset(test_set_folder, reports, eval_db, run_number):
     eval_table = []
 
-    for f, name in get_chat_history(test_set_folder / 'Papers'):
-        report = load_csv(f)
-
+    for f, name, report in reports:
         report = [
             i
             for i in report

@@ -77,13 +77,23 @@ def plot_by_question(
 
     draw_context['df_grouped_by_type'] = df_typed
 
+    # COLORS = [
+    #     # '#072F5F',
+    #     '#1261A0',
+    #     '#3895D3',
+    #     '#58CCED',
+    #     '#7ad6f0',
+    # ]
+
     COLORS = [
-        # '#072F5F',
         '#1261A0',
         '#3895D3',
         '#58CCED',
-        '#7ad6f0',
-        '#7ad6f0',
+        # '#7ad6f0',
+
+        '#963c32',
+        '#ab625a',
+        '#c08a84'
     ]
 
     draw_context['colors'] = COLORS

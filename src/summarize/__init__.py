@@ -78,6 +78,12 @@ def analyze(test_set_path):
         ])
 
     summarize_eval(
+        'GPT-4-oneq', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_15.csv'),
+        ])
+
+    summarize_eval(
         'GPT-4-base_2', [
             Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_base_2.csv'),
@@ -94,6 +100,8 @@ def analyze(test_set_path):
             Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_base_2.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_base_3.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_4.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
         ],
         additional_func=[get_stdev])
 

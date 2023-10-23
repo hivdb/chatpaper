@@ -95,10 +95,14 @@ def plot_by_paper(
     draw_context['df_grouped'] = df
 
     COLORS = [
-        '#072F5F',
         '#1261A0',
         '#3895D3',
         '#58CCED',
+        '#7ad6f0',
+
+        '#963c32',
+        '#ab625a',
+        '#c08a84'
     ]
 
     draw_context['colors'] = COLORS

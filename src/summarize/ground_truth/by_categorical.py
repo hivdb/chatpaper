@@ -22,10 +22,7 @@ def by_categorical(questions):
         num_not_zero = len([
             i
             for i in human_answer
-            if (
-                not i.lower().startswith('na') and
-                not i.lower().startswith('0')
-            )
+            if i.lower() != 'null'
             ])
 
         report['# GT_nonzero'] = num_not_zero

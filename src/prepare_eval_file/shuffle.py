@@ -5,16 +5,27 @@ from src.table import group_records_by
 from src.evaluation.quick_eval import quick_eval
 from src.select_content.test_set import select_test_set
 from src.excel2csv import excel2csv
+from src.evaluation.quick_eval import load_eval_db
 
 
 def shuffle_by_paper(paper=True, question=False):
-    test_set_path_list = select_test_set()
+    test_set_path = select_test_set()
 
-    excel_file = test_set_path_list / 'evaluation' / 'gpt-4_base.xlsx'
-    file_path = test_set_path_list / 'evaluation' / 'gpt-4_base.csv'
+    excel_file = test_set_path / 'evaluation' / 'gpt-4_base.xlsx'
+    csv_file = test_set_path / 'evaluation' / 'gpt-4_base.csv'
+    shuffle_file(test_set_path, excel_file, csv_file)
+
+    excel_file = test_set_path / 'evaluation' / 'gpt-4_base_10.xlsx'
+    csv_file = test_set_path / 'evaluation' / 'gpt-4_base_10.csv'
+    shuffle_file(test_set_path, excel_file, csv_file)
+
+
+def shuffle_file(test_set_path, excel_file, csv_file):
     excel2csv(excel_file, excel_file.stem)
 
-    table = load_csv(file_path)
+    eval_db = load_eval_db(test_set_path / 'evaluation' / 'eval_db.csv')
+
+    table = load_csv(csv_file)
 
     report = []
     for qid, answers in group_records_by(table, 'question_id').items():
@@ -50,7 +61,7 @@ def shuffle_by_paper(paper=True, question=False):
             i['chat_mode'] = 'shuffle'
             report.append(i)
 
-    [quick_eval(i, {}) for i in report]
+    [quick_eval(i, eval_db) for i in report]
 
-    save_file = file_path.parent / f'{file_path.stem}_shuffle_paper.csv'
+    save_file = csv_file.parent / f'{csv_file.stem}_shuffle_paper.csv'
     dump_csv(save_file, report)

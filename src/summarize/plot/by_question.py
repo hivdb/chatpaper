@@ -132,6 +132,14 @@ def plot_by_question(
         figure_path / 'diff_question.png')
     draw_compare_plot(draw_context, question_type=True)
 
+    df_default = get_grouped_by_default(
+        df, figure_path, header)
+    if df_default:
+        draw_context['df_grouped_by_type'] = df_default
+        draw_context['figure_path'] = (
+            figure_path / 'default_question.png')
+        draw_compare_plot(draw_context, question_type=True)
+
     # draw_context['df_grouped'] = df.sort_values(
     #     by=['question_id'], ascending=[True])
     # draw_context['figure_path'] = (
@@ -148,6 +156,47 @@ def plot_by_question(
     draw_context['figure_path'] = (
         figure_path / 'ordered_diff.png')
     draw_compare_plot(draw_context)
+
+
+def get_grouped_by_default(df, figure_path, header):
+    disagree_pattern = figure_path.parent / 'summary' / 'mode_disagree_pattern.csv'
+    disagree_pattern = load_csv(disagree_pattern)
+
+    columns = [
+        i
+        for i in disagree_pattern[0].keys()
+        if i not in ('question_id', 'question_type', '# disagree')
+    ]
+
+    if len(columns) != 2:
+        return None
+
+    c1, c2 = columns
+
+    disagree_qid = [
+        int(i['question_id'])
+        for i in disagree_pattern
+        if (
+            int(i[c1]) >= 10 and int(i[c2]) <= 1
+        ) or (
+            int(i[c2]) >= 10 and int(i[c1]) <= 1
+        )
+    ]
+
+    grouped = get_grouped_by_diff(df, header)
+
+    grouped_by_default = []
+    for name, df in grouped:
+        grouped_by_default.append([
+            name,
+            df[df['question_id'].isin(disagree_qid)]
+        ])
+        grouped_by_default.append([
+            name,
+            df[~df['question_id'].isin(disagree_qid)]
+        ])
+
+    return grouped_by_default
 
 
 def get_grouped_by_diff(df, header):

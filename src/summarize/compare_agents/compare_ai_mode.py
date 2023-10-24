@@ -81,6 +81,47 @@ def compare_ai_mode_diff(save_path, data_file_list):
     get_top_3_improve(save_path, improve)
     get_top_3_worse(save_path, worse)
 
+    get_disagree_pattern(save_path, report)
+
+
+def get_disagree_pattern(save_path, report):
+
+    table = []
+    for qid, q_list in group_records_by(report, 'question_id').items():
+        question_type = q_list[0]['question_type']
+        AI_answer_keys = [
+            i
+            for i in q_list[0].keys()
+            if 'AI_answer' in i
+        ]
+
+        AI_answers = {
+            i: [
+                j[i]
+                for j in q_list
+            ]
+            for i in AI_answer_keys
+        }
+
+        row = {
+            'question_id': qid,
+            'question_type': question_type
+        }
+        default = {
+            'Boolean': 'No',
+            'Categorical': 'NULL',
+            'Numerical': '0'
+        }
+        default = default[question_type]
+        for i, j in AI_answers.items():
+            row[f"{i} is No/NULL/0"] = j.count(default)
+
+        row['# disagree'] = len(q_list)
+
+        table.append(row)
+
+    dump_csv(save_path / 'mode_disagree_pattern.csv', table)
+
 
 def get_change_report(save_path, grouped, question_ids):
 

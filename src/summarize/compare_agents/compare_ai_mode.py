@@ -35,8 +35,8 @@ def compare_ai_mode_diff(save_path, data_file_list):
             for i in rows
         ]
 
-        if all(agreement):
-            continue
+        # if all(agreement):
+        #     continue
 
         report_row = {
             'paper': paper,
@@ -68,20 +68,70 @@ def compare_ai_mode_diff(save_path, data_file_list):
 
     dump_csv(save_path / 'disagree_with_human.csv', report)
 
-    report = [
+    report_disagree = [
         i
         for i in report
         if i['same agree?'].lower() != 'yes'
     ]
 
-    dump_csv(save_path / 'mode_disagree.csv', report)
+    dump_csv(save_path / 'mode_disagree.csv', report_disagree)
 
     get_change_report(save_path, grouped, question_ids)
 
     get_top_3_improve(save_path, improve)
     get_top_3_worse(save_path, worse)
 
-    get_disagree_pattern(save_path, report)
+    get_disagree_pattern(save_path / 'mode_disagree_pattern.csv', report)
+    get_negative_pattern(save_path / 'mode_disagree_negative.csv', report)
+
+
+def get_negative_pattern(save_path, report):
+
+    table = []
+
+    for qid, q_list in group_records_by(report, 'question_id').items():
+        default = {
+            'Boolean': 'No',
+            'Categorical': 'NULL',
+            'Numerical': '0'
+        }
+        question_type = q_list[0]['question_type']
+        default = default[question_type]
+
+        human_answer = [
+            str(i['human_answer'])
+            for i in q_list
+        ]
+        gt_negative = human_answer.count(default)
+
+        row = {
+            'question_id': qid,
+            'question_type': question_type,
+            '# GT_negative': gt_negative,
+            '% GT_negative': f"{gt_negative / 60 * 100}%",
+        }
+
+        AI_answer_keys = [
+            i
+            for i in q_list[0].keys()
+            if 'AI_answer' in i
+        ]
+
+        AI_answers = {
+            i: [
+                j[i]
+                for j in q_list
+            ]
+            for i in AI_answer_keys
+        }
+
+        for i, j in AI_answers.items():
+            row[f"{i} negative"] = j.count(default)
+            row[f"{i} positive"] = len(j) - j.count(default)
+
+        table.append(row)
+
+    dump_csv(save_path, table)
 
 
 def get_disagree_pattern(save_path, report):
@@ -120,7 +170,7 @@ def get_disagree_pattern(save_path, report):
 
         table.append(row)
 
-    dump_csv(save_path / 'mode_disagree_pattern.csv', table)
+    dump_csv(save_path, table)
 
 
 def get_change_report(save_path, grouped, question_ids):

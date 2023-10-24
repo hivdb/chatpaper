@@ -183,7 +183,7 @@ def get_grouped_by_default(df, figure_path, header):
     #     )
     # ]
 
-    grouped = get_grouped_by_diff(df, header, -3, 3)
+    grouped = get_grouped_by_diff(df, header)
 
     # grouped_by_default = []
     # for name, df in grouped:
@@ -199,7 +199,7 @@ def get_grouped_by_default(df, figure_path, header):
     return grouped
 
 
-def get_grouped_by_diff(df, header, min_cut=-3, max_cut=3):
+def get_grouped_by_diff(df, header, min_cut=-5, max_cut=5):
 
     header1 = header[0]
     header2 = header[1]

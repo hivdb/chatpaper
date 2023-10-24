@@ -150,6 +150,7 @@ def draw_ppv_table(figure_path, tables, ppv_values):
         ax.text(0.9, 0.5, f'PPV: {ppv}', transform=ax.transAxes, fontsize=10)
 
     plt.savefig(figure_path, dpi=300, bbox_inches='tight')
+    plt.close()
 
 
 def get_triple_cont_table(human_answer, ai_answer):

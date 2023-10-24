@@ -4,15 +4,38 @@ from matplotlib.ticker import PercentFormatter
 import numpy as np
 from src.file_format import load_csv
 
+pd.options.mode.chained_assignment = None
+
 
 # TODO, selection which to draw, and which file to draw
+
+# COLORS = [
+#     # '#072F5F',
+#     '#1261A0',
+#     '#3895D3',
+#     '#58CCED',
+#     '#7ad6f0',
+# ]
+
+COLORS = [
+    '#1261A0',
+    '#3895D3',
+    '#58CCED',
+    '#7ad6f0',
+
+    '#963c32',
+    '#ab625a',
+    '#c08a84'
+]
 
 
 def plot_by_question(
         data_file_list,
         figure_path,
         figsize=(50, 10),
-        figure_name='default.png'):
+        rename_header={},
+        figure_name='default.png',
+        colors=COLORS):
 
     draw_context = {
         'figsize': figsize,
@@ -42,6 +65,12 @@ def plot_by_question(
         for i, j in zip(df_list, data_file_list)
     ]
 
+    if rename_header:
+        df_list = [
+            i.rename(columns=rename_header)
+            for i in df_list
+        ]
+
     # Get the column headers
     df = df_list[0]
 
@@ -55,7 +84,7 @@ def plot_by_question(
     #     'Categorical': 'List',
     #     'Numerical': 'Number',
     # })
-    df.set_index('question_id', 'question_type', inplace=True)
+    df.set_index(['question_id', 'question_type'], inplace=True)
 
     df.reset_index(inplace=True)
     df_grouped = df.sort_values(by=header, ascending=[False]*len(header))
@@ -63,29 +92,10 @@ def plot_by_question(
     df_grouped.set_index('question_id', inplace=True)
     draw_context['df_grouped'] = df_grouped
 
-    draw_context['df_grouped_by_type'] = get_grouped_by_type(
+    draw_context['df_grouped_by_type'] = get_grouped_by_reason(
         df, data_file_list, header)
 
-    # COLORS = [
-    #     # '#072F5F',
-    #     '#1261A0',
-    #     '#3895D3',
-    #     '#58CCED',
-    #     '#7ad6f0',
-    # ]
-
-    COLORS = [
-        '#1261A0',
-        '#3895D3',
-        '#58CCED',
-        '#7ad6f0',
-
-        '#963c32',
-        '#ab625a',
-        '#c08a84'
-    ]
-
-    draw_context['colors'] = COLORS
+    draw_context['colors'] = colors
 
     statistics = {}
 
@@ -107,7 +117,19 @@ def plot_by_question(
     draw_compare_plot(draw_context, split=True)
 
     draw_context['figure_path'] = (
+        figure_path / 'reasoned_question.png')
+    draw_compare_plot(draw_context, question_type=True)
+
+    draw_context['df_grouped_by_type'] = get_grouped_by_type(
+        df, header)
+    draw_context['figure_path'] = (
         figure_path / 'typed_question.png')
+    draw_compare_plot(draw_context, question_type=True)
+
+    draw_context['df_grouped_by_type'] = get_grouped_by_diff(
+        df, header)
+    draw_context['figure_path'] = (
+        figure_path / 'diff_question.png')
     draw_compare_plot(draw_context, question_type=True)
 
     # draw_context['df_grouped'] = df.sort_values(
@@ -128,7 +150,59 @@ def plot_by_question(
     draw_compare_plot(draw_context)
 
 
-def get_grouped_by_type(df, data_file_paths, header):
+def get_grouped_by_diff(df, header):
+
+    header1 = header[0]
+    header2 = header[1]
+    df = df[['question_id', header1, header2]]
+    df['diff'] = df[header1] - df[header2]
+    df = df.sort_values(
+        by=['diff'], ascending=[False])
+
+    sub1 = df[df['diff'] < -0.02]
+    sub2 = df[(df['diff'] >= -0.02) & (df['diff'] <= 0.02)]
+    sub3 = df[df['diff'] >= 0.02]
+
+    sub1.drop('diff', axis=1, inplace=True)
+    sub2.drop('diff', axis=1, inplace=True)
+    sub3.drop('diff', axis=1, inplace=True)
+
+    grouped = [
+        ('', sub3),
+        ('', sub2),
+        ('', sub1),
+    ]
+
+    return grouped
+
+
+def get_grouped_by_type(df, header):
+
+    df = {name: group for name, group in df.groupby('question_type')}
+
+    typed = []
+    for name in ['Boolean', 'Numerical', 'Categorical']:
+        if name not in df:
+            continue
+
+        df_sub = df[name]
+
+        header1 = header[0]
+        header2 = header[1]
+        df_sub = df_sub[['question_id', header1, header2]]
+
+        df_sub['diff'] = df_sub[header1] - df_sub[header2]
+
+        df_sub = df_sub.sort_values(
+                by=['diff'], ascending=[False])
+        df_sub.drop('diff', axis=1, inplace=True)
+
+        typed.append((name, df_sub))
+
+    return typed
+
+
+def get_grouped_by_reason(df, data_file_paths, header):
 
     gt_path = data_file_paths[0].parent / 'summarize_ground_truth.csv'
     ground_truth = pd.read_csv(gt_path)
@@ -159,16 +233,20 @@ def get_grouped_by_type(df, data_file_paths, header):
             df_sub1.drop('diff', axis=1, inplace=True)
             df_sub1.drop('# GT_Yes', axis=1, inplace=True)
 
-            df_sub2 = df_sub[
-                (df_sub['# GT_Yes'] > 10) & (df_sub['# GT_Yes'] < 50)]
+            # df_sub2 = df_sub[
+            #     (df_sub['# GT_Yes'] >= 4) & (df_sub['# GT_Yes'] <= 56)]
+
+            df_sub2 = df_sub[(df_sub['diff'] > 0.1)]
 
             df_sub2 = df_sub2.sort_values(
                 by=['diff'], ascending=[False])
             df_sub2.drop('diff', axis=1, inplace=True)
             df_sub2.drop('# GT_Yes', axis=1, inplace=True)
 
-            df_sub3 = df_sub[
-                (df_sub['# GT_Yes'] <= 10) | (df_sub['# GT_Yes'] >= 50)]
+            # df_sub3 = df_sub[
+            #     (df_sub['# GT_Yes'] < 4) | (df_sub['# GT_Yes'] > 56)]
+
+            df_sub3 = df_sub[(df_sub['diff'] <= 0.1)]
 
             df_sub3 = df_sub3.sort_values(
                 by=['diff'], ascending=[False])
@@ -187,8 +265,8 @@ def get_grouped_by_type(df, data_file_paths, header):
             header2 = header[1]
             df_sub['diff'] = df_sub[header1] - df_sub[header2]
 
-            df_sub1 = df_sub[df_sub['# same'] < 10]
-            df_sub2 = df_sub[df_sub['# same'] >= 10]
+            df_sub1 = df_sub[df_sub['# same'] < 8]
+            df_sub2 = df_sub[df_sub['# same'] >= 8]
 
             df_sub1 = df_sub1.sort_values(
                 by=['diff'], ascending=[False])
@@ -279,6 +357,7 @@ def draw_compare_plot(draw_context, split=False, question_type=False):
         #     bbox=dict(facecolor='white', edgecolor='black'))
 
     plt.savefig(draw_context['figure_path'], dpi=300, bbox_inches='tight')
+    plt.close()
 
 
 def draw_compare_plot_with_legend(
@@ -341,10 +420,10 @@ def draw_compare_plot_with_legend(
     handles, labels = plt.gca().get_legend_handles_labels()
     new_labels = {}
     for i in labels:
-        # stat = draw_context['statistics'][i]
+        stat = draw_context['statistics'][i]
         new_labels[i] = (
             f"{i[:-1] if i[-1] == '?' else i.replace('_', ' ').upper()}"
-            #: f"{stat['median']}% ({stat['iqr25']}%, {stat['iqr75']}%)"
+            f": {stat['median']}% ({stat['iqr25']}%, {stat['iqr75']}%)"
             )
 
     ax.legend(handles, [new_labels.get(label, label) for label in labels])

@@ -180,6 +180,7 @@ def plot_disagree(save_path, report):
     ax.set_xlim([-1, 60])
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
 
 
 def get_top_3_improve(save_path, improve):

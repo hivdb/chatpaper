@@ -7,6 +7,18 @@ from collections import defaultdict
 import string
 
 
+COLORS = [
+    '#1261A0',
+    '#3895D3',
+    '#58CCED',
+    '#7ad6f0',
+
+    '#963c32',
+    '#ab625a',
+    '#c08a84'
+]
+
+
 def detect_duplicate(names):
     counts = Counter(names)
     for name, count in counts:
@@ -44,7 +56,8 @@ def plot_by_paper(
         data_file_list,
         figure_path,
         figsize=(50, 10),
-        figure_name='default.png'):
+        figure_name='default.png',
+        colors=COLORS):
 
     draw_context = {
         'figsize': figsize,
@@ -94,18 +107,7 @@ def plot_by_paper(
 
     draw_context['df_grouped'] = df
 
-    COLORS = [
-        '#1261A0',
-        '#3895D3',
-        '#58CCED',
-        '#7ad6f0',
-
-        '#963c32',
-        '#ab625a',
-        '#c08a84'
-    ]
-
-    draw_context['colors'] = COLORS
+    draw_context['colors'] = colors
 
     statistics = {}
 
@@ -149,6 +151,7 @@ def draw_compare_plot(draw_context, split=False):
         draw_context, df_grouped, ax, len(df_grouped), split=False)
 
     plt.savefig(draw_context['figure_path'], dpi=300, bbox_inches='tight')
+    plt.close()
 
 
 def draw_compare_plot_with_legend(

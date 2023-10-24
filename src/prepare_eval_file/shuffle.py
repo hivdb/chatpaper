@@ -26,7 +26,7 @@ def shuffle_by_paper(paper=True, question=False):
                     'paper',
                     'question_id', 'question', 'question_type',
                     'human_answer',
-                    'human_NA'
+                    # 'human_NA'
                     ]
                 }
             for i in answers
@@ -38,7 +38,7 @@ def shuffle_by_paper(paper=True, question=False):
                 k: i[k]
                 for k in [
                     'AI_reply',
-                    'AI_NA',
+                    # 'AI_NA',
                     'AI_answer']
             }
             for i in answers
@@ -50,7 +50,7 @@ def shuffle_by_paper(paper=True, question=False):
             i['chat_mode'] = 'shuffle'
             report.append(i)
 
-    [quick_eval(i) for i in report]
+    [quick_eval(i, {}) for i in report]
 
     save_file = file_path.parent / f'{file_path.stem}_shuffle_paper.csv'
     dump_csv(save_file, report)

@@ -173,44 +173,47 @@ def get_grouped_by_default(df, figure_path, header):
 
     c1, c2 = columns
 
-    disagree_qid = [
-        int(i['question_id'])
-        for i in disagree_pattern
-        if (
-            int(i[c1]) >= 10 and int(i[c2]) <= 1
-        ) or (
-            int(i[c2]) >= 10 and int(i[c1]) <= 1
-        )
-    ]
+    # disagree_qid = [
+    #     int(i['question_id'])
+    #     for i in disagree_pattern
+    #     if (
+    #         int(i[c1]) >= 10 and int(i[c2]) <= 1
+    #     ) or (
+    #         int(i[c2]) >= 10 and int(i[c1]) <= 1
+    #     )
+    # ]
 
-    grouped = get_grouped_by_diff(df, header)
+    grouped = get_grouped_by_diff(df, header, -3, 3)
 
-    grouped_by_default = []
-    for name, df in grouped:
-        grouped_by_default.append([
-            name,
-            df[df['question_id'].isin(disagree_qid)]
-        ])
-        grouped_by_default.append([
-            name,
-            df[~df['question_id'].isin(disagree_qid)]
-        ])
+    # grouped_by_default = []
+    # for name, df in grouped:
+    #     grouped_by_default.append([
+    #         name,
+    #         df[df['question_id'].isin(disagree_qid)]
+    #     ])
+    #     grouped_by_default.append([
+    #         name,
+    #         df[~df['question_id'].isin(disagree_qid)]
+    #     ])
 
-    return grouped_by_default
+    return grouped
 
 
-def get_grouped_by_diff(df, header):
+def get_grouped_by_diff(df, header, min_cut=-3, max_cut=3):
 
     header1 = header[0]
     header2 = header[1]
     df = df[['question_id', header1, header2]]
-    df['diff'] = df[header1] - df[header2]
+    df['diff'] = ((df[header1] - df[header2]) * 60)
     df = df.sort_values(
         by=['diff'], ascending=[False])
 
-    sub1 = df[df['diff'] < -0.02]
-    sub2 = df[(df['diff'] >= -0.02) & (df['diff'] <= 0.02)]
-    sub3 = df[df['diff'] >= 0.02]
+    min_cut -= 0.001
+    max_cut += 0.001
+
+    sub1 = df[df['diff'] < min_cut]
+    sub2 = df[(df['diff'] >= min_cut) & (df['diff'] <= max_cut)]
+    sub3 = df[df['diff'] > max_cut]
 
     sub1.drop('diff', axis=1, inplace=True)
     sub2.drop('diff', axis=1, inplace=True)

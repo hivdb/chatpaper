@@ -104,6 +104,12 @@ def get_negative_pattern(save_path, report):
         ]
         gt_negative = human_answer.count(default)
 
+        q_gt_negative = [
+            i
+            for i in q_list
+            if str(i['human_answer']) == default
+        ]
+
         row = {
             'question_id': qid,
             'question_type': question_type,
@@ -111,23 +117,27 @@ def get_negative_pattern(save_path, report):
             '% GT_negative': f"{gt_negative / 60 * 100}%",
         }
 
+        if not q_gt_negative:
+            table.append(row)
+            continue
+
         AI_answer_keys = [
             i
-            for i in q_list[0].keys()
-            if 'AI_answer' in i
+            for i in q_gt_negative[0].keys()
+            if 'agree?' in i
         ]
 
         AI_answers = {
             i: [
                 j[i]
-                for j in q_list
+                for j in q_gt_negative
             ]
             for i in AI_answer_keys
         }
 
         for i, j in AI_answers.items():
-            row[f"{i} negative"] = j.count(default)
-            row[f"{i} positive"] = len(j) - j.count(default)
+            row[f"{i} agree"] = j.count('Yes')
+            row[f"{i} not agree"] = len(j) - j.count('Yes')
 
         table.append(row)
 

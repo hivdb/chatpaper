@@ -158,6 +158,18 @@ def analyze(test_set_path):
     #     additional_func=[get_stdev])
 
     summarize_eval(
+        'GPT-4-guide_3times_multi', [
+            Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_2.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_3.csv'),
+        ], rename_header={
+            'gpt-4_guide': 'gpt-4_All Per Time, Run 1',
+            'gpt-4_guide_2': 'gpt-4_All Per Time, Run 2',
+            'gpt-4_guide_3': 'gpt-4_All Per time, Run 3',
+        },
+        additional_func=[get_stdev])
+
+    summarize_eval(
         'GPT-4-base_3times_one', [
             Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_base_11.csv'),

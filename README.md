@@ -32,4 +32,4 @@
 
 ## About Parse paper
 
-Note: although there exists many kinds of tools to extract content from a PDF document, none of them can do it without introducing errors. Even more, none of them tools can be used to get a consensus result. So if we want to make sure the parsed content doesn't have errors, manually checking the result is necessary.
+Note: although there exists many kinds of tools to extract content from a PDF document, none of them can do it without introducing errors. Even more, none of the tools can be used to get a consensus result. So if we want to make sure the parsed content doesn't have errors, manually checking the result is necessary.

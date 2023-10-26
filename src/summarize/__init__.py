@@ -71,53 +71,53 @@ def merge_eval_files(test_set_path_list):
 
 def analyze(test_set_path):
 
-    summarize_eval(
-        'GPT-4-multiq', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
-        ], rename_header={
-            'gpt-4_base': 'gpt-4_base',
-            'gpt-4_guide': 'gpt-4_instruction'
-        }, colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ])
+    # summarize_eval(
+    #     'GPT-4-multiq', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base': 'gpt-4_base',
+    #         'gpt-4_guide': 'gpt-4_instruction'
+    #     }, colors=[
+    #         '#1f78b4',
+    #         '#ff7f00',
+    #     ])
 
-    summarize_eval(
-        'GPT-4-oneq', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_15.csv'),
-        ], rename_header={
-            'gpt-4_base_10': 'gpt-4_base',
-            'gpt-4_guide_15': 'gpt-4_instruction'
-        }, colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ])
+    # summarize_eval(
+    #     'GPT-4-oneq', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_15.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base_10': 'gpt-4_base',
+    #         'gpt-4_guide_15': 'gpt-4_instruction'
+    #     }, colors=[
+    #         '#1f78b4',
+    #         '#ff7f00',
+    #     ])
 
-    summarize_eval(
-        'GPT-4-base_one_multi', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
-        ], rename_header={
-            'gpt-4_base_10': 'gpt-4_one_per_time',
-            'gpt-4_base': 'gpt-4_all_per_time',
-        }, colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ])
+    # summarize_eval(
+    #     'GPT-4-base_one_multi', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base_10': 'gpt-4_one_per_time',
+    #         'gpt-4_base': 'gpt-4_all_per_time',
+    #     }, colors=[
+    #         '#1f78b4',
+    #         '#ff7f00',
+    #     ])
 
-    summarize_eval(
-        'GPT-4-guide_one_multi', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_15.csv'),
-        ], rename_header={
-            'gpt-4_guide': 'gpt-4_all_per_time',
-            'gpt-4_guide_15': 'gpt-4_one_per_time',
-        }, colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ])
+    # summarize_eval(
+    #     'GPT-4-guide_one_multi', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_15.csv'),
+    #     ], rename_header={
+    #         'gpt-4_guide': 'gpt-4_all_per_time',
+    #         'gpt-4_guide_15': 'gpt-4_one_per_time',
+    #     }, colors=[
+    #         '#1f78b4',
+    #         '#ff7f00',
+    #     ])
 
     # summarize_eval(
     #     'GPT-4-base_2', [
@@ -131,17 +131,17 @@ def analyze(test_set_path):
     #         Path(test_set_path / 'analysis' / 'gpt-4_base_3.csv'),
     #     ])
 
-    summarize_eval(
-        'GPT-4-base_3times_multi', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_2.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_3.csv'),
-        ], rename_header={
-            'gpt-4_base': 'gpt-4_All Per Time, Run 1',
-            'gpt-4_base_2': 'gpt-4_All Per Time, Run 2',
-            'gpt-4_base_3': 'gpt-4_All Per time, Run 3',
-        },
-        additional_func=[get_stdev])
+    # summarize_eval(
+    #     'GPT-4-base_3times_multi', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_2.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_3.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base': 'gpt-4_All Per Time, Run 1',
+    #         'gpt-4_base_2': 'gpt-4_All Per Time, Run 2',
+    #         'gpt-4_base_3': 'gpt-4_All Per time, Run 3',
+    #     },
+    #     additional_func=[get_stdev])
 
     # summarize_eval(
     #     'GPT-4-base_4times_multi', [
@@ -157,56 +157,72 @@ def analyze(test_set_path):
     #     },
     #     additional_func=[get_stdev])
 
+    # summarize_eval(
+    #     'GPT-4-guide_3times_multi', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_2.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_3.csv'),
+    #     ], rename_header={
+    #         'gpt-4_guide': 'gpt-4_All Per Time, Run 1',
+    #         'gpt-4_guide_2': 'gpt-4_All Per Time, Run 2',
+    #         'gpt-4_guide_3': 'gpt-4_All Per time, Run 3',
+    #     },
+    #     additional_func=[get_stdev])
+
     summarize_eval(
-        'GPT-4-guide_3times_multi', [
+        'GPT-4-3times_multi', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_2.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_3.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_guide_2.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_guide_3.csv'),
         ], rename_header={
-            'gpt-4_guide': 'gpt-4_All Per Time, Run 1',
-            'gpt-4_guide_2': 'gpt-4_All Per Time, Run 2',
-            'gpt-4_guide_3': 'gpt-4_All Per time, Run 3',
+            'gpt-4_base': 'gpt-4_All Per Time, Run 1',
+            'gpt-4_base_2': 'gpt-4_All Per Time, Run 2',
+            'gpt-4_base_3': 'gpt-4_All Per time, Run 3',
         },
+        bar_width=0.1,
         additional_func=[get_stdev])
 
-    summarize_eval(
-        'GPT-4-base_3times_one', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_11.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_12.csv'),
-        ], rename_header={
-            'gpt-4_base_10': 'gpt-4_One per time, Run 1',
-            'gpt-4_base_11': 'gpt-4_One per time, Run 2',
-            'gpt-4_base_12': 'gpt-4_One per time, Run 3',
-        },
-        additional_func=[get_stdev])
+    # summarize_eval(
+    #     'GPT-4-base_3times_one', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_11.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_12.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base_10': 'gpt-4_One per time, Run 1',
+    #         'gpt-4_base_11': 'gpt-4_One per time, Run 2',
+    #         'gpt-4_base_12': 'gpt-4_One per time, Run 3',
+    #     },
+    #     additional_func=[get_stdev])
 
-    summarize_eval(
-        'GPT-4-multi-Shuffle', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper.csv'),
-        ], rename_header={
-            'gpt-4_base': 'gpt-4_base',
-            'gpt-4_base_shuffle_paper': 'gpt-4_permutation',
-        }, colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ]
-    )
+    # summarize_eval(
+    #     'GPT-4-multi-Shuffle', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base': 'gpt-4_base',
+    #         'gpt-4_base_shuffle_paper': 'gpt-4_permutation',
+    #     }, colors=[
+    #         '#1f78b4',
+    #         '#ff7f00',
+    #     ]
+    # )
 
-    summarize_eval(
-        'GPT-4-one-Shuffle', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
-            Path(
-                test_set_path / 'analysis' / 'gpt-4_base_10_shuffle_paper.csv'),
-        ], rename_header={
-            'gpt-4_base_10': 'gpt-4_base',
-            'gpt-4_base_10_shuffle_paper': 'gpt-4_permutation',
-        }, colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ]
-    )
+    # summarize_eval(
+    #     'GPT-4-one-Shuffle', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
+    #         Path(
+    #             test_set_path / 'analysis' / 'gpt-4_base_10_shuffle_paper.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base_10': 'gpt-4_base',
+    #         'gpt-4_base_10_shuffle_paper': 'gpt-4_permutation',
+    #     }, colors=[
+    #         '#1f78b4',
+    #         '#ff7f00',
+    #     ]
+    # )
 
     # summarize_eval(
     #     'GPT-4-extract', [
@@ -348,7 +364,7 @@ def merge_disagree(folder):
 
 def summarize_eval(
         analysis_name, data_file_list, additional_func=[],
-        rename_header={}, colors=None):
+        rename_header={}, colors=None, bar_width=0.2):
 
     print(f'Work on {analysis_name}')
 
@@ -380,7 +396,7 @@ def summarize_eval(
     if colors:
         plot_by_question(
             data_file_list, figure_path, rename_header=rename_header,
-            figure_name='by_question.png', colors=colors)
+            figure_name='by_question.png', bar_width=bar_width, colors=colors)
     else:
         plot_by_question(
             data_file_list, figure_path, rename_header=rename_header,

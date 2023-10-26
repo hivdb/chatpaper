@@ -5,10 +5,149 @@ from operator import itemgetter
 from src.table import group_records_by
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
+import matplotlib.patches as mpatches
 
 
 def compare_ai_mode_diff(save_path, data_file_list):
 
+    grouped = get_grouped_questions(data_file_list)
+    report, improve, worse = get_disagree_with_human(grouped)
+
+    dump_csv(save_path / 'disagree_with_human.csv', report)
+
+    report_disagree = [
+        i
+        for i in report
+        if i['same agree?'].lower() != 'yes'
+    ]
+
+    dump_csv(save_path / 'mode_disagree.csv', report_disagree)
+
+    question_ids = list(set([
+        i[1]
+        for i in grouped.keys()
+    ]))
+
+    get_change_report(
+        save_path / 'mode_disagree_summary.csv', grouped, question_ids)
+
+    get_top_3_improve(save_path, improve)
+    get_top_3_worse(save_path, worse)
+
+    get_disagree_pattern(save_path / 'mode_disagree_pattern.csv', report)
+    get_negative_pattern(save_path / 'mode_disagree_negative.csv', report)
+
+    compare_pairs(data_file_list, save_path)
+
+
+def compare_pairs(data_file_list, save_path):
+
+    n_files = len(data_file_list)
+
+    if n_files <= 2:
+        return
+
+    if n_files % 2 != 0:
+        return
+
+    set1 = data_file_list[:(n_files // 2)]
+    set2 = data_file_list[(n_files // 2):]
+
+    save_path = save_path / 'pairs'
+    save_path.mkdir(exist_ok=True, parents=True)
+
+    reports = []
+    for idx, (i, j) in enumerate(zip(set1, set2)):
+
+        grouped = get_grouped_questions([i, j])
+
+        question_ids = list(set([
+            i[1]
+            for i in grouped.keys()
+        ]))
+
+        reports.append(get_change_report(
+            save_path / f'{idx + 1}.csv', grouped, question_ids))
+
+    draw_compare(save_path / 'compare.png', reports)
+
+
+def draw_compare(save_path, reports):
+
+    qid_group = defaultdict(list)
+    for r in reports:
+        for i in r:
+            qid_group[i['question_id']].append(i)
+
+    qid_group = list(qid_group.values())
+
+    qid_group.sort(
+        key=lambda x: [
+            sum([
+                i['# improve']
+                for i in x
+            ]),
+            sum([
+                i['# worse']
+                for i in x
+            ])
+            ]
+        ,
+        reverse=True)
+
+    group_labels = [
+        f'Q{i[0]["question_id"]}'
+        for i in qid_group
+    ]
+
+    fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+
+    bar_positions = []
+    bar_width = 0.2
+    for pos, rows in enumerate(qid_group):
+        bar_positions.append(pos)
+        pos = pos - bar_width
+
+        for pair in rows:
+            ax.bar(
+                pos,
+                pair['# worse'] / 60,
+                width=bar_width,
+                color='#D32F2F',
+                edgecolor='black',
+            )
+            ax.bar(
+                pos,
+                bottom=pair['# worse'] / 60,
+                height=pair['# improve'] / 60,
+                width=0.2,
+                color='#1976D2',
+                edgecolor='black',
+            )
+
+            pos += 0.2
+
+    ax.set_xticks(bar_positions, group_labels)
+    ax.set_xticklabels(group_labels, rotation=90)
+
+    ax.yaxis.set_major_formatter(PercentFormatter(1))
+
+    ax.set_yticks([0, 0.5])
+    ax.set_ylim(0, 0.6)
+
+    ax.margins(x=0.05)
+    ax.set_xlim([-1, 60])
+
+    legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
+    legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
+
+    ax.legend(handles=[legend_handle1, legend_handle2])
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
+
+def get_grouped_questions(data_file_list):
     date_tables = [
         load_csv(i)
         for i in data_file_list
@@ -17,13 +156,14 @@ def compare_ai_mode_diff(save_path, data_file_list):
     grouped = defaultdict(list)
 
     for table in date_tables:
+
         for row in table:
             grouped[(row['paper'], row['question_id'])].append(row)
 
-    question_ids = list(set([
-        i[1]
-        for i in grouped.keys()
-    ]))
+    return grouped
+
+
+def get_disagree_with_human(grouped):
 
     report = []
     improve = []
@@ -66,23 +206,7 @@ def compare_ai_mode_diff(save_path, data_file_list):
 
     report.sort(key=itemgetter('question_id'))
 
-    dump_csv(save_path / 'disagree_with_human.csv', report)
-
-    report_disagree = [
-        i
-        for i in report
-        if i['same agree?'].lower() != 'yes'
-    ]
-
-    dump_csv(save_path / 'mode_disagree.csv', report_disagree)
-
-    get_change_report(save_path, grouped, question_ids)
-
-    get_top_3_improve(save_path, improve)
-    get_top_3_worse(save_path, worse)
-
-    get_disagree_pattern(save_path / 'mode_disagree_pattern.csv', report)
-    get_negative_pattern(save_path / 'mode_disagree_negative.csv', report)
+    return report, improve, worse
 
 
 def get_negative_pattern(save_path, report):
@@ -221,8 +345,11 @@ def get_change_report(save_path, grouped, question_ids):
 
         report.append(row)
 
-    dump_csv(save_path / 'mode_disagree_summary.csv', report)
-    plot_disagree(save_path / 'mode_disagree_summary.png', report)
+    dump_csv(save_path, report)
+    plot_disagree(
+        save_path.parent / save_path.name.replace('csv', 'png'), report)
+
+    return report
 
 
 def plot_disagree(save_path, report):

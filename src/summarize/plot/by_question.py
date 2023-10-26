@@ -35,6 +35,7 @@ def plot_by_question(
         figsize=(50, 10),
         rename_header={},
         figure_name='default.png',
+        bar_width=0.2,
         colors=COLORS):
 
     draw_context = {
@@ -43,7 +44,7 @@ def plot_by_question(
             figure_path / figure_name)
     }
 
-    draw_context['bar_width'] = 0.2
+    draw_context['bar_width'] = bar_width
 
     data_file1 = data_file_list[0]
     df1 = pd.read_csv(data_file1)

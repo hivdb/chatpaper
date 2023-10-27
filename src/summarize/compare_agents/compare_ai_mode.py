@@ -6,6 +6,8 @@ from src.table import group_records_by
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 import matplotlib.patches as mpatches
+from itertools import product
+import numpy as np
 
 
 def compare_ai_mode_diff(save_path, data_file_list):
@@ -47,9 +49,6 @@ def compare_pairs(data_file_list, save_path):
     if n_files <= 2:
         return
 
-    if n_files % 2 != 0:
-        return
-
     set1 = data_file_list[:(n_files // 2)]
     set2 = data_file_list[(n_files // 2):]
 
@@ -57,7 +56,8 @@ def compare_pairs(data_file_list, save_path):
     save_path.mkdir(exist_ok=True, parents=True)
 
     reports = []
-    for idx, (i, j) in enumerate(zip(set1, set2)):
+
+    for idx, (i, j) in enumerate(product(set1, set2)):
 
         grouped = get_grouped_questions([i, j])
 
@@ -67,9 +67,14 @@ def compare_pairs(data_file_list, save_path):
         ]))
 
         reports.append(get_change_report(
-            save_path / f'{idx + 1}.csv', grouped, question_ids))
+            save_path / f'{idx}.csv', grouped, question_ids))
 
     draw_compare(save_path / 'compare.png', reports)
+
+
+def add_jitter(data, jitter_strength=0.1):
+    jitter = jitter_strength * (np.random.rand(len(data)) - 0.5)
+    return data + jitter
 
 
 def draw_compare(save_path, reports):
@@ -91,8 +96,7 @@ def draw_compare(save_path, reports):
                 i['# worse']
                 for i in x
             ])
-            ]
-        ,
+        ],
         reverse=True)
 
     group_labels = [
@@ -106,34 +110,39 @@ def draw_compare(save_path, reports):
     bar_width = 0.2
     for pos, rows in enumerate(qid_group):
         bar_positions.append(pos)
-        pos = pos - bar_width
 
-        for pair in rows:
-            ax.bar(
-                pos,
-                pair['# worse'] / 60,
-                width=bar_width,
-                color='#D32F2F',
-                edgecolor='black',
-            )
-            ax.bar(
-                pos,
-                bottom=pair['# worse'] / 60,
-                height=pair['# improve'] / 60,
-                width=0.2,
-                color='#1976D2',
-                edgecolor='black',
-            )
+        improves = [
+            i['# improve'] / 60
+            for i in rows
+        ]
 
-            pos += 0.2
+        q1, median, q3 = np.percentile(improves, [25, 50, 75])
+        ax.scatter(
+            add_jitter([pos] * len(improves)), improves, s=8, color='#1976D2')
+        ax.hlines(
+            [median], pos - 0.2, pos + 0.2,
+            colors=['black'])
+
+        ax.axhline(0, color='black', linewidth=0.5)
+
+        worses = [
+            i['# worse'] / -60
+            for i in rows
+        ]
+        q1, median, q3 = np.percentile(worses, [25, 50, 75])
+        ax.scatter(
+            add_jitter([pos] * len(worses)), worses, s=8, color='#D32F2F')
+        ax.hlines(
+            [median], pos - 0.2, pos + 0.2,
+            colors=['black'])
 
     ax.set_xticks(bar_positions, group_labels)
     ax.set_xticklabels(group_labels, rotation=90)
 
     ax.yaxis.set_major_formatter(PercentFormatter(1))
 
-    ax.set_yticks([0, 0.5])
-    ax.set_ylim(0, 0.6)
+    ax.set_yticks([-0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5])
+    ax.set_ylim(-0.2, 0.4)
 
     ax.margins(x=0.05)
     ax.set_xlim([-1, 60])

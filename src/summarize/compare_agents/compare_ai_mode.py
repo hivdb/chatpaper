@@ -8,6 +8,7 @@ from matplotlib.ticker import PercentFormatter
 import matplotlib.patches as mpatches
 from itertools import product
 import numpy as np
+import statistics
 
 
 def compare_ai_mode_diff(save_path, data_file_list):
@@ -40,9 +41,696 @@ def compare_ai_mode_diff(save_path, data_file_list):
     get_negative_pattern(save_path / 'mode_disagree_negative.csv', report)
 
     compare_pairs(data_file_list, save_path)
+    compare_pairs2(data_file_list, save_path)
 
 
 def compare_pairs(data_file_list, save_path):
+
+    n_files = len(data_file_list)
+
+    if n_files <= 2:
+        return
+
+    set1 = data_file_list[:(n_files // 2)]
+    set2 = data_file_list[(n_files // 2):]
+
+    save_path = save_path / 'pairs'
+    save_path.mkdir(exist_ok=True, parents=True)
+
+    reports = []
+
+    for idx, (i, j) in enumerate(zip(set1, set2)):
+
+        grouped = get_grouped_questions([i, j])
+
+        question_ids = list(set([
+            i[1]
+            for i in grouped.keys()
+        ]))
+
+        reports.append(get_change_report(
+            save_path / f'p{idx}.csv', grouped, question_ids))
+
+    draw_compare(save_path / 'compare.png', reports)
+    draw_compareV2(save_path / 'compareV2.png', reports)
+    draw_compareV3(save_path / 'compareV3.png', reports)
+    draw_compareV4(save_path / 'compareV4.png', reports)
+    draw_compareV5(save_path / 'compareV5.png', reports)
+    draw_compareV6(save_path / 'compareV6.png', reports)
+    draw_compareV7(save_path / 'compareV7.png', reports)
+
+
+def draw_compare(save_path, reports):
+
+    qid_group = defaultdict(list)
+    for r in reports:
+        for i in r:
+            qid_group[i['question_id']].append(i)
+
+    qid_group = list(qid_group.values())
+
+    qid_group.sort(
+        key=lambda x: [
+            sum([
+                i['# improve']
+                for i in x
+            ]),
+            sum([
+                i['# worse']
+                for i in x
+            ])
+        ],
+        reverse=True)
+
+    group_labels = [
+        f'Q{i[0]["question_id"]}'
+        for i in qid_group
+    ]
+
+    fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+
+    bar_positions = []
+    bar_width = 0.2
+
+    for pos, rows in enumerate(qid_group):
+        bar_positions.append(pos)
+
+        for idx, r in enumerate(rows):
+            idx = idx - 1
+            bar_pos = pos + idx * bar_width
+
+            ax.bar(
+                bar_pos,
+                r['# improve'] / 60,
+                width=bar_width,
+                color='#1976D2',
+                edgecolor='black',
+                linewidth=1
+            )
+
+            ax.bar(
+                bar_pos,
+                r['# worse'] / -60,
+                width=bar_width,
+                color='#D32F2F',
+                edgecolor='black',
+                linewidth=1
+            )
+
+    ax.axhline(0, color='black', linewidth=0.5)
+
+    ax.set_xticks(bar_positions, group_labels)
+    ax.set_xticklabels(group_labels, rotation=90)
+
+    ax.yaxis.set_major_formatter(PercentFormatter(1))
+
+    ax.set_yticks([-0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5])
+    ax.set_ylim(-0.2, 0.4)
+
+    ax.margins(x=0.05)
+    ax.set_xlim([-1, 60])
+
+    legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
+    legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
+
+    ax.legend(handles=[legend_handle1, legend_handle2])
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
+
+def draw_compareV2(save_path, reports):
+
+    qid_group = defaultdict(list)
+    for r in reports:
+        for i in r:
+            qid_group[i['question_id']].append(i)
+
+    qid_group = list(qid_group.values())
+
+    qid_group.sort(
+        key=lambda x: [
+            statistics.median([
+                i['# improve']
+                for i in x
+            ]),
+            statistics.median([
+                i['# worse']
+                for i in x
+            ]),
+            statistics.median([
+                i['# no change']
+                for i in x
+            ]),
+        ],
+        reverse=True)
+
+    group_labels = [
+        f'Q{i[0]["question_id"]}'
+        for i in qid_group
+    ]
+
+    fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+
+    bar_positions = []
+    bar_width = 0.5
+
+    for pos, rows in enumerate(qid_group):
+        bar_positions.append(pos)
+
+        improves = [
+            i['# improve'] / 60
+            for i in rows
+        ]
+
+        q1, median, q3 = np.percentile(improves, [25, 50, 75])
+
+        ax.bar(
+            pos,
+            median,
+            width=bar_width,
+            color='#1976D2',
+            # edgecolor='black',
+            # linewidth=1
+        )
+        ax.hlines(
+            [q1], pos - 0.1, pos + 0.1,
+            colors=['black'])
+        ax.vlines([pos], q1, q3, colors=['black'])
+        ax.hlines(
+            [q3], pos - 0.1, pos + 0.1,
+            colors=['black'])
+
+        worses = [
+            i['# worse'] / -60
+            for i in rows
+        ]
+
+        q1, median, q3 = np.percentile(worses, [25, 50, 75])
+
+        ax.bar(
+            pos,
+            median,
+            width=bar_width,
+            color='#D32F2F',
+            # edgecolor='black',
+            # linewidth=1
+        )
+        ax.hlines(
+            [q1], pos - 0.1, pos + 0.1,
+            colors=['black'])
+        ax.vlines([pos], q1, q3, colors=['black'])
+        ax.hlines(
+            [q3], pos - 0.1, pos + 0.1,
+            colors=['black'])
+
+    ax.axhline(0, color='black', linewidth=0.5)
+
+    ax.set_xticks(bar_positions, group_labels)
+    ax.set_xticklabels(group_labels, rotation=90)
+
+    ax.yaxis.set_major_formatter(PercentFormatter(1))
+
+    ax.set_yticks([-0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5])
+    ax.set_ylim(-0.2, 0.4)
+
+    ax.margins(x=0.05)
+    ax.set_xlim([-1, 60])
+
+    legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
+    legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
+
+    ax.legend(handles=[legend_handle1, legend_handle2])
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
+
+def draw_compareV3(save_path, reports):
+
+    qid_group = defaultdict(list)
+    for r in reports:
+        for i in r:
+            qid_group[i['question_id']].append(i)
+
+    qid_group = list(qid_group.values())
+
+    qid_group.sort(
+        key=lambda x: [
+            sum([
+                i['# improve']
+                for i in x
+            ]),
+            sum([
+                i['# worse']
+                for i in x
+            ])
+        ],
+        reverse=True)
+
+    group_labels = [
+        f'Q{i[0]["question_id"]}'
+        for i in qid_group
+    ]
+
+    fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+
+    bar_positions = []
+    bar_width = 0.5
+
+    for pos, rows in enumerate(qid_group):
+        bar_positions.append(pos)
+
+        changes = [
+            (i['# improve'] - i['# worse']) / 60
+            for i in rows
+        ]
+
+        q1, median, q3 = np.percentile(changes, [25, 50, 75])
+
+        ax.bar(
+            pos,
+            median,
+            width=bar_width,
+            color='#1976D2' if median >= 0 else '#D32F2F',
+            # edgecolor='black',
+            # linewidth=1
+        )
+        ax.hlines(
+            [q1], pos - 0.1, pos + 0.1,
+            colors=['black'])
+        ax.vlines([pos], q1, q3, colors=['black'])
+        ax.hlines(
+            [q3], pos - 0.1, pos + 0.1,
+            colors=['black'])
+
+    ax.axhline(0, color='black', linewidth=0.5)
+
+    ax.set_xticks(bar_positions, group_labels)
+    ax.set_xticklabels(group_labels, rotation=90)
+
+    ax.yaxis.set_major_formatter(PercentFormatter(1))
+
+    ax.set_yticks([-0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5])
+    ax.set_ylim(-0.2, 0.4)
+
+    ax.margins(x=0.05)
+    ax.set_xlim([-1, 60])
+
+    legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
+    legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
+
+    ax.legend(handles=[legend_handle1, legend_handle2])
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
+
+def draw_compareV4(save_path, reports):
+
+    qid_group = defaultdict(list)
+    for r in reports:
+        for i in r:
+            qid_group[i['question_id']].append(i)
+
+    qid_group = list(qid_group.values())
+
+    qid_group.sort(
+        key=lambda x: [
+            sum([
+                i['# improve']
+                for i in x
+            ]),
+            sum([
+                i['# worse']
+                for i in x
+            ])
+        ],
+        reverse=True)
+
+    group_labels = [
+        f'Q{i[0]["question_id"]}'
+        for i in qid_group
+    ]
+
+    fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+
+    bar_positions = []
+    bar_width = 0.2
+
+    for pos, rows in enumerate(qid_group):
+        bar_positions.append(pos)
+
+        for idx, r in enumerate(rows):
+            idx = idx - 1
+            bar_pos = pos + idx * bar_width
+
+            change = (r['# improve'] - r['# worse']) / 60
+
+            ax.bar(
+                bar_pos,
+                change,
+                width=bar_width,
+                color='#1976D2' if change >= 0 else '#D32F2F',
+                edgecolor='black',
+                linewidth=1
+            )
+
+    ax.axhline(0, color='black', linewidth=0.5)
+
+    ax.set_xticks(bar_positions, group_labels)
+    ax.set_xticklabels(group_labels, rotation=90)
+
+    ax.yaxis.set_major_formatter(PercentFormatter(1))
+
+    ax.set_yticks([-0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4, 0.5])
+    ax.set_ylim(-0.2, 0.4)
+
+    ax.margins(x=0.05)
+    ax.set_xlim([-1, 60])
+
+    legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
+    legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
+
+    ax.legend(handles=[legend_handle1, legend_handle2])
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
+
+def draw_compareV5(save_path, reports):
+
+    qid_group = defaultdict(list)
+    for r in reports:
+        for i in r:
+            qid_group[i['question_id']].append(i)
+
+    qid_group = list(qid_group.values())
+
+    qid_group.sort(
+        key=lambda x: [
+            sum([
+                i['# improve']
+                for i in x
+            ]),
+            sum([
+                i['# worse']
+                for i in x
+            ])
+        ],
+        reverse=True)
+
+    group_labels = [
+        f'Q{i[0]["question_id"]}'
+        for i in qid_group
+    ]
+
+    fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+
+    bar_positions = []
+    bar_width = 0.2
+
+    for pos, rows in enumerate(qid_group):
+        bar_positions.append(pos)
+
+        for idx, r in enumerate(rows):
+            idx = idx - 1
+            bar_pos = pos + idx * bar_width
+
+            no_change = r['# no change'] / 60
+            ax.bar(
+                bar_pos,
+                no_change,
+                width=bar_width,
+                color='#828282',
+                edgecolor='black',
+                linewidth=1
+            )
+
+            change = (r['# improve'] - r['# worse']) / 60
+
+            ax.bar(
+                bar_pos,
+                change,
+                bottom=no_change,
+                width=bar_width,
+                color='#1976D2' if change >= 0 else '#D32F2F',
+                edgecolor='black',
+                linewidth=1
+            )
+
+    ax.axhline(0, color='black', linewidth=0.5)
+
+    ax.set_xticks(bar_positions, group_labels)
+    ax.set_xticklabels(group_labels, rotation=90)
+
+    ax.yaxis.set_major_formatter(PercentFormatter(1))
+
+    ax.set_yticks([0, 0.5, 1])
+    ax.set_ylim(0, 1.2)
+
+    ax.margins(x=0.05)
+    ax.set_xlim([-1, 60])
+
+    legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
+    legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
+
+    ax.legend(handles=[legend_handle1, legend_handle2])
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
+
+def draw_compareV6(save_path, reports):
+
+    qid_group = defaultdict(list)
+    for r in reports:
+        for i in r:
+            qid_group[i['question_id']].append(i)
+
+    qid_group = list(qid_group.values())
+
+    qid_group.sort(
+        key=lambda x: [
+            sum([
+                i['# improve']
+                for i in x
+            ]),
+            sum([
+                i['# worse']
+                for i in x
+            ])
+        ],
+        reverse=True)
+
+    group_labels = [
+        f'Q{i[0]["question_id"]}'
+        for i in qid_group
+    ]
+
+    fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+
+    bar_positions = []
+    bar_width = 0.2
+
+    for pos, rows in enumerate(qid_group):
+        bar_positions.append(pos)
+
+        for idx, r in enumerate(rows):
+            idx = idx - 1
+            bar_pos = pos + idx * bar_width
+
+            no_change = r['# no change'] / 60
+
+            ax.bar(
+                bar_pos,
+                no_change,
+                width=bar_width,
+                color='#828282',
+                edgecolor='black',
+                linewidth=1
+            )
+
+            improve = r['# improve'] / 60
+
+            ax.bar(
+                bar_pos,
+                improve,
+                bottom=no_change,
+                width=bar_width,
+                color='#1976D2',
+                edgecolor='black',
+                linewidth=1
+            )
+
+            worse = r['# worse'] / -60
+
+            ax.bar(
+                bar_pos,
+                worse,
+                width=bar_width,
+                color='#D32F2F',
+                edgecolor='black',
+                linewidth=1
+            )
+
+    ax.axhline(0, color='black', linewidth=0.5)
+
+    ax.set_xticks(bar_positions, group_labels)
+    ax.set_xticklabels(group_labels, rotation=90)
+
+    ax.yaxis.set_major_formatter(PercentFormatter(1))
+
+    ax.set_yticks([-0.2, 0.5, 1])
+    ax.set_ylim(-0.2, 1.2)
+
+    ax.margins(x=0.05)
+    ax.set_xlim([-1, 60])
+
+    legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
+    legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
+
+    ax.legend(handles=[legend_handle1, legend_handle2])
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
+
+def draw_compareV7(save_path, reports):
+
+    qid_group = defaultdict(list)
+    for r in reports:
+        for i in r:
+            qid_group[i['question_id']].append(i)
+
+    qid_group = list(qid_group.values())
+
+    qid_group.sort(
+        key=lambda x: [
+            statistics.median([
+                i['# improve']
+                for i in x
+            ]),
+            statistics.median([
+                i['# worse']
+                for i in x
+            ]),
+            statistics.median([
+                i['# no change']
+                for i in x
+            ]),
+        ],
+        reverse=True)
+
+    group_labels = [
+        f'Q{i[0]["question_id"]}'
+        for i in qid_group
+    ]
+
+    fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+
+    bar_positions = []
+    bar_width = 0.6
+
+    for pos, rows in enumerate(qid_group):
+        bar_positions.append(pos)
+
+        no_change = [
+            i['# no change'] / 60
+            for i in rows
+        ]
+        q1, median, q3 = np.percentile(no_change, [25, 50, 75])
+        ax.bar(
+            pos,
+            median,
+            width=bar_width,
+            color='#828282',
+            # edgecolor='black',
+            # linewidth=1
+        )
+
+        bottom = median
+
+        worses = [
+            i['# worse'] / 60
+            for i in rows
+        ]
+
+        q1, median, q3 = np.percentile(worses, [25, 50, 75])
+
+        pos -= bar_width / 2 / 2
+        q1 += bottom
+        q3 += bottom
+
+        ax.bar(
+            pos,
+            median,
+            bottom=bottom,
+            width=bar_width / 2,
+            color='#D32F2F',
+            # edgecolor='black',
+            # linewidth=1
+        )
+        ax.hlines(
+            [q1], pos - 0.1, pos + 0.1,
+            colors=['black'])
+        ax.vlines([pos], q1, q3, colors=['black'])
+        ax.hlines(
+            [q3], pos - 0.1, pos + 0.1,
+            colors=['black'])
+
+        improves = [
+            i['# improve'] / 60
+            for i in rows
+        ]
+
+        q1, median, q3 = np.percentile(improves, [25, 50, 75])
+
+        pos += bar_width / 2
+        q1 = q1 + bottom
+        q3 = q3 + bottom
+
+        ax.bar(
+            pos,
+            median,
+            bottom=bottom,
+            width=bar_width / 2,
+            color='#1976D2',
+            # edgecolor='black',
+            # linewidth=1
+        )
+        ax.hlines(
+            [q1], pos - 0.1, pos + 0.1,
+            colors=['black'])
+        ax.vlines([pos], q1, q3, colors=['black'])
+        ax.hlines(
+            [q3], pos - 0.1, pos + 0.1,
+            colors=['black'])
+
+    ax.axhline(0, color='black', linewidth=0.5)
+
+    ax.set_xticks(bar_positions, group_labels)
+    ax.set_xticklabels(group_labels, rotation=90)
+
+    ax.yaxis.set_major_formatter(PercentFormatter(1))
+
+    ax.set_yticks(np.arange(0, 11) / 10)
+    ax.set_ylim(0, 1.2)
+
+    ax.margins(x=0.05)
+    ax.set_xlim([-1, 60])
+
+    legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
+    legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
+    legend_handle3 = mpatches.Patch(color='#828282', label='Correct in both')
+
+    ax.legend(handles=[legend_handle1, legend_handle2, legend_handle3])
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
+
+def compare_pairs2(data_file_list, save_path):
 
     n_files = len(data_file_list)
 
@@ -69,7 +757,7 @@ def compare_pairs(data_file_list, save_path):
         reports.append(get_change_report(
             save_path / f'{idx}.csv', grouped, question_ids))
 
-    draw_compare(save_path / 'compare.png', reports)
+    draw_compare2(save_path / 'compareV100.png', reports)
 
 
 def add_jitter(data, jitter_strength=0.1):
@@ -77,7 +765,7 @@ def add_jitter(data, jitter_strength=0.1):
     return data + jitter
 
 
-def draw_compare(save_path, reports):
+def draw_compare2(save_path, reports):
 
     qid_group = defaultdict(list)
     for r in reports:

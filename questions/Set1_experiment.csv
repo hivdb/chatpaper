@@ -1,10 +1,10 @@
-id,question,main category,sub category,type,cheatsheet,prompt,use
-2202,Does the paper report lists of mutations for individual sequenced HIV isolates?,Sequence information,Mutation,Boolean,,,
-2603,How many samples in the paper were reported to have undergone plasma virus sequencing?,Sequence information,Sequence source,Numerical,,,
-3102,Did all of the individuals in the paper undergo HIV sequencing?,Patient basic information,,Boolean,,,
-4104,How many samples in the paper were obtained from ART-naive individuals?,Treatment information,naive and experienced,Numerical,,,
-4105,Does the paper provide complete ART history for all of the individuals in the study?,Treatment information,naive and experienced,Boolean,,,
-4304,Did all of the individuals in the paper receive the same ART?,Treatment information,Drug class,Boolean,,,
-4305,Were the individuals in the paper INSTI-naive?,Treatment information,Drug class,Boolean,,,
-4403,How many individuals in the paper received more than one ART regimen?,Treatment information,Regimen,Numerical,,,
-4405,Did all individuals in the paper receive the same number of ART regimens?,Treatment information,Regimen,Boolean,,,
+id,question,main category,sub category,type,cheatsheet,prompt,use,issue
+2202,Does the paper report lists of mutations for individual sequenced HIV isolates?,Sequence information,Mutation,Boolean,,"The authors can indicate whether they submitted the samples to GenBank or the authors can provide lists of amino acid mutations present in sequenced virus samples. Lists of mutations are presented as amino acid differences from a reference sequence. If gene sequencing samples are not available with GenBank accession number, then the author may provide a list of mutations as a substitute. The list of mutations should be provided for each individual or each clinical isolate.",yes,
+2603,How many samples in the paper were reported to have undergone plasma virus sequencing?,Sequence information,Sequence source,Numerical,,,,no from plasma
+3102,Did all of the individuals in the paper undergo HIV sequencing?,Patient basic information,,Boolean,,,,ambiguity of question
+4104,How many samples in the paper were obtained from ART-naive individuals?,Treatment information,naive and experienced,Numerical,,Individuals who got PrEP but no ART-treatment could be considered as Na•ve.,yes,
+4105,Does the paper provide complete ART history for all of the individuals in the study?,Treatment information,naive and experienced,Boolean,,"Regimen history details should encompass the drugs used and their duration of use. If all the patients have been newly diagnosed or are treatment/ART naive, the complete ART history is classified as 'naive'.	",yes,
+4304,Did all of the individuals in the paper receive the same ART?,Treatment information,Drug class,Boolean,,"Individuals who got PrEP but no ART-treatment could be considered as Na•ve. If individuals were all ART-na•ve, they should be considered as received the same ART.",,the meaning of same ART
+4305,Were the individuals in the paper INSTI-naive?,Treatment information,Drug class,Boolean,,"The first-generation integrase strand transfer inhibitors (INSTIs) raltegravir and elvitegravir, and the second-generation INSTIs dolutegravir (DTG), bictegravir (BA), and cabotegravir (CAB). If the patients were newly treated they were both ART-naive and INSTI-naive. If the full ART-history was provided and no INSTI was mentioned, they were INSTI-naive",yes,
+4403,How many individuals in the paper received more than one ART regimen?,Treatment information,Regimen,Numerical,,,,hard question
+4405,Did all individuals in the paper receive the same number of ART regimens?,Treatment information,Regimen,Boolean,,"The number of regimens a patient receives is determined by the number of distinct ART-treatment they have received. Patients who are ART-naive have been administered 0 regimens. Patients who have only initiated their first line of ART have been administered 1 regimen. Patients who have changed their combination of ART treatments will possess more than 1 regimen, depending on the number of times the ART treatments had changed.	",,hard question

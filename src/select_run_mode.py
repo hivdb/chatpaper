@@ -9,7 +9,7 @@ from src.prepare_eval_file import prepare_eval_file
 from src.prepare_eval_file.update_human_answer import update_human_answer
 from src.prepare_eval_file import prepare_claude_eval_file
 
-from src.cleanup import cleanup_folder  # noqa
+from src.cleanup import archive_folder  # noqa
 from src.cleanup import cleanup_question  # noqa
 from src.chat.chat_history import fix_chat_history_question  # noqa
 from src.chat.chat_history import fix_chat_history_run_number  # noqa
@@ -28,9 +28,10 @@ MODES = {
     'Summarize & Visualize': summarize,
     # 'Fix Chat history': fix_chat_history_question
     # 'Fix Chat history': fix_chat_history_run_number,
-    # 'Fix Chat history': remove_chat_history_run_number,
+    'Fix Chat history': remove_chat_history_run_number,
     # 'Fix chat history': remove_chat_history_run_number_and_qid,
-    # 'Clean up folder': cleanup_folder,
+    # 'Clean up folder': archive_folder,
+    'Archive folder': archive_folder,
     # 'Clean up question': cleanup_question,
 }
 

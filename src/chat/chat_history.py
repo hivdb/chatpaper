@@ -331,6 +331,10 @@ def fix_chat_history_run_number(run_number=1):
 
 def remove_chat_history_run_number(run_number=100):
 
+    # Protected runs
+    if run_number <= 20:
+        return
+
     test_set = select_test_set() / 'Papers'
 
     for i in test_set.iterdir():

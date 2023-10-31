@@ -41,3 +41,20 @@ def cleanup_question():
         ]
 
         dump_csv(chat_hist_path, records)
+
+
+def archive_folder():
+
+    test_set = select_test_set()
+
+    papers = select_paper(test_set, all_option=True)
+
+    today = datetime.today()
+    date = today.strftime("%Y%m%d")
+
+    for i in papers:
+        i = i.resolve()
+        chat_hist_path = i / 'chat_history'
+        if not chat_hist_path.exists():
+            continue
+        shutil.copytree(chat_hist_path, i / 'archive' / date)

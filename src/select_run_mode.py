@@ -28,10 +28,10 @@ MODES = {
     'Summarize & Visualize': summarize,
     # 'Fix Chat history': fix_chat_history_question
     # 'Fix Chat history': fix_chat_history_run_number,
-    'Fix Chat history': remove_chat_history_run_number,
+    # 'Fix Chat history': remove_chat_history_run_number,
     # 'Fix chat history': remove_chat_history_run_number_and_qid,
     # 'Clean up folder': archive_folder,
-    'Archive folder': archive_folder,
+    # 'Archive folder': archive_folder,
     # 'Clean up question': cleanup_question,
 }
 

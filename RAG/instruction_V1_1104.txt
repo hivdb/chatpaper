@@ -1,8 +1,4 @@
-Please carefully read the cheatsheet below
-
-## Cheatsheet
-
-We review published papers to extract data relevant to HIV drug resistance (HIVDR). 4 main types of studies contain relevant HIVDR data: (1) In vitro passage experiments in which viruses are cultured in the presence of increasing concentrations of an antiretroviral (ARV) drug; (2) Genetic sequencing of virus isolates from patients who have or who not received ARV therapy (ART); (3) In vitro susceptibility testing (aka phenotypic testing) of viruses with drug-resistance mutations (DRMs) to determine the concentration required to inhibit the replication of these viruses by 50% (referred to as EC50 or IC50). This concentration is divided by the EC50 (or IC50) of a reference drug-susceptible virus to determine the fold-reduction in susceptibility (aka fold increase in drug resistance) of a virus to an ARV; and (4) Studies of the influence of DRMs on the virological response of patients to an ARV treatment regimen.
+We review published papers to extract data relevant to HIV drug resistance (HIVDR). 4 main types of studies contain relevant HIVDR data: (1) In vitro passage experiments in which viruses are cultured in the presence of increasing concentrations of an antiretroviral (ARV) drug; (2) Genetic sequencing of virus isolates from patients who have or who not received ARV therapy (ART); and (4) Studies of the influence of DRMs on the virological response of patients to an ARV treatment regimen.
 
 ### HIV isolates and gene sequences:
 
@@ -46,8 +42,6 @@ In many studies, there are patients with different ART histories. The informatio
 We distinguish studies of HIVDR from studies that use HIV pol sequences to study transmission patterns (also referred to as molecular epidemiology or phylogenetic studies). Molecular epidemiology have little granular information linking HIV sequences to the ART history of the person from whom sequences are obtained. Instead, molecular epidemiological studies use the similarity between sequences to identify clusters of sequences from HIV-infected patients sharing similar epidemiological characteristics.
 
 ### HIV drug susceptibility (phenotypic) data:
-
-Phenotypic testing is usually performed on site-directed mutants, virus isolates that developed mutations during in vitro passage experiments, or on clinical viruses samples obtained directly from a patient sample. If phenotypic testing was performed, there are usually one or more sentences describing the phenotypic test method. The most common method is the PhenoSense assay (which can also be referred to as PhenoSenseGT).
 
 Many studies report that patients had one of the following levels of resistance: potential low-level, low-level, intermediate, and high-level. Unless a fold reduction in resistance is reported, these levels are determined by an interpretation program applied to a list of mutations in a sequence.
 

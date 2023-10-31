@@ -34,8 +34,19 @@ def gen_eval_file(test_set_folder_list):
 
         eval_db = load_eval_db(t / 'evaluation' / 'eval_db.csv')
 
-        for i in range(1, 1000):
+        for i in get_run_numbers(reports):
             gen_eval_file_for_testset(t, reports, eval_db, i)
+
+
+def get_run_numbers(reports):
+    run_numbers = []
+    for f, name, report in reports:
+        run_numbers.extend([
+            int(i['run_number'])
+            for i in report
+        ])
+
+    return sorted(list(set(run_numbers)))
 
 
 def gen_eval_file_for_testset(test_set_folder, reports, eval_db, run_number):

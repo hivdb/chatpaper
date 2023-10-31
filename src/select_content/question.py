@@ -83,7 +83,7 @@ def select_some_question(
 
     # TODO, show question id
     questions = [
-        ((i, j), j)
+        ((i, j), f"{i}. {j}")
         for i, j in load_questions(question_set).items()
     ]
     num_ques = len(questions)

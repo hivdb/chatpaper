@@ -13,7 +13,7 @@ def select_question_template(multi_questions):
 
 RESEREVED_TEMPLATE = (
     'system',
-    'cheatsheet',
+    'instruction',
     'paper_content',
     'simple',
     'auto_eval_answer',

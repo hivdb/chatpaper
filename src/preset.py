@@ -6,6 +6,7 @@ WS = Path(__file__).resolve().parent.parent
 
 ENV_PATH = WS / '.env'
 PROMPT_TEMPLATE_PATH = WS / 'prompt_template'
+RAG_PATH = WS / 'RAG'
 PAPER_PATH = WS / 'papers'
 QUESTION_PATH = WS / 'questions'
 RATE_LIMIT_PATH = WS / '.rate_limit.json'

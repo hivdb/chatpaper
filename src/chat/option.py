@@ -14,6 +14,7 @@ from src.select_content.llm_model import select_model
 from src.select_content.paper import select_paper_content
 from src.select_content.test_set import select_test_set
 from src.select_content.prompt_template import load_prompt_template
+from src.select_content.instruction import select_instruction
 
 from .chat_mode.one_q_all_content import one_q_all_content
 from .chat_mode.multi_q_all_content import multi_q_all_content
@@ -107,7 +108,14 @@ def select_chat_mode():
             question_template = select_question_template(multi_questions=True)
 
     w_cheatsheet = choose_cheatsheet_mode()
-    cheatsheet = load_prompt_template('cheatsheet')
+    if w_cheatsheet:
+        instruction_template = load_prompt_template('instruction')
+
+        instruction = select_instruction()
+        cheatsheet = instruction_template + instruction
+        print(cheatsheet)
+    else:
+        cheatsheet = ''
 
     if (question_mode, embedding_mode) not in CHAT_MODE_LIST:
         raise Exception(f'{question_mode}, {embedding_mode} not supported')
@@ -148,8 +156,10 @@ def select_chat_mode():
         'embedding?': embedding_mode,
         'cheatsheet?': w_cheatsheet,
         'cheatsheet': cheatsheet if w_cheatsheet else '',
-        'remove_sent?': choose_remove_sentence() if w_cheatsheet else False,
-        'append_sent?': choose_append_sentence() if w_cheatsheet else False,
+        'remove_sent?': False,
+        'append_sent?': False,
+        # 'remove_sent?': choose_remove_sentence() if w_cheatsheet else False,
+        # 'append_sent?': choose_append_sentence() if w_cheatsheet else False,
         'chat_func': chat_func,
         'chat_mode': ', '.join([
             question_mode, embedding_mode, cheatsheet_mode]),

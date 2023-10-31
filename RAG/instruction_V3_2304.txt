@@ -1,0 +1,1 @@
+The genes we are interested are (1) reverse transcriptase (RT), (2) protease (PR), (3) integrase (IN or INT), and (4) capsid. HIV RT, protease, and integrase are encoded by the HIV pol gene. HIV capsid is encoded by the HIV gag gene. Therefore, a paper that reports the results of PR, RT or IN sequencing is reporting the results of pol sequencing.

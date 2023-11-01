@@ -1,0 +1,61 @@
+id,question,main category,sub category,type
+1101,Does the paper report previously unpublished data?,paper category,,Boolean
+1102,Does the paper report HIV sequences?,paper category,,Boolean
+1103,Does the paper report the results of in vitro passage experiments?,paper category,,Boolean
+1104,Does the paper report in vitro antiretroviral susceptibility data?,paper category,,Boolean
+2101,Does the paper report GenBank accession numbers for sequenced HIV isolates?,Sequence information,Genbank,Boolean
+2102,Does the paper report GenBank accession numbers for sequenced HIV isolates other than those for laboratory HIV isolates?,Sequence information,Genbank,Boolean
+2103,Which are the genbank accession numbers reported in the paper?,Sequence information,Genbank,Categorical
+2202,Does the paper report lists of mutations for individual sequenced HIV isolates?,Sequence information,Mutation,Boolean
+2301,Which HIV species were studied in the paper?,Sequence information,"Species, subtype, gene",Categorical
+2302,What were the subtypes of the sequenced viruses reported in the paper?,Sequence information,"Species, subtype, gene",Categorical
+2303,Which HIV genes were sequenced in the paper?,Sequence information,"Species, subtype, gene",Categorical
+2304,Does the paper report the results of HIV pol sequences?,Sequence information,"Species, subtype, gene",Boolean
+2401,Which geographic regions and/or countries were the sequences from in the paper?,Sequence information,Geolocation and date,Categorical
+2402,What years were the sequenced samples obtained in the paper?,Sequence information,Geolocation and date,Categorical
+2502,Was sequencing in the paper performed using Sanger sequencing?,Sequence information,Sequencing method,Boolean
+2503,Was sequencing in the paper performed using an NGS technology?,Sequence information,Sequencing method,Boolean
+2504,Were samples in the paper cloned prior to sequencing?,Sequence information,Sequencing method,Boolean
+2505,Did the samples in the paper undergo single genome sequencing?,Sequence information,Sequencing method,Boolean
+2506,Did the samples in the paper undergo molecular cloning?,Sequence information,Sequencing method,Boolean
+2601,Does the paper report the results of plasma HIV sequencing?,Sequence information,Sequence source,Boolean
+2602,Does the paper report the results of PBMC HIV sequencing?,Sequence information,Sequence source,Boolean
+2603,How many samples in the paper were reported to have undergone plasma virus sequencing?,Sequence information,Sequence source,Numerical
+2604,How many samples in the paper were reported to have undergone PBMC virus sequencing?,Sequence information,Sequence source,Numerical
+2607,Were sequences in the paper obtained from individuals with virological failure while receiving antiretroviral therapy?,Sequence information,Sequence source,Boolean
+2606,Were sequences in the paper obtained from the proviral DNA reservoir?,Sequence information,Sequence source,Boolean
+2701,Does the paper report samples obtain from infants and/or children?,Sequence information,Individual characteristics,Boolean
+2702,Were any of the individuals in the paper in a clinical trial?,Sequence information,Individual characteristics,Boolean
+2703,Were all of the individuals in the paper in a clinical trial?,Sequence information,Individual characteristics,Boolean
+3101,How many individuals in the paper had samples obtained for HIV sequencing?,Patient basic information,,Numerical
+3102,Did all of the individuals in the paper undergo HIV sequencing?,Patient basic information,,Boolean
+4101,Does the paper report HIV sequences from individuals who were ART-naive?,Treatment information,naive and experienced,Boolean
+4102,Does the paper report HIV sequences from individuals who had previously received ARV drugs?,Treatment information,naive and experienced,Boolean
+4103,Does the paper report HIV sequences from individuals who were ART-naive and from persons who were ART-experienced?,Treatment information,naive and experienced,Boolean
+4104,How many samples in the paper were obtained from ART-naive individuals?,Treatment information,naive and experienced,Numerical
+4105,Does the paper provide complete ART history for all of the individuals in the study?,Treatment information,naive and experienced,Boolean
+4201,Does the paper report the prevalence of transmitted HIV drug resistance?,Treatment information,PDR and TDR,Boolean
+4202,Does the paper report the prevalence of pretreatment HIV drug resistance?,Treatment information,PDR and TDR,Boolean
+4301,Which drug classes were received by individuals in the paper?,Treatment information,Drug class,Categorical
+4302,Does the paper report individuals who received integrase inhibitors?,Treatment information,Drug class,Boolean
+4303,Does the paper report individuals who received protease inhibitors?,Treatment information,Drug class,Boolean
+4304,Did all of the individuals in the paper receive the same ART?,Treatment information,Drug class,Boolean
+4305,Were the individuals in the paper INSTI-naive?,Treatment information,Drug class,Boolean
+4403,How many individuals in the paper received more than one ART regimen?,Treatment information,Regimen,Numerical
+4404,How many individuals in the paper received more than two ART regimens?,Treatment information,Regimen,Numerical
+4405,Did all individuals in the paper receive the same number of ART regimens?,Treatment information,Regimen,Boolean
+4406,Did all individuals in the paper receive one ART regimen?,Treatment information,Regimen,Boolean
+4501,How many individuals in the paper received dolutegravir?,Treatment information,ARVs,Numerical
+4502,How many individuals in the paper received darunavir?,Treatment information,ARVs,Numerical
+5101,How many individuals in the paper were found to have one or more drug resistance mutation?,Drug-resistance mutations,,Numerical
+5102,How many individuals in the paper were found to have INSTI-resistance mutations?,Drug-resistance mutations,,Numerical
+5103,How many individuals in the paper were found to have TDF-resistance mutations?,Drug-resistance mutations,,Numerical
+5104,Which INSTI-resistance mutations were reported to have developed in individuals in the paper?,Drug-resistance mutations,,Categorical
+6101,What method in the paper was used on phenotypic susceptibility test?,Susceptibility,,Categorical
+6102,Does the paper report IC values like IC50? IC90?,Susceptibility,,Boolean
+6103,Does the paper report IC50 fold change values?,Susceptibility,,Boolean
+6104,Which phenotypic susceptibility assay was used in the paper?,Susceptibility,,Categorical
+6105,Dose the paper report data about replication capacity?,Susceptibility,,Boolean
+6106,Which drugs were tested on phenotypic susceptibility in the paper?,Susceptibility,,Categorical
+7101,Were any of the isolates described in the paper site-directed mutations?,Lab isolate,,Boolean
+7102,Did any of the isolates in the paper result from in vitro passage experiments?,Lab isolate,,Boolean

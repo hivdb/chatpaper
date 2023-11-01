@@ -16,10 +16,10 @@ def get_question_type(report):
     }
 
     for i in report:
-        question = questions[i['question_id']]
+        question = questions.get(i['question_id'], '')
         if question in i['question']:
             i['question'] = question
 
-        i['question_type'] = question_types[i['question_id']]
+        i['question_type'] = question_types.get(i['question_id'], '')
 
     return report

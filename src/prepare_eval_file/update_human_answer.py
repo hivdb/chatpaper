@@ -38,9 +38,9 @@ def update_human_answer():
     test_set_path = select_test_set()
 
     # file_path = choose_checked_answer(test_set_path)
-    excel_file = test_set_path / 'evaluation' / 'gpt-4_base.xlsx'
-    excel2csv(excel_file, excel_file.stem)
-    content = load_csv(test_set_path / 'evaluation' / 'gpt-4_base.csv')
+    # excel_file = test_set_path / 'evaluation' / 'gpt-4_base.xlsx'
+    # excel2csv(excel_file, excel_file.stem)
+    content = load_csv(test_set_path / 'evaluation' / 'human_answer2.csv')
 
     paper_info = group_records_by(content, 'paper')
 

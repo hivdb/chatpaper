@@ -273,10 +273,44 @@ def analyze(test_set_path):
         'GPT-4-2304', [
             Path(test_set_path / 'analysis' / 'gpt-4_guide_22304.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_guide_32304.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_42304.csv'),
+        ])
+
+    summarize_eval(
+        'GPT-4-2605', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base_2605.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_2605.csv'),
         ], colors=[
             '#1f78b4',
             '#ff7f00',
         ])
+
+    summarize_eval(
+        'GPT-4-22605', [
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_22605.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_22605.csv'),
+        ], colors=[
+            '#1f78b4',
+            '#ff7f00',
+        ])
+
+    summarize_eval(
+        'GPT-4-4305', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base_4305.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_4305.csv'),
+        ], colors=[
+            '#1f78b4',
+            '#ff7f00',
+        ])
+    summarize_eval(
+        'GPT-4-24305', [
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_24305.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_24305.csv'),
+        ], colors=[
+            '#1f78b4',
+            '#ff7f00',
+        ])
+
     # summarize_eval(
     #     'Claude', [
     #         Path(test_set_path / 'analysis' / 'claude_base.csv'),

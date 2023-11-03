@@ -56,4 +56,3 @@ def get_batches(questions, batch):
         batches.append(dict(one_batch))
 
     return batches
-

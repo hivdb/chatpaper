@@ -224,91 +224,72 @@ def analyze(test_set_path):
     #     ]
     # )
 
-    summarize_eval(
-        'GPT-4-2102', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base_2102.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_2102.csv'),
-        ], colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ])
+    # summarize_eval(
+    #     'GPT-4-1104', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_1104.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_1104.csv'),  # remove old text
+    #     ])
+
+    # summarize_eval(
+    #     'GPT-4-2602', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_2602.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_2602.csv'),  # remove old text
+    #     ])
+
+    # summarize_eval(
+    #     'GPT-4-6101', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_6101.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_6101.csv'),  # remove old text
+    #     ])
+
+    # summarize_eval(
+    #     'GPT-4-6106', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_6106.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_6106.csv'),  # remove old text
+    #     ])
+
+    # summarize_eval(
+    #     'GPT-4-2102', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_2102.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_2102.csv'),  # new question
+    #     ])
+
+    # summarize_eval(
+    #     'GPT-4-2304', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_22304.csv'),  # old text
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_32304.csv'),  # new text
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_42304.csv'),  # new instruction
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_52304.csv'),  # new instruction 2
+    #     ])
 
     summarize_eval(
-        'GPT-4-1104', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_1104.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_1104.csv'),
-        ], colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ])
-
-    summarize_eval(
-        'GPT-4-2602', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_2602.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_2602.csv'),
-        ], colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ])
-
-    summarize_eval(
-        'GPT-4-6101', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_6101.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_6101.csv'),
-        ], colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ])
-
-    summarize_eval(
-        'GPT-4-6106', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_6106.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_6106.csv'),
-        ], colors=[
-            '#1f78b4',
-            '#ff7f00',
-        ])
-
-    summarize_eval(
-        'GPT-4-2304', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_22304.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_32304.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_42304.csv'),
+        'GPT-4-2605-2607', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base_2605.csv'),   # new question
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_22605.csv'),   # new instruction new question
         ])
 
     summarize_eval(
         'GPT-4-2605', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base_2605.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_2605.csv'),
-        ], colors=[
-            '#1f78b4',
-            '#ff7f00',
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_32605.csv'),   # new instruction old question
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_32605.csv'),   # new instruction old question
         ])
 
     summarize_eval(
-        'GPT-4-22605', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_22605.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_22605.csv'),
-        ], colors=[
-            '#1f78b4',
-            '#ff7f00',
+        'GPT-4-4305-4306', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base_4305.csv'),  # new question
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_24305.csv'),  # new instruction new question
         ])
 
     summarize_eval(
         'GPT-4-4305', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base_4305.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_base_4305.csv'),
-        ], colors=[
-            '#1f78b4',
-            '#ff7f00',
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_34305.csv'),  # new instruction old question
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_34305.csv'),  # new instruction old question
         ])
+
     summarize_eval(
-        'GPT-4-24305', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_24305.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_24305.csv'),
-        ], colors=[
-            '#1f78b4',
-            '#ff7f00',
+        'GPT-4-2202', [
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_22202.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_22202.csv'),  # new instruction
         ])
 
     # summarize_eval(

@@ -2,7 +2,7 @@ id,question,main category,sub category,type
 2602,Does the paper report the results of PBMC HIV sequencing?,Sequence information,Sequence source,Boolean
 2603,How many samples in the paper were reported to have undergone plasma virus sequencing?,Sequence information,Sequence source,Numerical
 2604,How many samples in the paper were reported to have undergone PBMC virus sequencing?,Sequence information,Sequence source,Numerical
-2607,Were sequences in the paper obtained from individuals with virological failure while receiving antiretroviral therapy?,Sequence information,Sequence source,Boolean
+2605,Were sequences in the paper obtained from individuals with active HIV replication?,Sequence information,Sequence source,Boolean
 2606,Were sequences in the paper obtained from the proviral DNA reservoir?,Sequence information,Sequence source,Boolean
 2701,Does the paper report samples obtain from infants and/or children?,Sequence information,Individual characteristics,Boolean
 2702,Were any of the individuals in the paper in a clinical trial?,Sequence information,Individual characteristics,Boolean

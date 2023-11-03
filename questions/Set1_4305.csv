@@ -1,6 +1,6 @@
 id,question,main category,sub category,type
 4304,Did all of the individuals in the paper receive the same ART?,Treatment information,Drug class,Boolean
-4306,Did any of the individuals in the paper received an integrase inhibitor?,Treatment information,Drug class,Boolean
+4305,Were the individuals in the paper INSTI-naive?,Treatment information,Drug class,Boolean
 4403,How many individuals in the paper received more than one ART regimen?,Treatment information,Regimen,Numerical
 4404,How many individuals in the paper received more than two ART regimens?,Treatment information,Regimen,Numerical
 4405,Did all individuals in the paper receive the same number of ART regimens?,Treatment information,Regimen,Boolean

@@ -271,7 +271,7 @@ def analyze(test_set_path):
     summarize_eval(
         'GPT-4-2605', [
             Path(test_set_path / 'analysis' / 'gpt-4_guide_32605.csv'),   # new instruction old question
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_32605.csv'),   # new instruction old question
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_42605.csv'),   # new text old question
         ])
 
     summarize_eval(
@@ -283,13 +283,14 @@ def analyze(test_set_path):
     summarize_eval(
         'GPT-4-4305', [
             Path(test_set_path / 'analysis' / 'gpt-4_guide_34305.csv'),  # new instruction old question
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_34305.csv'),  # new instruction old question
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_44305.csv'),  # new text old question
         ])
 
     summarize_eval(
         'GPT-4-2202', [
             Path(test_set_path / 'analysis' / 'gpt-4_guide_22202.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_guide_22202.csv'),  # new instruction
+            Path(test_set_path / 'analysis' / 'gpt-4_guide_32202.csv'),  # new text
         ])
 
     # summarize_eval(

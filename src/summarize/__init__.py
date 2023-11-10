@@ -72,7 +72,7 @@ def merge_eval_files(test_set_path_list):
 def analyze(test_set_path):
 
     # summarize_eval(
-    #     'GPT-4-multiq', [
+    #     'GPT-4-multi_pair1', [
     #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
     #         Path(test_set_path / 'analysis' / 'gpt-4_guide.csv'),
     #     ], rename_header={
@@ -84,7 +84,31 @@ def analyze(test_set_path):
     #     ])
 
     # summarize_eval(
-    #     'GPT-4-oneq', [
+    #     'GPT-4-multi_pair2', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_2.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_2.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base': 'gpt-4_base',
+    #         'gpt-4_guide': 'gpt-4_instruction'
+    #     }, colors=[
+    #         '#1f78b4',
+    #         '#ff7f00',
+    #     ])
+
+    # summarize_eval(
+    #     'GPT-4-multi_pair3', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_3.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_3.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base': 'gpt-4_base',
+    #         'gpt-4_guide': 'gpt-4_instruction'
+    #     }, colors=[
+    #         '#1f78b4',
+    #         '#ff7f00',
+    #     ])
+
+    # summarize_eval(
+    #     'GPT-4-one', [
     #         Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
     #         Path(test_set_path / 'analysis' / 'gpt-4_guide_15.csv'),
     #     ], rename_header={
@@ -96,9 +120,33 @@ def analyze(test_set_path):
     #     ])
 
     # summarize_eval(
-    #     'GPT-4-base_one_multi', [
+    #     'GPT-4-base_one_multi_1', [
     #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
     #         Path(test_set_path / 'analysis' / 'gpt-4_base_10.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base_10': 'gpt-4_one_per_time',
+    #         'gpt-4_base': 'gpt-4_all_per_time',
+    #     }, colors=[
+    #         '#1f78b4',
+    #         '#ff7f00',
+    #     ])
+
+    # summarize_eval(
+    #     'GPT-4-base_one_multi_2', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_2.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_11.csv'),
+    #     ], rename_header={
+    #         'gpt-4_base_10': 'gpt-4_one_per_time',
+    #         'gpt-4_base': 'gpt-4_all_per_time',
+    #     }, colors=[
+    #         '#1f78b4',
+    #         '#ff7f00',
+    #     ])
+
+    # summarize_eval(
+    #     'GPT-4-base_one_multi_3', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_3.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_12.csv'),
     #     ], rename_header={
     #         'gpt-4_base_10': 'gpt-4_one_per_time',
     #         'gpt-4_base': 'gpt-4_all_per_time',
@@ -262,36 +310,36 @@ def analyze(test_set_path):
     #         Path(test_set_path / 'analysis' / 'gpt-4_guide_52304.csv'),  # new instruction 2
     #     ])
 
-    summarize_eval(
-        'GPT-4-2605-2607', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base_2605.csv'),   # new question
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_22605.csv'),   # new instruction new question
-        ])
+    # summarize_eval(
+    #     'GPT-4-2605-2607', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_2605.csv'),   # new question
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_22605.csv'),   # new instruction new question
+    #     ])
 
-    summarize_eval(
-        'GPT-4-2605', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_32605.csv'),   # new instruction old question
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_42605.csv'),   # new text old question
-        ])
+    # summarize_eval(
+    #     'GPT-4-2605', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_32605.csv'),   # new instruction old question
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_42605.csv'),   # new text old question
+    #     ])
 
-    summarize_eval(
-        'GPT-4-4305-4306', [
-            Path(test_set_path / 'analysis' / 'gpt-4_base_4305.csv'),  # new question
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_24305.csv'),  # new instruction new question
-        ])
+    # summarize_eval(
+    #     'GPT-4-4305-4306', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_base_4305.csv'),  # new question
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_24305.csv'),  # new instruction new question
+    #     ])
 
-    summarize_eval(
-        'GPT-4-4305', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_34305.csv'),  # new instruction old question
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_44305.csv'),  # new text old question
-        ])
+    # summarize_eval(
+    #     'GPT-4-4305', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_34305.csv'),  # new instruction old question
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_44305.csv'),  # new text old question
+    #     ])
 
-    summarize_eval(
-        'GPT-4-2202', [
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_22202.csv'),
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_22202.csv'),  # new instruction
-            Path(test_set_path / 'analysis' / 'gpt-4_guide_32202.csv'),  # new text
-        ])
+    # summarize_eval(
+    #     'GPT-4-2202', [
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_22202.csv'),
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_22202.csv'),  # new instruction
+    #         Path(test_set_path / 'analysis' / 'gpt-4_guide_32202.csv'),  # new text
+    #     ])
 
     # summarize_eval(
     #     'Claude', [
@@ -299,12 +347,12 @@ def analyze(test_set_path):
     #         Path(test_set_path / 'analysis' / 'claude_guide.csv'),
     #     ])
 
-    # summarize_eval(
-    #     'GPT-4_vs_Claude',
-    #     [
-    #         Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
-    #         Path(test_set_path / 'analysis' / 'claude_base.csv'),
-    #     ])
+    summarize_eval(
+        'GPT-4_vs_Claude', [
+            Path(test_set_path / 'analysis' / 'gpt-4_base.csv'),
+            Path(test_set_path / 'analysis' / 'claude_base.csv'),
+            Path(test_set_path / 'analysis' / 'claude_guide.csv'),
+        ])
 
     # summarize_eval(
     #     'GPT-4_base_embed', [

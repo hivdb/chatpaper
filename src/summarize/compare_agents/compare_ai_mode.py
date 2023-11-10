@@ -1034,11 +1034,11 @@ def get_change_report(save_path, grouped, question_ids):
             '# no change': no_change.get(question_id, 0),
             '# improve': improve_count.get(question_id, 0),
             '# worse': worse_count.get(question_id, 0),
-            '# diff': (
+            '# net change': (
                 improve_count.get(question_id, 0) -
                 worse_count.get(question_id, 0))
         }
-        row['# net change'] = row['# improve'] + row['# worse']
+        row['# total change'] = row['# improve'] + row['# worse']
 
         report.append(row)
 

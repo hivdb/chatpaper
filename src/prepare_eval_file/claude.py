@@ -10,6 +10,7 @@ from .translate_answer.get_human_answer import get_human_answer
 from .translate_answer.translate_human_NA import translate_human_NA
 
 from src.evaluation.quick_eval import quick_eval
+from src.evaluation.quick_eval import load_eval_db
 
 
 def gen_claude_eval_file(test_set):
@@ -34,10 +35,12 @@ def gen_claude_eval_file(test_set):
 
     verify_claude_files(files, all_papers)
 
+    eval_db = load_eval_db(test_set / 'evaluation' / 'eval_db.csv')
+
     prepare_table(
-        test_set / 'evaluation', files, 'claude_base', 'WO')
+        test_set / 'evaluation', files, 'claude_base', 'WO', eval_db)
     prepare_table(
-        test_set / 'evaluation', files, 'claude_guide', 'WITH')
+        test_set / 'evaluation', files, 'claude_guide', 'WITH', eval_db)
 
 
 def verify_claude_files(files, all_papers):
@@ -73,7 +76,7 @@ def verify_claude_files(files, all_papers):
                 print('Error paper', f, i['Paper'])
 
 
-def prepare_table(save_path, files, mode, include_prefix):
+def prepare_table(save_path, files, mode, include_prefix, eval_db):
 
     table = []
 
@@ -138,7 +141,7 @@ def prepare_table(save_path, files, mode, include_prefix):
 
         sub_table = translate_human_NA(sub_table)
 
-        [quick_eval(i) for i in sub_table]
+        [quick_eval(i, eval_db) for i in sub_table]
 
         table.extend(sub_table)
 

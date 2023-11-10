@@ -466,8 +466,9 @@ def draw_compare_plot_with_legend(
     # ax.set_ylabel('Percentage of agreement')
     ax.yaxis.set_major_formatter(PercentFormatter(1))
 
-    ax.set_yticks([0, 0.5, 1])
-    ax.set_ylim(0, 1.2)
+    ax.set_yticks([i / 10 for i in range(2, 11, 2)])
+    ax.set_ylim(0, 1.1)
+    ax.tick_params(axis='y', labelsize=14)
 
     # if not split:
     handles, labels = plt.gca().get_legend_handles_labels()
@@ -479,7 +480,7 @@ def draw_compare_plot_with_legend(
             f": {stat['median']}% ({stat['iqr25']}%, {stat['iqr75']}%)"
             )
 
-    ax.legend(handles, [new_labels.get(label, label) for label in labels])
+    # ax.legend(handles, [new_labels.get(label, label) for label in labels])
 
     ax.margins(x=0.05)
     ax.set_xlim([0, max_label + 1])
@@ -499,3 +500,6 @@ def get_df_group_list(df_grouped):
         result.append(new_df)
 
     return result
+
+
+

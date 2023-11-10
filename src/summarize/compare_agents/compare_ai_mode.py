@@ -43,6 +43,8 @@ def compare_ai_mode_diff(save_path, data_file_list):
     compare_pairs(data_file_list, save_path)
     compare_pairs2(data_file_list, save_path)
 
+    draw_pairs(data_file_list, save_path / 'compareV200.png')
+
 
 def compare_pairs(data_file_list, save_path):
 
@@ -153,7 +155,7 @@ def draw_compare(save_path, reports):
     legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
     legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
 
-    ax.legend(handles=[legend_handle1, legend_handle2])
+    # ax.legend(handles=[legend_handle1, legend_handle2])
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
@@ -204,6 +206,7 @@ def draw_compareV2(save_path, reports):
         ]
 
         q1, median, q3 = np.percentile(improves, [25, 50, 75])
+        q1, q3 = min(improves), max(improves)
 
         ax.bar(
             pos,
@@ -227,6 +230,7 @@ def draw_compareV2(save_path, reports):
         ]
 
         q1, median, q3 = np.percentile(worses, [25, 50, 75])
+        q1, q3 = min(worses), max(worses)
 
         ax.bar(
             pos,
@@ -260,7 +264,7 @@ def draw_compareV2(save_path, reports):
     legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
     legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
 
-    ax.legend(handles=[legend_handle1, legend_handle2])
+    # ax.legend(handles=[legend_handle1, legend_handle2])
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
@@ -307,6 +311,7 @@ def draw_compareV3(save_path, reports):
         ]
 
         q1, median, q3 = np.percentile(changes, [25, 50, 75])
+        q1, q3 = min(changes), max(changes)
 
         ax.bar(
             pos,
@@ -340,7 +345,7 @@ def draw_compareV3(save_path, reports):
     legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
     legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
 
-    ax.legend(handles=[legend_handle1, legend_handle2])
+    # ax.legend(handles=[legend_handle1, legend_handle2])
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
@@ -412,7 +417,7 @@ def draw_compareV4(save_path, reports):
     legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
     legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
 
-    ax.legend(handles=[legend_handle1, legend_handle2])
+    # ax.legend(handles=[legend_handle1, legend_handle2])
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
@@ -495,7 +500,7 @@ def draw_compareV5(save_path, reports):
     legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
     legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
 
-    ax.legend(handles=[legend_handle1, legend_handle2])
+    # ax.legend(handles=[legend_handle1, legend_handle2])
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
@@ -590,7 +595,7 @@ def draw_compareV6(save_path, reports):
     legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
     legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
 
-    ax.legend(handles=[legend_handle1, legend_handle2])
+    # ax.legend(handles=[legend_handle1, legend_handle2])
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
@@ -640,6 +645,7 @@ def draw_compareV7(save_path, reports):
             for i in rows
         ]
         q1, median, q3 = np.percentile(no_change, [25, 50, 75])
+        q1, q3 = min(no_change), max(no_change)
         ax.bar(
             pos,
             median,
@@ -657,6 +663,7 @@ def draw_compareV7(save_path, reports):
         ]
 
         q1, median, q3 = np.percentile(worses, [25, 50, 75])
+        q1, q3 = min(worses), max(worses)
 
         pos -= bar_width / 2 / 2
         q1 += bottom
@@ -685,6 +692,7 @@ def draw_compareV7(save_path, reports):
         ]
 
         q1, median, q3 = np.percentile(improves, [25, 50, 75])
+        q1, q3 = min(improves), max(improves)
 
         pos += bar_width / 2
         q1 = q1 + bottom
@@ -714,8 +722,9 @@ def draw_compareV7(save_path, reports):
 
     ax.yaxis.set_major_formatter(PercentFormatter(1))
 
-    ax.set_yticks(np.arange(0, 11) / 10)
-    ax.set_ylim(0, 1.2)
+    ax.set_yticks(np.arange(0, 11, 2) / 10)
+    ax.set_ylim(0, 1.1)
+    ax.tick_params(axis='y', labelsize=14)
 
     ax.margins(x=0.05)
     ax.set_xlim([-1, 60])
@@ -724,7 +733,7 @@ def draw_compareV7(save_path, reports):
     legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
     legend_handle3 = mpatches.Patch(color='#828282', label='Correct in both')
 
-    ax.legend(handles=[legend_handle1, legend_handle2, legend_handle3])
+    # ax.legend(handles=[legend_handle1, legend_handle2, legend_handle3])
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
@@ -805,6 +814,8 @@ def draw_compare2(save_path, reports):
         ]
 
         q1, median, q3 = np.percentile(improves, [25, 50, 75])
+        q1, q3 = min(improves), max(improves)
+
         ax.scatter(
             add_jitter([pos] * len(improves)), improves, s=8, color='#1976D2')
         ax.hlines(
@@ -818,6 +829,8 @@ def draw_compare2(save_path, reports):
             for i in rows
         ]
         q1, median, q3 = np.percentile(worses, [25, 50, 75])
+        q1, q3 = min(worses), max(worses)
+
         ax.scatter(
             add_jitter([pos] * len(worses)), worses, s=8, color='#D32F2F')
         ax.hlines(
@@ -838,7 +851,7 @@ def draw_compare2(save_path, reports):
     legend_handle1 = mpatches.Patch(color='#1976D2', label='Improved')
     legend_handle2 = mpatches.Patch(color='#D32F2F', label='Worsen')
 
-    ax.legend(handles=[legend_handle1, legend_handle2])
+    # ax.legend(handles=[legend_handle1, legend_handle2])
 
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
@@ -1156,3 +1169,143 @@ def get_top_3_changed(save_path, report):
     dump_csv(save_path / 'mode_disagree_top3_changed.csv', top_3_question)
 
     # TODO remove renamed files when in development
+
+
+def draw_pairs(data_file_list, save_path):
+
+    n_files = len(data_file_list)
+
+    if n_files <= 2 or (n_files % 2 != 0):
+        return
+
+    set1 = data_file_list[:(n_files // 2)]
+    set2 = data_file_list[(n_files // 2):]
+
+    set1_group = defaultdict(list)
+
+    for f in set1:
+        for qid, rows in group_records_by(load_csv(f), 'question_id').items():
+            agreement = [
+                i
+                for i in rows
+                if i['agree?'].lower().startswith('yes')
+            ]
+            set1_group[qid].append(len(agreement))
+
+    set2_group = defaultdict(list)
+
+    for f in set2:
+        for qid, rows in group_records_by(load_csv(f), 'question_id').items():
+            agreement = [
+                i
+                for i in rows
+                if i['agree?'].lower().startswith('yes')
+            ]
+            set2_group[qid].append(len(agreement))
+
+    qid_group = []
+    for qid, multi in set1_group.items():
+        qid_group.append({
+            'question_id': qid,
+            'group1': multi,
+            'group2': set2_group[qid],
+            'median_group1': statistics.median(multi),
+            'median_group2': statistics.median(set2_group[qid]),
+            'delta': statistics.median(multi) - statistics.median(set2_group[qid])
+        })
+
+    qid_group.sort(
+        key=lambda x: x['delta'],
+        reverse=True)
+
+    group_labels = [
+        f'Q{i["question_id"]}'
+        for i in qid_group
+    ]
+
+    fig, ax = plt.subplots(1, 1, figsize=(25, 8))
+
+    bar_positions = []
+    bar_width = 0.6
+
+    prev_delta = None
+
+    for pos, row in enumerate(qid_group):
+        bar_positions.append(pos)
+
+        group1_accuracy = [
+            i / 60
+            for i in row['group1']
+        ]
+        q1, median, q3 = np.percentile(group1_accuracy, [25, 50, 75])
+        q1, q3 = min(group1_accuracy), max(group1_accuracy)
+        pos1 = pos - bar_width / 2 / 2
+        ax.bar(
+            pos1,
+            median,
+            width=bar_width / 2,
+            color='#1f78b4',
+            # edgecolor='black',
+            # linewidth=1
+        )
+        ax.hlines(
+            [q1], pos1 - 0.1, pos1 + 0.1,
+            colors=['black'])
+        ax.vlines([pos1], q1, q3, colors=['black'])
+        ax.hlines(
+            [q3], pos1 - 0.1, pos1 + 0.1,
+            colors=['black'])
+
+        group2_accuracy = [
+            i / 60
+            for i in row['group2']
+        ]
+
+        q1, median, q3 = np.percentile(group2_accuracy, [25, 50, 75])
+        q1, q3 = min(group2_accuracy), max(group2_accuracy)
+
+        pos2 = pos + bar_width / 2 / 2
+
+        ax.bar(
+            pos2,
+            median,
+            width=bar_width / 2,
+            color='#ff7f00',
+            # edgecolor='black',
+            # linewidth=1
+        )
+        ax.hlines(
+            [q1], pos2 - 0.1, pos2 + 0.1,
+            colors=['black'])
+        ax.vlines([pos2], q1, q3, colors=['black'])
+        ax.hlines(
+            [q3], pos2 - 0.1, pos2 + 0.1,
+            colors=['black'])
+
+        delta = abs(row['delta'])
+
+        if not prev_delta:
+            prev_delta = delta
+            continue
+
+        if delta >= 6 and prev_delta < 6:
+            ax.axvline(x=pos - 0.5, color='grey', linestyle='--')
+        elif delta < 6 and prev_delta >= 6:
+            ax.axvline(x=pos - 0.5, color='grey', linestyle='--')
+
+        prev_delta = delta
+
+    ax.set_xticks(bar_positions, group_labels)
+    ax.set_xticklabels(group_labels, rotation=90)
+
+    ax.yaxis.set_major_formatter(PercentFormatter(1))
+
+    ax.set_yticks(np.arange(0, 11, 2) / 10)
+    ax.set_ylim(0, 1.1)
+    ax.tick_params(axis='y', labelsize=14)
+
+    ax.margins(x=0.05)
+    ax.set_xlim([-1, 60])
+
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()

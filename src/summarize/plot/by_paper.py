@@ -211,7 +211,7 @@ def draw_compare_plot_with_legend(
                 f"{i[:-1] if i[-1] == '?' else i.replace('_', ' ').capitalize()}: "
                 f"{stat['median']}% ({stat['iqr25']}%, {stat['iqr75']}%)")
 
-        ax.legend(handles, [new_labels.get(label, label) for label in labels])
+        # ax.legend(handles, [new_labels.get(label, label) for label in labels])
 
     ax.margins(x=0.05)
     ax.set_xlim([0, max_label + 1])

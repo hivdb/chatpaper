@@ -99,24 +99,24 @@ def quick_eval_boolean(human_answer, ai_answer, ai_NA):
     elif human_answer.startswith('no') and ai_answer.startswith('yes'):
         return 'No'
 
-    elif human_answer.startswith('yes') and ai_NA:
-        return 'No'
-    elif human_answer.startswith('no') and human_answer != 'no' and ai_NA:
-        return 'No'
-    elif human_answer.startswith('no') and ai_NA:
-        return 'Yes'
+    # elif human_answer.startswith('yes') and ai_NA:
+    #     return 'No'
+    # elif human_answer.startswith('no') and human_answer != 'no' and ai_NA:
+    #     return 'No'
+    # elif human_answer.startswith('no') and ai_NA:
+    #     return 'Yes'
 
     return ''
 
 
 def quick_eval_categorical(human_answer, ai_answer, ai_reply):
 
-    if human_answer in ai_reply:
+    if human_answer == 'NULL' and ai_answer == 'NULL':
         return 'Yes'
-
-    if human_answer in ai_answer:
-        return 'Yes'
-
+    elif human_answer == 'NULL' and ai_answer != 'NULL':
+        return 'No'
+    elif human_answer != 'NULL' and ai_answer == 'NULL':
+        return 'No'
     # if not human_NA and ai_NA:
     #     return 'No'
 

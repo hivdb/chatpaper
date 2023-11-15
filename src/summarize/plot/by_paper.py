@@ -15,7 +15,13 @@ COLORS = [
 
     '#963c32',
     '#ab625a',
-    '#c08a84'
+    '#c08a84',
+
+    '#ffffff',
+    '#ffffff',
+    '#ffffff',
+    '#ffffff',
+    '#ffffff',
 ]
 
 

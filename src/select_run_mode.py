@@ -16,6 +16,7 @@ from src.chat.chat_history import fix_chat_history_run_number  # noqa
 from src.chat.chat_history import remove_chat_history_run_number_and_qid  # noqa
 from src.chat.chat_history import remove_chat_history_run_number  # noqa
 from src.prepare_eval_file.shuffle import shuffle_by_paper
+from src.prepare_eval_file import analysis_cost
 
 
 MODES = {
@@ -26,6 +27,7 @@ MODES = {
     'Prepare claude eval file': prepare_claude_eval_file,
     'Shuffle': shuffle_by_paper,
     'Summarize & Visualize': summarize,
+    'Cost': analysis_cost,
     # 'Fix Chat history': fix_chat_history_question
     # 'Fix Chat history': fix_chat_history_run_number,
     # 'Fix Chat history': remove_chat_history_run_number,

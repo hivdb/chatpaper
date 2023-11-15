@@ -281,6 +281,11 @@ def analyze(test_set_path):
             Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper_3.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper_4.csv'),
             Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper_5.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper_6.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper_7.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper_8.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper_9.csv'),
+            Path(test_set_path / 'analysis' / 'gpt-4_base_shuffle_paper_10.csv'),
         ]
     )
 

@@ -14,6 +14,9 @@ def validate(data_file_list):
         if 'old' in f.name:
             continue
 
+        if 'cost' in f.name:
+            continue
+
         check_human_answer(f)
 
         check_human_boolean_eval(f)

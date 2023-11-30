@@ -216,13 +216,13 @@ def draw_compareV2(save_path, reports):
             # edgecolor='black',
             # linewidth=1
         )
-        ax.hlines(
-            [q1], pos - 0.1, pos + 0.1,
-            colors=['black'])
-        ax.vlines([pos], q1, q3, colors=['black'])
-        ax.hlines(
-            [q3], pos - 0.1, pos + 0.1,
-            colors=['black'])
+        # ax.hlines(
+        #     [q1], pos - 0.1, pos + 0.1,
+        #     colors=['black'])
+        # ax.vlines([pos], q1, q3, colors=['black'])
+        # ax.hlines(
+        #     [q3], pos - 0.1, pos + 0.1,
+        #     colors=['black'])
 
         worses = [
             i['# worse'] / -60
@@ -240,13 +240,13 @@ def draw_compareV2(save_path, reports):
             # edgecolor='black',
             # linewidth=1
         )
-        ax.hlines(
-            [q1], pos - 0.1, pos + 0.1,
-            colors=['black'])
-        ax.vlines([pos], q1, q3, colors=['black'])
-        ax.hlines(
-            [q3], pos - 0.1, pos + 0.1,
-            colors=['black'])
+        # ax.hlines(
+        #     [q1], pos - 0.1, pos + 0.1,
+        #     colors=['black'])
+        # ax.vlines([pos], q1, q3, colors=['black'])
+        # ax.hlines(
+        #     [q3], pos - 0.1, pos + 0.1,
+        #     colors=['black'])
 
     ax.axhline(0, color='black', linewidth=0.5)
 
@@ -321,13 +321,13 @@ def draw_compareV3(save_path, reports):
             # edgecolor='black',
             # linewidth=1
         )
-        ax.hlines(
-            [q1], pos - 0.1, pos + 0.1,
-            colors=['black'])
-        ax.vlines([pos], q1, q3, colors=['black'])
-        ax.hlines(
-            [q3], pos - 0.1, pos + 0.1,
-            colors=['black'])
+        # ax.hlines(
+        #     [q1], pos - 0.1, pos + 0.1,
+        #     colors=['black'])
+        # ax.vlines([pos], q1, q3, colors=['black'])
+        # ax.hlines(
+        #     [q3], pos - 0.1, pos + 0.1,
+        #     colors=['black'])
 
     ax.axhline(0, color='black', linewidth=0.5)
 
@@ -678,13 +678,13 @@ def draw_compareV7(save_path, reports):
             # edgecolor='black',
             # linewidth=1
         )
-        ax.hlines(
-            [q1], pos - 0.1, pos + 0.1,
-            colors=['black'])
-        ax.vlines([pos], q1, q3, colors=['black'])
-        ax.hlines(
-            [q3], pos - 0.1, pos + 0.1,
-            colors=['black'])
+        # ax.hlines(
+        #     [q1], pos - 0.1, pos + 0.1,
+        #     colors=['black'])
+        # ax.vlines([pos], q1, q3, colors=['black'])
+        # ax.hlines(
+        #     [q3], pos - 0.1, pos + 0.1,
+        #     colors=['black'])
 
         improves = [
             i['# improve'] / 60
@@ -707,13 +707,13 @@ def draw_compareV7(save_path, reports):
             # edgecolor='black',
             # linewidth=1
         )
-        ax.hlines(
-            [q1], pos - 0.1, pos + 0.1,
-            colors=['black'])
-        ax.vlines([pos], q1, q3, colors=['black'])
-        ax.hlines(
-            [q3], pos - 0.1, pos + 0.1,
-            colors=['black'])
+        # ax.hlines(
+        #     [q1], pos - 0.1, pos + 0.1,
+        #     colors=['black'])
+        # ax.vlines([pos], q1, q3, colors=['black'])
+        # ax.hlines(
+        #     [q3], pos - 0.1, pos + 0.1,
+        #     colors=['black'])
 
     ax.axhline(0, color='black', linewidth=0.5)
 
@@ -1248,13 +1248,13 @@ def draw_pairs(data_file_list, save_path):
             # edgecolor='black',
             # linewidth=1
         )
-        ax.hlines(
-            [q1], pos1 - 0.1, pos1 + 0.1,
-            colors=['black'])
-        ax.vlines([pos1], q1, q3, colors=['black'])
-        ax.hlines(
-            [q3], pos1 - 0.1, pos1 + 0.1,
-            colors=['black'])
+        # ax.hlines(
+        #     [q1], pos1 - 0.1, pos1 + 0.1,
+        #     colors=['black'])
+        # ax.vlines([pos1], q1, q3, colors=['black'])
+        # ax.hlines(
+        #     [q3], pos1 - 0.1, pos1 + 0.1,
+        #     colors=['black'])
 
         group2_accuracy = [
             i / 60
@@ -1274,13 +1274,13 @@ def draw_pairs(data_file_list, save_path):
             # edgecolor='black',
             # linewidth=1
         )
-        ax.hlines(
-            [q1], pos2 - 0.1, pos2 + 0.1,
-            colors=['black'])
-        ax.vlines([pos2], q1, q3, colors=['black'])
-        ax.hlines(
-            [q3], pos2 - 0.1, pos2 + 0.1,
-            colors=['black'])
+        # ax.hlines(
+        #     [q1], pos2 - 0.1, pos2 + 0.1,
+        #     colors=['black'])
+        # ax.vlines([pos2], q1, q3, colors=['black'])
+        # ax.hlines(
+        #     [q3], pos2 - 0.1, pos2 + 0.1,
+        #     colors=['black'])
 
         delta = abs(row['delta'])
 

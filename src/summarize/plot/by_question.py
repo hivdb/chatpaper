@@ -474,7 +474,9 @@ def draw_compare_plot_with_legend(
 
     ax.set_yticks([i / 10 for i in range(2, 11, 2)])
     ax.set_ylim(0, 1.1)
-    ax.tick_params(axis='y', labelsize=14)
+
+    ax.tick_params(axis='x', labelsize=16)
+    ax.tick_params(axis='y', labelsize=16)
 
     # if not split:
     handles, labels = plt.gca().get_legend_handles_labels()

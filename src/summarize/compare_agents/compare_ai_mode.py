@@ -724,7 +724,8 @@ def draw_compareV7(save_path, reports):
 
     ax.set_yticks(np.arange(0, 11, 2) / 10)
     ax.set_ylim(0, 1.1)
-    ax.tick_params(axis='y', labelsize=14)
+    ax.tick_params(axis='x', labelsize=16)
+    ax.tick_params(axis='y', labelsize=16)
 
     ax.margins(x=0.05)
     ax.set_xlim([-1, 60])
@@ -1302,7 +1303,8 @@ def draw_pairs(data_file_list, save_path):
 
     ax.set_yticks(np.arange(0, 11, 2) / 10)
     ax.set_ylim(0, 1.1)
-    ax.tick_params(axis='y', labelsize=14)
+    ax.tick_params(axis='x', labelsize=16)
+    ax.tick_params(axis='y', labelsize=16)
 
     ax.margins(x=0.05)
     ax.set_xlim([-1, 60])

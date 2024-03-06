@@ -5,7 +5,7 @@ from ..chat_history import ChatHistory
 # from ..filter_question import get_unanswered
 
 
-def multi_q_all_content(paper_file_path, chat_context, num_batch=20):
+def multi_q_all_content(paper_file_path, chat_context, num_batch=60):
 
     # TODO, decorator
     chat_history = ChatHistory(paper_file_path, chat_context)

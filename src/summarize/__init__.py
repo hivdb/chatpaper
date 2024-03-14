@@ -25,6 +25,7 @@ from src.table import group_records_by
 from statistics import stdev
 from statistics import quantiles
 from statistics import mean, median
+import re
 
 
 def summarize():
@@ -38,6 +39,25 @@ def summarize():
     data_folder = merge_eval_files(test_set_path_list)
 
     analyze(data_folder)
+
+
+def count_more_than_1_numbers(table):
+
+    count = 0
+
+    for i in table:
+        if 'question_type' not in i:
+            continue
+        if i['question_type'] != 'Numerical':
+            continue
+
+        reply = i['AI_reply'].lower()
+
+        ai_ans = re.findall(r'(\d+)', reply)
+        if len(ai_ans) > 1:
+            count += 1
+
+    print(count)
 
 
 def merge_eval_files(test_set_path_list):
@@ -55,7 +75,11 @@ def merge_eval_files(test_set_path_list):
             if 'human_answer' in j.name:
                 continue
             if j.suffix == '.csv':
-                result[j.name].extend(load_csv(j))
+                table = load_csv(j)
+                result[j.name].extend(table)
+
+                print(j)
+                count_more_than_1_numbers(table)
 
                 eval_files.append(j)
 

@@ -36,6 +36,7 @@ def by_boolean(questions):
 
 def by_numerical(questions):
 
+    count = 0
     for i in questions:
         reply = i['AI_reply'].lower()
         # question_type = i['question_type']
@@ -50,8 +51,12 @@ def by_numerical(questions):
             ai_ans = re.findall(r'(\d+)', reply)
             if len(ai_ans) == 1:
                 ai_answer = ai_ans[0]
+            else:
+                count += 1
 
         i['AI_answer'] = ai_answer
+
+    print(count)
 
 
 def by_categorical(questions):

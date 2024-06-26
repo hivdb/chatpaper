@@ -65,7 +65,7 @@ def extract_method_and_result(src, dest):
 
     section_names = list(sections.keys())
 
-    for i in ['method', 'result']:
+    for i in ['abstract', 'method', 'result', 'discussion']:
         if any([i in j.lower() for j in section_names]):
             continue
 
@@ -76,16 +76,21 @@ def extract_method_and_result(src, dest):
     meta_data = {}
 
     for k, v in sections.items():
-        if 'title' in k:
-            v = v.split('\n')[0]
-            result.append(v)
-            meta_data['title'] = True
-        if 'method' in k:
-            result.append(v)
-            meta_data['method'] = True
-        if 'result' in k:
-            result.append(v)
-            meta_data['result'] = True
+        if 'reference' in k:
+            continue
+        result.append(v)
+
+    # for k, v in sections.items():
+    #     if 'title' in k:
+    #         v = v.split('\n')[0]
+    #         result.append(v)
+    #         meta_data['title'] = True
+    #     if 'method' in k:
+    #         result.append(v)
+    #         meta_data['method'] = True
+    #     if 'result' in k:
+    #         result.append(v)
+    #         meta_data['result'] = True
 
     result = [
         remove_non_markdown(i)
@@ -112,6 +117,26 @@ def remove_non_markdown(text):
         '</div>\n', '').replace(
         '::: section\n', '').replace(
         ':::\n', '')
+
+    new_text = []
+    find_figure = False
+    for i in text.split('\n'):
+        if i.strip().lower() == '<figure>':
+            find_figure = True
+        elif find_figure and i.strip().lower() == '</figure>':
+            find_figure = False
+        elif not find_figure:
+            new_text.append(i)
+
+    text = '\n'.join(new_text)
+
+    new_text = []
+    for i in text.split('\n'):
+        if i.startswith('![](') and i.endswith(')'):
+            continue
+        new_text.append(i)
+
+    text = '\n'.join(new_text)
 
     return text
 

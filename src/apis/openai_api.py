@@ -1,11 +1,13 @@
+from openai import OpenAI
 import openai
 import os
 
 
 def chat_openai(model, messages, temperature=0):
-    openai.api_key = os.getenv('OPENAI_API_KEY')
 
-    response = openai.ChatCompletion.create(
+    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+    response = client.chat.completions.create(
         model=model,
         messages=messages,
         temperature=temperature

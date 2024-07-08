@@ -3,7 +3,7 @@ from src.apis.embedding import get_token_length
 from .filter_question import get_unanswered
 from src.logs import logger
 from src.checksum import get_md5
-from openai.error import Timeout
+from openai import Timeout
 import warnings
 
 
@@ -144,7 +144,6 @@ def process_one_question(unanswered, part, chat_context):
 
 
 def process_multi_questions(unanswered, part, chat_context, retry_time=10):
-    # TODO, define retry 3 times
 
     unanswered = get_unanswered(
         unanswered, part['batch_content'],

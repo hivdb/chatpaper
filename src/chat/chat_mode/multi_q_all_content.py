@@ -38,7 +38,7 @@ def multi_q_all_content(paper_file_path, chat_context, num_batch=60):
 
 def try_batches(batches, chat_context):
     for one_batch in batches:
-        print(len(one_batch))
+        print('#Question per batch', len(one_batch))
 
         try_map_reduce(dict(one_batch), chat_context)
 

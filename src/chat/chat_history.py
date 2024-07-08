@@ -9,7 +9,7 @@ from src.select_content.test_set import select_test_set
 class ChatHistory:
 
     def __init__(self, file_path, chat_context, save_format='csv'):
-        self.folder = file_path.parent.parent / 'chat_history'
+        self.folder = file_path.parent / 'chat_history'
         self.folder.mkdir(exist_ok=True)
 
         self.save_format = save_format

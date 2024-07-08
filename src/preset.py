@@ -43,6 +43,12 @@ MODEL_RATE_LIMITS = {
         'MAX_TOKENS': 32768,
         'type': 'chat-model',
     },
+    'gpt-4o': {
+        'RPM': 10000,
+        'TPM': 800000,
+        'MAX_TOKENS': 128000,
+        'type': 'chat-model',
+    },
     # 'gpt-4-32k-0613': {
     #     'RPM': 200,
     #     'TPM': 40000,
@@ -58,15 +64,15 @@ MODEL_RATE_LIMITS = {
 
 
 DEFAULT_OPTIONS = {
-    'model': 'gpt-4-32k',
+    'model': 'gpt-4o',
     'auto_mode': True,
-    'papers': 'all',
+    # 'papers': 'all',
     'file_format': 'checked.md',
     # 'question_set': 'Set1',
     # 'questions': 'all',
     'embedding?': False,
     # 'multiple_questions?': True,
-    # 'cheatsheet?': False,
+    'cheatsheet?': False,
     # 'remove_sent?': False
     # 'append_sent?': False
 }

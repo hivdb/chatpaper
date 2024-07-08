@@ -13,15 +13,17 @@ from langchain.document_loaders.base import BaseLoader
 def split_md_section(markdownfile: Path):
 
     with open(markdownfile) as fd:
-        content = fd.readlines()
+        content = fd.read()
 
-    content = group_by_headers(content)
-    content = get_header_level(content)
+    # content = group_by_headers(content)
+    # content = get_header_level(content)
 
-    for c in content:
-        c['paragraphs'] = get_paragraph_list(c)
+    # for c in content:
+    #     c['paragraphs'] = get_paragraph_list(c)
 
-    return content
+    return [{
+        'all_content': content,
+    }]
 
 
 def get_paragraph_list(one_section):

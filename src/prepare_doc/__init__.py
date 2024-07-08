@@ -178,7 +178,7 @@ def collect_all_paper_summary(folder=PAPER_PATH):
         if not i.is_dir():
             continue
 
-        if not i.name.startswith('Set'):
+        if not i.name.startswith('papers'):
             continue
 
         info_file = i / 'papers_infomation.csv'

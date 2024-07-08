@@ -22,12 +22,12 @@ from src.prepare_eval_file import analysis_cost
 MODES = {
     'Prepare papers': batch_prepare_files,
     'Chat AI': chat,
-    'Update human answer': update_human_answer,
-    'Prepare eval file': prepare_eval_file,
-    'Prepare claude eval file': prepare_claude_eval_file,
-    'Shuffle': shuffle_by_paper,
-    'Summarize & Visualize': summarize,
-    'Cost': analysis_cost,
+    # 'Update human answer': update_human_answer,
+    # 'Prepare eval file': prepare_eval_file,
+    # 'Prepare claude eval file': prepare_claude_eval_file,
+    # 'Shuffle': shuffle_by_paper,
+    # 'Summarize & Visualize': summarize,
+    # 'Cost': analysis_cost,
     # 'Fix Chat history': fix_chat_history_question
     # 'Fix Chat history': fix_chat_history_run_number,
     # 'Fix Chat history': remove_chat_history_run_number,

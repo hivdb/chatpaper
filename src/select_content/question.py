@@ -13,14 +13,15 @@ def load_questions(file_path):
         if 'use' in i:
             if i['use'].lower() != 'yes':
                 continue
+
         question = i['question'].strip()
         cheatsheet = i.get('cheatsheet', '').strip()
         prompt = i.get('prompt', '').strip()
 
         if prompt:
-            questions[i['id']] = f"{prompt}\n\n\n{question}"
+            questions[i['id']] = f"```{prompt}\n\n\n{question}````\n\n"
         elif cheatsheet:
-            questions[i['id']] = f"{cheatsheet}\n\n\n{question}"
+            questions[i['id']] = f"```{cheatsheet}\n\n\n{question}````\n\n"
         else:
             questions[i['id']] = question
 

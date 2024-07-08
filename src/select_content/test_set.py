@@ -10,9 +10,10 @@ def load_test_set(folder=PAPER_PATH):
     for i in folder.iterdir():
         if not i.is_dir():
             continue
-        if 'set' not in i.name.lower():
-            continue
-        test_sets.append((i, i.name))
+        if 'set' in i.name.lower():
+            test_sets.append((i, i.name))
+        if i.name.lower().startswith('paper'):
+            test_sets.append((i, i.name))
 
     test_sets.sort(key=lambda x: x[-1])
 

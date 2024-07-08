@@ -5,7 +5,7 @@ from src.preset import DEFAULT_OPTIONS
 
 
 def select_paper_content(test_set_folder, all_option=False, only_one=False):
-    test_set_folder = test_set_folder / 'Papers'
+    # test_set_folder = test_set_folder / 'Papers'
 
     file_format = select_paper_file_format()
 
@@ -73,12 +73,13 @@ def list_paper_content(file_format, folder):
         if not f.is_dir():
             continue
 
-        document_path = f / 'document'
+        # document_path = f / 'document'
 
-        if not document_path.exists():
-            continue
+        # if not document_path.exists():
+        #     continue
 
-        for i in document_path.iterdir():
+        # for i in document_path.iterdir():
+        for i in f.iterdir():
             if file_format in i.name.lower():
                 papers.append((i, i.name))
 
@@ -117,7 +118,7 @@ def select_some_paper_content(
 
 
 def select_paper(test_set_folder, all_option=True, only_one=False):
-    test_set_folder = test_set_folder / 'Papers'
+    # test_set_folder = test_set_folder / 'Papers'
 
     # TODO, show number of papers
 

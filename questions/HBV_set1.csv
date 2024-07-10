@@ -1,0 +1,27 @@
+id,question,prompt
+1,Does the paper report HBV sequences from patient samples?,Please begin your answer with either 'Yes' or 'No' as the first word.
+2,"Does the paper report GenBank accession numbers for sequenced HBV isolates? If 'Yes', what were the GenBank accession numbers for sequenced HBV isolates?","Please begin your answer with either 'Yes' or 'No' as the first word.
+If 'Yes',  list all of the Accession numbers.
+Hint: Accession number begin with two letters followed by six or fewer digits"
+3,Which HBV genes were reported to have been sequenced?,
+4,From which countries were the sequenced samples obtained?,"Try your best to get countries from abstract, method, or result section. If no sequenced samples were used in this research paper, you should return 'Not Found'."
+5,From what years were the sequenced samples obtained?,"Reply with a list of year(s) only. If no sequenced samples were used in this research paper, you should return 'Not Found'."
+6,What method was used for sequencing?,"Sequencing is performed using two main types of methods. Sanger (aka dideoxyterminator or dideoxynucleotide) sequencing was the only method used prior to 2007. Companies involved in Sanger sequencing included ABI (ViroSeq) and Visible Genetics (TruGene). Next-generation sequencing (NGS) is being increasingly used but is still less common than Sanger sequencing. The main NGS methods involve using Illumina, Nanopore, Ion Torrent, and PacBio. Genotypic resistance testing refers to sequencing of the genes that are the targets of ART. This usually refers to the RT, protease, and integrase genes.
+
+
+Select from the following options and begin your answer with this:
+A.	Sanger sequencing
+B.	Illumina sequencing
+C.	PacBio sequencing
+D.	Oxford Nanopore sequencing
+E. 	Unknown
+F.	Other"
+7,What clinical specimens were sequenced?,"Select from the following options and begin your answer with this:
+A.	Plasma
+B.	PBMC
+C.	Whole Blood
+D.Serum
+E.Other
+F.Unknown"
+8,Which drugs were received by individuals in the study before sample sequencing?,Drugs could be Lamivudine (3TC); Emtricitabine (FTC); Adefovir dipivoxil (ADV); Entecavir (ETV); Telbivudine (LdT); Tenofovir alafenamide (TAF); Tenofovir disoproxil fumarate (TDF).
+9,How many individuals had samples obtained for HBV sequencing?,"Please begin your answer with the number of individuals as an integer. "

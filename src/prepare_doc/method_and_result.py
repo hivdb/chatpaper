@@ -114,7 +114,7 @@ def extract_method_and_result(src, dest):
 
     result = '\n'.join(result)
 
-    start_of_title = result.index('# ')
+    start_of_title = result.find('# ')
     if start_of_title > 0:
         result = result[start_of_title:]
 

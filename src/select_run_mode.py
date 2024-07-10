@@ -6,6 +6,7 @@ from src.logs import logger
 from src.summarize import summarize
 
 from src.prepare_eval_file import prepare_eval_file
+from src.prepare_eval_file import combine_chat_history
 from src.prepare_eval_file.update_human_answer import update_human_answer
 from src.prepare_eval_file import prepare_claude_eval_file
 
@@ -23,6 +24,7 @@ MODES = {
     'Prepare papers': batch_prepare_files,
     'Chat AI': chat,
     # 'Update human answer': update_human_answer,
+    'Combine chat history': combine_chat_history,
     # 'Prepare eval file': prepare_eval_file,
     # 'Prepare claude eval file': prepare_claude_eval_file,
     # 'Shuffle': shuffle_by_paper,

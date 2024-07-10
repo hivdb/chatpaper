@@ -104,6 +104,20 @@ def extract_method_and_result(src, dest):
 
     result = '\n\n'.join(result)
 
+    result = result.split('\n')
+
+    result = [
+        i
+        for i in result
+        if i.strip() != 'Go to:'
+    ]
+
+    result = '\n'.join(result)
+
+    start_of_title = result.index('# ')
+    if start_of_title > 0:
+        result = result[start_of_title:]
+
     with open(dest, 'w') as fd:
         fd.write(result)
 

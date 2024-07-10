@@ -24,6 +24,9 @@ def prepare_clean_html(file_context, file_key):
 def clean_html(html):
     soup = BeautifulSoup(html, 'html.parser')
 
+    for element in soup.findAll("span", {"class" : "tag-json"}):
+        element.decompose()
+
     for script in soup(["script", "style"]):
         script.decompose()
 

@@ -11,19 +11,19 @@ def combine_content(file_context):
             content += fd.read()
             content += '\n\n'
 
-    figure_file_path = file_context['.figures.md']
+    # figure_file_path = file_context['.figures.md']
 
-    if figure_file_path.exists():
-        with open(figure_file_path) as fd:
-            content += fd.read()
-            content += '\n\n'
+    # if figure_file_path.exists():
+    #     with open(figure_file_path) as fd:
+    #         content += fd.read()
+    #         content += '\n\n'
 
-    table_file_path = file_context['.tables.md']
+    # table_file_path = file_context['.tables.md']
 
-    if table_file_path.exists():
-        with open(table_file_path) as fd:
-            content += fd.read()
-            content += '\n\n'
+    # if table_file_path.exists():
+    #     with open(table_file_path) as fd:
+    #         content += fd.read()
+    #         content += '\n\n'
 
     new_file_key = '.combined.md'
     dest = (

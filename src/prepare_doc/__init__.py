@@ -22,8 +22,10 @@ from .option import choose_generate_embedding
 def batch_prepare_files():
 
     test_set_path = select_test_set()
+    print(test_set_path)
     overwrite_option = choose_overwrite()
-    embedding_option = choose_generate_embedding()
+    # embedding_option = choose_generate_embedding()
+    embedding_option = False
 
     file_context_list = prepare_file_context_list(test_set_path, {
         '_overwrite': overwrite_option,
@@ -182,6 +184,8 @@ def collect_all_paper_summary(folder=PAPER_PATH):
             continue
 
         info_file = i / 'papers_infomation.csv'
+        if not info_file.exists():
+            continue
         result.extend(load_csv(info_file))
 
     dump_csv(folder / 'papers_information.csv', result)

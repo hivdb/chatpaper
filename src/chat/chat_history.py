@@ -23,7 +23,7 @@ class ChatHistory:
         self.chatlog = [
             i
             for i in self.chatlog
-            # if i.get('question_id') and i['answer'] != 'NA from AI'
+            # if i.get('question_id') and i['answer'] != ''
         ]
 
         today = datetime.today()
@@ -94,10 +94,10 @@ class ChatHistory:
                 {
                     'question_id': qid,
                     'question': q,
-                    'answer': 'NA from AI',
-                    'explain': 'NA from AI',
-                    'sentences': 'NA from AI',
-                    'confidence': 'NA from AI',
+                    'answer': '',
+                    'explain': '',
+                    'sentences': '',
+                    'confidence': '',
                 }
                 for qid, q in questions.items()
             ]
@@ -176,7 +176,7 @@ class ChatHistory:
             # if check_content and (get_md5(content) != i.get('md5')):
             #     continue
 
-            # if i['answer'] == 'NA from AI':
+            # if i['answer'] == '':
             #     continue
 
             result.append(i)

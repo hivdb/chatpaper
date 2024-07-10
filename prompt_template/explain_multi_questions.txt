@@ -8,7 +8,7 @@ try to answer them one by one using the paper content quoted in triple backticks
 Step 1: get the question, store as "question".
 Step 2: answer the question, store as 'answer'.
 Step 3: explain how you found the answer from the content in details, store as 'explain'.
-Step 4: extract paragraphs directly from the research paper that give the information can be used to answer the question, store as 'sentences'.
+Step 4: extract all paragraphs from the research paper that can be used to answer the question, remove '\n', join by ";", store as 'sentences'.
 Step 5: rate your confidence in percentage for your "answer", store as 'confidence'.
 Step 6: format your answer as follows
 

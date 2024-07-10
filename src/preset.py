@@ -71,7 +71,7 @@ DEFAULT_OPTIONS = {
     # 'question_set': 'Set1',
     # 'questions': 'all',
     'embedding?': False,
-    # 'multiple_questions?': True,
+    'multiple_questions?': True,
     'cheatsheet?': False,
     # 'remove_sent?': False
     # 'append_sent?': False

@@ -71,7 +71,7 @@ def batch_prepare_files():
 
     collect_paper_summary(test_set_path, file_context_list)
 
-    collect_all_paper_summary(folder=PAPER_PATH)
+    # collect_all_paper_summary(folder=PAPER_PATH)
 
 
 def prepare_file_context_list(folder, parameters={}):

@@ -1,20 +1,27 @@
-# See below is my request
+## See below is my request
 
-Given a question, try to answer it using the paper content quoted in triple backticks.
-Explain how you found the answer from the content.
-Cite all relevant sentences that you find the information.
-Use percentage to rate your confidence.
-Also, use the format in triple quote below to format your answer:
+Given a question below, try to answer it using the paper content quoted in triple backticks,
+and save to `Answer`
+Give the `Rationale` how you found the answer from the content.
+Cite all relevant `Sentences` that you find the information.
+
+Use the format in triple quote below to format your answer:
 """
 Answer: <your answer>
 
-Explain: <your explain>
+Rationale: <your rationale>
 
-Sentences: <cite the sentences>
-
-Confidence: <your confidence>
+Sentences: <relevant sentences>
 """
 
-Here is the question:
+## Question:
 
-Question: {question}
+```
+{question}
+```
+
+## Paper content:
+
+```
+{paper_content}
+```

@@ -1,0 +1,5 @@
+```
+Answer: {answer}
+Explain: {rationale}
+Sentences: {sentences}
+```

@@ -19,6 +19,8 @@ from src.chat.chat_history import remove_chat_history_run_number  # noqa
 from src.prepare_eval_file.shuffle import shuffle_by_paper
 from src.prepare_eval_file import analysis_cost
 from src.collect_pdf import collect_pdf
+from src.fine_tune.prepare_data import prepare_data
+
 
 MODES = {
     'Prepare papers': batch_prepare_files,
@@ -36,6 +38,7 @@ MODES = {
     # 'Fix chat history': remove_chat_history_run_number_and_qid,
     'Clean up folder': cleanup_folder,
     'Collect PDF': collect_pdf,
+    'Prepare fine tuning': prepare_data,
     # 'Archive folder': archive_folder,
     # 'Clean up question': cleanup_question,
 }

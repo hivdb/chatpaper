@@ -1,5 +1,7 @@
 ```
 Answer: {answer}
-Explain: {rationale}
+
+Rationale: {rationale}
+
 Sentences: {sentences}
 ```

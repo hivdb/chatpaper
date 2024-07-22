@@ -171,3 +171,5 @@ papers*
 index
 
 Fine-tuning instruction set, Jul 18_with_paper.xlsx
+
+*.jsonl

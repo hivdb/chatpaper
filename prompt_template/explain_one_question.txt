@@ -19,6 +19,9 @@ Sentences: <relevant sentences>
 ```
 {question}
 ```
+```
+{question_prompt}
+```
 
 ## Paper content:
 

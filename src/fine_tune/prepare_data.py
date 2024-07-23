@@ -33,7 +33,7 @@ def load_paper_markdown(papers=PAPER_PATH):
 
                 paper_content[pmid.name] = open(f).read()
 
-    print('# Papers', paper_content.keys())
+    print('# Papers', len(paper_content))
 
     return paper_content
 
@@ -83,6 +83,8 @@ def prepare_data():
             rationale=i['Rationale'],
             sentences=i['Reference Sentences']
         )
+
+    dump_jsonl(PAPER_PATH.parent / 'pre_dataset.jsonl', table)
 
     # for i in table:
     #     if str(i['PMID']) == '20004217' and str(i['QID']) == '17':

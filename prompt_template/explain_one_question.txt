@@ -1,25 +1,24 @@
 ## See below is my request
 
-Given a question below, try to answer it using the paper content quoted in triple backticks,
-and save to `Answer`
-Give the `Rationale` how you found the answer from the content.
-Cite all relevant `Sentences` that you find the information.
+Given a question in `Question` section, try to answer it using the paper content quoted in triple backticks, and save to `Answer`
+Give the `Rationale` about how you found the answer.
+Cite more than two relevant sentences that you find the information, and save to sentences
 
-Use the format in triple quote below to format your answer:
+Use the format in triple quote below for your response:
+
 """
-Answer: <your answer>
+Answer: <answer>
 
-Rationale: <your rationale>
+Rationale: <rationale>
 
-Sentences: <relevant sentences>
+Sentences: <sentences>
 """
 
 ## Question:
 
 ```
 {question}
-```
-```
+
 {question_prompt}
 ```
 

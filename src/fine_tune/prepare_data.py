@@ -75,6 +75,7 @@ def prepare_data():
             question_prompt=ques['prompt'],
             paper_content=i['paper_content'])
 
+        i['question prompt'] = ques['prompt']
         i['user'] = prompt
 
     for i in table:
@@ -83,6 +84,7 @@ def prepare_data():
             rationale=i['Rationale'],
             sentences=i['Reference Sentences']
         )
+        i['Answer'] = str(i['Answer'])
 
     dump_jsonl(PAPER_PATH.parent / 'pre_dataset.jsonl', table)
 

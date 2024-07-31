@@ -41,7 +41,7 @@ def get_data_distribution():
         }
         for i in qids:
             a = [
-                r['Answer']
+                str(r['Answer']).strip()
                 for r in pmid_list
                 if int(r['QID']) == i
             ]

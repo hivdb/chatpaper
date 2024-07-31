@@ -6,14 +6,76 @@ from src.preset import PROMPT_TEMPLATE_PATH
 from src.preset import QUESTION_PATH
 
 
-DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Jul 22.xlsx'
+DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Jul 31.xlsx'
 SYSTEM_PROMPT = open(PROMPT_TEMPLATE_PATH / 'system.txt').read()
 MAIN_PROMPT = open(PROMPT_TEMPLATE_PATH / 'explain_one_question.txt').read()
 QUESTIONS = QUESTION_PATH / 'HIV_Set1_Jul8.csv'
 ASSISTANT_PROMPT = open(PROMPT_TEMPLATE_PATH / 'assistant.txt').read()
 
+VAL_SET_PMID = [
+    20124001,
+    20300008,
+    20308382,
+    20438383,
+    20455758,
+    20507208,
+    20530226,
+    20660667,
+    20666602,
+    20718620,
+    21114823,
+    21189351,
+    21358627,
+    21765953,
+    25261422,
+    25273080,
+    25281399,
+    25642847,
+    25681380,
+    25694653,
+    26041893,
+    26082240,
+    29765018,
+    33055182,
+    34422316,
+]
+
+TEST_SET_PMID = [
+    19686436,
+    19913270,
+    19917747,
+    19933171,
+    19933797,
+    19938977,
+    20008779,
+    20029816,
+    20345882,
+    20388636,
+    20398371,
+    20426823,
+    20430786,
+    20453629,
+    20643915,
+    20702636,
+    34422316,
+    35305571,
+    36082606,
+    36101479,
+    36347497,
+    36708743,
+    37293603,
+    38141637,
+    38376918
+]
+
 
 def load_paper_markdown(papers=PAPER_PATH):
+
+    both_eval_test = set(VAL_SET_PMID) & set(TEST_SET_PMID)
+
+    print('#Val, test set overlap:', both_eval_test)
+    print('#val set:', len(set(VAL_SET_PMID)))
+    print('#test set:', len(set(TEST_SET_PMID)))
 
     paper_content = {}
 
@@ -52,11 +114,11 @@ def prepare_data():
 
     table = load_excel(DATA_FILE)
 
-    table = [
-        i
-        for i in table
-        if str(i['Done']).strip() == '1'
-    ]
+    # table = [
+    #     i
+    #     for i in table
+    #     if str(i['Done']).strip() == '1'
+    # ]
 
     print('#Sample for fine tuning', len(table))
 
@@ -94,7 +156,31 @@ def prepare_data():
     #         print(i['user'])
     #         print(i['assistant'])
 
-    table = [
+    train_set = [
+        i
+        for i in table
+        if (
+                (int(i['PMID']) not in VAL_SET_PMID)
+                and
+                (int(i['PMID']) not in TEST_SET_PMID)
+        )
+    ]
+    val_set = [
+        i
+        for i in table
+        if (int(i['PMID']) in VAL_SET_PMID)
+    ]
+    test_set = [
+        i
+        for i in table
+        if (int(i['PMID']) in TEST_SET_PMID)
+    ]
+
+    print('#Train', len(train_set))
+    print('#Val', len(val_set))
+    print('#Test', len(test_set))
+
+    train_set = [
         {
             'messages': [
                 {"role": "system", "content": i['system']},
@@ -102,7 +188,33 @@ def prepare_data():
                 {"role": "assistant", "content": i['assistant']},
             ]
         }
-        for i in table
+        for i in train_set
     ]
 
-    dump_jsonl(PAPER_PATH.parent / 'dataset.jsonl', table)
+    dump_jsonl(PAPER_PATH.parent / 'train_set.jsonl', train_set)
+
+    val_set = [
+        {
+            'messages': [
+                {"role": "system", "content": i['system']},
+                {"role": "user", "content": i['user']},
+                {"role": "assistant", "content": i['assistant']},
+            ]
+        }
+        for i in val_set
+    ]
+
+    dump_jsonl(PAPER_PATH.parent / 'val_set.jsonl', val_set)
+
+    test_set = [
+        {
+            'messages': [
+                {"role": "system", "content": i['system']},
+                {"role": "user", "content": i['user']},
+                {"role": "assistant", "content": i['assistant']},
+            ]
+        }
+        for i in test_set
+    ]
+
+    dump_jsonl(PAPER_PATH.parent / 'test_set.jsonl', test_set)

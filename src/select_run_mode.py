@@ -20,6 +20,7 @@ from src.prepare_eval_file.shuffle import shuffle_by_paper
 from src.prepare_eval_file import analysis_cost
 from src.collect_pdf import collect_pdf
 from src.fine_tune.prepare_data import prepare_data
+from src.fine_tune.get_data_distribution import get_data_distribution
 
 
 MODES = {
@@ -39,6 +40,7 @@ MODES = {
     'Clean up folder': cleanup_folder,
     'Collect PDF': collect_pdf,
     'Prepare fine tuning': prepare_data,
+    'Get data distribution': get_data_distribution,
     # 'Archive folder': archive_folder,
     # 'Clean up question': cleanup_question,
 }

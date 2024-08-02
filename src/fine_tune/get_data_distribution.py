@@ -5,7 +5,7 @@ from src.table import group_records_by
 from collections import Counter
 
 
-DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Jul 31.xlsx'
+DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 1.xlsx'
 
 
 def get_data_distribution():
@@ -13,9 +13,10 @@ def get_data_distribution():
     table = load_excel(DATA_FILE, 'Sheet1')
 
     result = []
+    result2 = []
     for qid, qid_list in group_records_by(table, 'QID').items():
         answers = [
-            str(i['Answer']).lower()
+            str(i['Answer']).strip()
             for i in qid_list
         ]
 
@@ -25,9 +26,30 @@ def get_data_distribution():
                 'answer': a,
                 'Number': c
             })
+        # if int(qid) == 11:
+        #     for j in sorted(answers):
+        #         print(j)
+        if int(qid) not in (3, 6, 7, 18):
+            answers = [
+                sub_a.strip()
+                for a in answers
+                for sub_a in (
+                    a.split(',') if (',' in a) else a.split(';')
+                )
+            ]
+
+        for a, c in Counter(answers).items():
+            result2.append({
+                'QID': qid,
+                'answer': a,
+                'Number': c
+            })
 
     save_file = DATA_FILE.parent / f"{DATA_FILE.name.replace('.xlsx', '_report.csv')}"
     dump_csv(save_file, result)
+
+    save_file = DATA_FILE.parent / f"{DATA_FILE.name.replace('.xlsx', '_report2.csv')}"
+    dump_csv(save_file, result2)
 
     qids = sorted(list(set(
         int(i['QID'])

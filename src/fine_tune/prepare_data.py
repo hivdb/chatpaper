@@ -156,6 +156,18 @@ def prepare_data():
     #         print(i['user'])
     #         print(i['assistant'])
 
+    dataset = [
+        {
+            'messages': [
+                {"role": "system", "content": i['system']},
+                {"role": "user", "content": i['user']},
+                {"role": "assistant", "content": i['assistant']},
+            ]
+        }
+        for i in table
+    ]
+    dump_jsonl(PAPER_PATH.parent / 'dataset.jsonl', dataset)
+
     train_set = [
         i
         for i in table

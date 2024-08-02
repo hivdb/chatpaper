@@ -19,9 +19,9 @@ def load_questions(file_path):
         prompt = i.get('prompt', '').strip()
 
         if prompt:
-            questions[i['id']] = f"```{prompt}\n\n\n{question}````\n\n"
+            questions[i['id']] = f"```{question}\n\n{prompt}````\n\n"
         elif cheatsheet:
-            questions[i['id']] = f"```{cheatsheet}\n\n\n{question}````\n\n"
+            questions[i['id']] = f"```{cheatsheet}\n\n{question}````\n\n"
         else:
             questions[i['id']] = question
 

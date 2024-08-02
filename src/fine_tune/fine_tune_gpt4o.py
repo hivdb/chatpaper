@@ -8,16 +8,16 @@ def fine_tune_gpt4o():
 
     client = OpenAI()
 
-    TRAIN_SET = PAPER_PATH.parent / 'train_set.jsonl'
+    train_set = PAPER_PATH.parent / 'dataset.jsonl'
 
     train_file = client.files.create(
-        file=open(TRAIN_SET, "rb"),
+        file=open(train_set, "rb"),
         purpose="fine-tune"
     )
 
-    TRAIN_SET = PAPER_PATH.parent / 'val_set.jsonl'
+    val_set = PAPER_PATH.parent / 'dataset.jsonl'
     val_file = client.files.create(
-        file=open(TRAIN_SET, "rb"),
+        file=open(val_set, "rb"),
         purpose="fine-tune"
     )
 
@@ -38,12 +38,17 @@ def monitor_job():
     client = OpenAI()
 
     # List 10 fine-tuning jobs
-    print(client.fine_tuning.jobs.list(limit=10))
+    models = client.fine_tuning.jobs.list(limit=10)
+    for i in models.data:
+        print(i)
 
     job_id = input('Monitor job id:')
 
     while True:
-        print(client.fine_tuning.jobs.list_events(fine_tuning_job_id=job_id, limit=10))
+        result = client.fine_tuning.jobs.list_events(fine_tuning_job_id=job_id)
+        for i in result.data:
+            print(i)
+        # print(result)
         time.sleep(10)
 
     # Retrieve the state of a fine-tune

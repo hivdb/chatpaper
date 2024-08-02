@@ -49,6 +49,12 @@ MODEL_RATE_LIMITS = {
         'MAX_TOKENS': 128000,
         'type': 'chat-model',
     },
+    'gpt-4o-mini': {
+        'RPM': 10000,
+        'TPM': 800000,
+        'MAX_TOKENS': 128000,
+        'type': 'chat-model',
+    },
     # 'gpt-4-32k-0613': {
     #     'RPM': 200,
     #     'TPM': 40000,
@@ -64,7 +70,7 @@ MODEL_RATE_LIMITS = {
 
 
 DEFAULT_OPTIONS = {
-    'model': 'gpt-4o',
+    'model': 'gpt-4o-mini',
     'auto_mode': True,
     # 'papers': 'all',
     'file_format': 'checked.md',

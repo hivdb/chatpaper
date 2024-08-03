@@ -8,14 +8,14 @@ def fine_tune_gpt4o():
 
     client = OpenAI()
 
-    train_set = PAPER_PATH.parent / 'dataset.jsonl'
+    train_set = PAPER_PATH.parent / 'train_set.jsonl'
 
     train_file = client.files.create(
         file=open(train_set, "rb"),
         purpose="fine-tune"
     )
 
-    val_set = PAPER_PATH.parent / 'dataset.jsonl'
+    val_set = PAPER_PATH.parent / 'val_set.jsonl'
     val_file = client.files.create(
         file=open(val_set, "rb"),
         purpose="fine-tune"
@@ -28,7 +28,7 @@ def fine_tune_gpt4o():
         suffix='hivdb',
         hyperparameters={
             'batch_size': 1,
-            'n_epochs': 1,
+            'n_epochs': 3,
         }
     )
 

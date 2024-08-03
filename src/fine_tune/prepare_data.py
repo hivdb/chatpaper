@@ -4,9 +4,10 @@ from src.excel2csv import load_excel
 from src.preset import PAPER_PATH
 from src.preset import PROMPT_TEMPLATE_PATH
 from src.preset import QUESTION_PATH
+import random
 
 
-DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Jul 31.xlsx'
+DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 1.xlsx'
 SYSTEM_PROMPT = open(PROMPT_TEMPLATE_PATH / 'system.txt').read()
 MAIN_PROMPT = open(PROMPT_TEMPLATE_PATH / 'explain_one_question.txt').read()
 QUESTIONS = QUESTION_PATH / 'HIV_Set1_Jul8.csv'
@@ -168,6 +169,33 @@ def prepare_data():
     ]
     dump_jsonl(PAPER_PATH.parent / 'dataset.jsonl', dataset)
 
+    # split_by_paper(table)
+    split_by_question(table)
+
+
+def split_by_question(table):
+    random.shuffle(table)
+
+    # Calculate the size of each set
+    test_size = int(0.15 * len(table))
+    validation_size = int(0.15 * len(table))
+    # training_size = len(pmid_list) - test_size - validation_size
+
+    test_set = table[:test_size]
+    val_set = table[test_size:test_size + validation_size]
+    train_set = table[test_size + validation_size:]
+
+    dump_dataset_jsonl(train_set, val_set, test_set)
+
+
+def split_by_paper(table):
+    pmid_list = list(set([
+        i['PMID']
+        for i in table
+    ]))
+
+    _, VAL_SET_PMID, TEST_SET_PMID = random_dataset_by_pmid(pmid_list)
+
     train_set = [
         i
         for i in table
@@ -187,6 +215,27 @@ def prepare_data():
         for i in table
         if (int(i['PMID']) in TEST_SET_PMID)
     ]
+
+    dump_dataset_jsonl(train_set, val_set, test_set)
+
+
+
+def random_dataset_by_pmid(pmid_list):
+    random.shuffle(pmid_list)
+
+    # Calculate the size of each set
+    test_size = int(0.15 * len(pmid_list))
+    validation_size = int(0.15 * len(pmid_list))
+    # training_size = len(pmid_list) - test_size - validation_size
+
+    test_set = pmid_list[:test_size]
+    validation_set = pmid_list[test_size:test_size + validation_size]
+    training_set = pmid_list[test_size + validation_size:]
+
+    return training_set, validation_set, test_set
+
+
+def dump_dataset_jsonl(train_set, val_set, test_set):
 
     print('#Train', len(train_set))
     print('#Val', len(val_set))

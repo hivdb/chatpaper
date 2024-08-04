@@ -7,11 +7,14 @@ from src.preset import QUESTION_PATH
 import random
 
 
-DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 1.xlsx'
+DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 3.xlsx'
 SYSTEM_PROMPT = open(PROMPT_TEMPLATE_PATH / 'system.txt').read()
 MAIN_PROMPT = open(PROMPT_TEMPLATE_PATH / 'explain_one_question.txt').read()
 QUESTIONS = QUESTION_PATH / 'HIV_Set1_Jul8.csv'
 ASSISTANT_PROMPT = open(PROMPT_TEMPLATE_PATH / 'assistant.txt').read()
+
+DATASET_PATH = PAPER_PATH / 'dataset'
+DATASET_PATH.mkdir(exist_ok=True)
 
 VAL_SET_PMID = [
     20124001,
@@ -149,7 +152,7 @@ def prepare_data():
         )
         i['Answer'] = str(i['Answer'])
 
-    dump_jsonl(PAPER_PATH.parent / 'pre_dataset.jsonl', table)
+    dump_jsonl(DATASET_PATH / 'pre_dataset.jsonl', table)
 
     # for i in table:
     #     if str(i['PMID']) == '20004217' and str(i['QID']) == '17':
@@ -167,13 +170,18 @@ def prepare_data():
         }
         for i in table
     ]
-    dump_jsonl(PAPER_PATH.parent / 'dataset.jsonl', dataset)
+    dump_jsonl(DATASET_PATH / 'dataset.jsonl', dataset)
 
-    # split_by_paper(table)
-    split_by_question(table)
+    save_path = DATASET_PATH / 'by_paper'
+    save_path.mkdir(exist_ok=True)
+    split_by_paper(save_path, table)
+
+    save_path = DATASET_PATH / 'by_question'
+    save_path.mkdir(exist_ok=True)
+    split_by_question(save_path, table)
 
 
-def split_by_question(table):
+def split_by_question(save_path, table):
     random.shuffle(table)
 
     # Calculate the size of each set
@@ -185,10 +193,10 @@ def split_by_question(table):
     val_set = table[test_size:test_size + validation_size]
     train_set = table[test_size + validation_size:]
 
-    dump_dataset_jsonl(train_set, val_set, test_set)
+    dump_dataset_jsonl(save_path, train_set, val_set, test_set)
 
 
-def split_by_paper(table):
+def split_by_paper(save_path, table):
     pmid_list = list(set([
         i['PMID']
         for i in table
@@ -216,8 +224,7 @@ def split_by_paper(table):
         if (int(i['PMID']) in TEST_SET_PMID)
     ]
 
-    dump_dataset_jsonl(train_set, val_set, test_set)
-
+    dump_dataset_jsonl(save_path, train_set, val_set, test_set)
 
 
 def random_dataset_by_pmid(pmid_list):
@@ -235,7 +242,7 @@ def random_dataset_by_pmid(pmid_list):
     return training_set, validation_set, test_set
 
 
-def dump_dataset_jsonl(train_set, val_set, test_set):
+def dump_dataset_jsonl(save_path, train_set, val_set, test_set):
 
     print('#Train', len(train_set))
     print('#Val', len(val_set))
@@ -252,7 +259,7 @@ def dump_dataset_jsonl(train_set, val_set, test_set):
         for i in train_set
     ]
 
-    dump_jsonl(PAPER_PATH.parent / 'train_set.jsonl', train_set)
+    dump_jsonl(save_path / 'train_set.jsonl', train_set)
 
     val_set = [
         {
@@ -265,7 +272,7 @@ def dump_dataset_jsonl(train_set, val_set, test_set):
         for i in val_set
     ]
 
-    dump_jsonl(PAPER_PATH.parent / 'val_set.jsonl', val_set)
+    dump_jsonl(save_path / 'val_set.jsonl', val_set)
 
     test_set = [
         {
@@ -278,4 +285,4 @@ def dump_dataset_jsonl(train_set, val_set, test_set):
         for i in test_set
     ]
 
-    dump_jsonl(PAPER_PATH.parent / 'test_set.jsonl', test_set)
+    dump_jsonl(save_path / 'test_set.jsonl', test_set)

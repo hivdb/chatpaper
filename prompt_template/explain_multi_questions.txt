@@ -1,30 +1,31 @@
-# See below is my request
-
-Given a list of questions in "Questions" section below,
-try to answer them one by one using the paper content quoted in triple backticks.
+Read the paper in "Paper content" section, and answer a list of questions in "Questions" section below,
 
 ## For each question:
 
 Step 1: get the question, store as "question".
-Step 2: answer the question, store as 'answer'.
-Step 3: explain how you found the answer from the content in details, store as 'explain'.
-Step 4: extract all paragraphs from the research paper that can be used to answer the question, remove '\n', join by ";", store as 'sentences'.
-Step 5: rate your confidence in percentage for your "answer", store as 'confidence'.
-Step 6: format your answer as follows
+Step 2: extract all evidence from the "paper content" that can be used to answer the question, separate evidence using '.', store as 'evidence'.
+Step 3: provide the rationale about how you found the answer from the content in details, store as 'rationale'.
+Step 4: answer the question, store as 'answer'.
+Step 5: format your answer in the format:
 
 """
 Question: <question>
 
-Sentences: <sentences>
+Evidence: <evidence>
 
-Explain: <explain>
+Rationale: <rationale>
 
 Answer: <answer>
 """
 
 Make sure you answer all the questions.
 
-After you answered all the questions, show the total number of questions in format "#Questions <question number>"
+
+## Paper content:
+
+```
+{paper_content}
+```
 
 ## Questions:
 

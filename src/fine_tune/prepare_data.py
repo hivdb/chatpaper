@@ -5,13 +5,15 @@ from src.preset import PAPER_PATH
 from src.preset import PROMPT_TEMPLATE_PATH
 from src.preset import QUESTION_PATH
 import random
+from src.table import group_records_by
 
 
 DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 3.xlsx'
 SYSTEM_PROMPT = open(PROMPT_TEMPLATE_PATH / 'system.txt').read()
-MAIN_PROMPT = open(PROMPT_TEMPLATE_PATH / 'explain_one_question.txt').read()
-QUESTIONS = QUESTION_PATH / 'HIV_Set1_Jul8.csv'
+MAIN_PROMPT = open(PROMPT_TEMPLATE_PATH / 'explain_multi_questions.txt').read()
+QUESTIONS = QUESTION_PATH / 'HIV_Set1_Jul25.csv'
 ASSISTANT_PROMPT = open(PROMPT_TEMPLATE_PATH / 'assistant.txt').read()
+QUESTION_PROMPT = open(PROMPT_TEMPLATE_PATH / 'question_prompt.txt').read()
 
 DATASET_PATH = PAPER_PATH / 'dataset'
 DATASET_PATH.mkdir(exist_ok=True)
@@ -136,23 +138,58 @@ def prepare_data():
     for i in table:
         qid = str(i['QID'])
         ques = questions[qid]
-        prompt = MAIN_PROMPT.format(
+        prompt = QUESTION_PROMPT.format(
+            question_id=ques['id'],
             question=ques['question'],
-            question_prompt=ques['prompt'],
-            paper_content=i['paper_content'])
+            instruction=ques['instruction'])
 
-        i['question prompt'] = ques['prompt']
-        i['user'] = prompt
+        i['instruction'] = ques['instruction']
+        i['question_prompt'] = prompt
+        i['Answer'] = str(i['Answer'])
+
+    # single question
+
+    for i in table:
+        i['user'] = MAIN_PROMPT.format(
+            paper_content=i['paper_content'],
+            question=i['question_prompt']
+        )
 
     for i in table:
         i['assistant'] = ASSISTANT_PROMPT.format(
+            question=i['Question'],
             answer=i['Answer'],
             rationale=i['Rationale'],
-            sentences=i['Reference Sentences']
+            evidence=i['Evidence']
         )
-        i['Answer'] = str(i['Answer'])
 
     dump_jsonl(DATASET_PATH / 'pre_dataset.jsonl', table)
+    show_one_example(table, DATASET_PATH / 'single_question.txt')
+
+    # multi question
+
+    new_table = []
+    for pmid, pmid_list in group_records_by(table, 'PMID').items():
+        item = pmid_list[0]
+        item['question_prompt'] = '\n'.join([
+            i['question_prompt']
+            for i in pmid_list
+        ])
+        item['user'] = MAIN_PROMPT.format(
+            paper_content=item['paper_content'],
+            question=item['question_prompt']
+        )
+        item['assistant'] = '\n'.join([
+            i['assistant']
+            for i in pmid_list
+        ])
+        new_table.append(item)
+
+    table = new_table
+
+    show_one_example(table, DATASET_PATH / 'multi_question.txt')
+
+
 
     # for i in table:
     #     if str(i['PMID']) == '20004217' and str(i['QID']) == '17':
@@ -286,3 +323,15 @@ def dump_dataset_jsonl(save_path, train_set, val_set, test_set):
     # ]
 
     dump_jsonl(save_path / 'test_set.jsonl', test_set)
+
+
+def show_one_example(table, save_path):
+    row = table[0]
+    with open(save_path, 'w') as fd:
+        fd.write(row['system'])
+        fd.write('-' * 80)
+        fd.write('\n\n')
+        fd.write(row['user'])
+        fd.write('-' * 80)
+        fd.write('\n\n')
+        fd.write(row['assistant'])

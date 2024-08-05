@@ -1,4 +1,4 @@
-id,question,prompt
+id,question,instruction
 1,Does the paper report HIV sequences from patient samples?,Begin your answer with either 'Yes' or 'No' as the first word.
 2,Does the paper report in vitro drug susceptibility data?,Begin your answer with either 'Yes' or 'No' as the first word.
 3,What were the GenBank accession numbers for sequenced HIV isolates?,"Accession number begin with two letters followed by six or fewer digits. European Nucleotide Archive (ENA): Two-letter prefix followed by six digits or pefixed by 'ENA'. DNA Data Bank of Japan (DDBJ):  Two-letter prefix followed by six digits or pefixed by 'DDBJ'. If the study didn't provide the accession number, the answer should be ""Not reported"" and the relevant sentences could be blank. Several lab virus accession number should be ignored: HXB2 (K03455); IIIB (K02013); NL4-3 (AF324493); HIV-2 (M15390, U27200)"

@@ -1,5 +1,7 @@
 ```
-Sentences: {sentences}
+Question: {question}
+
+Evidence: {evidence}
 
 Rationale: {rationale}
 

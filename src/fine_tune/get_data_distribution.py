@@ -5,7 +5,7 @@ from src.table import group_records_by
 from collections import Counter
 
 
-DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 1.xlsx'
+DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 3.xlsx'
 
 
 def get_data_distribution():
@@ -73,5 +73,3 @@ def get_data_distribution():
 
     save_file = DATA_FILE.parent / f"{DATA_FILE.name.replace('.xlsx', '_pivot.csv')}"
     dump_csv(save_file, result, headers=['PMID'] + [str(i) for i in qids])
-
-

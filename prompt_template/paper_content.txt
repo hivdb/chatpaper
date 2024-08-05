@@ -1,4 +1,4 @@
-## Paper content:
+## Paper content
 
 ```
 {paper_content}

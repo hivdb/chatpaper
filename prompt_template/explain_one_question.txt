@@ -7,11 +7,12 @@ Cite more than two relevant sentences that you find the information, and save to
 Use the format in triple quote below for your response:
 
 """
-Answer: <answer>
+Sentences: <sentences>
 
 Rationale: <rationale>
 
-Sentences: <sentences>
+Answer: <answer>
+
 """
 
 ## Question:

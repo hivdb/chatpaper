@@ -274,15 +274,15 @@ def dump_dataset_jsonl(save_path, train_set, val_set, test_set):
 
     dump_jsonl(save_path / 'val_set.jsonl', val_set)
 
-    test_set = [
-        {
-            'messages': [
-                {"role": "system", "content": i['system']},
-                {"role": "user", "content": i['user']},
-                {"role": "assistant", "content": i['assistant']},
-            ]
-        }
-        for i in test_set
-    ]
+    # test_set = [
+    #     {
+    #         'messages': [
+    #             {"role": "system", "content": i['system']},
+    #             {"role": "user", "content": i['user']},
+    #             {"role": "assistant", "content": i['assistant']},
+    #         ]
+    #     }
+    #     for i in test_set
+    # ]
 
     dump_jsonl(save_path / 'test_set.jsonl', test_set)

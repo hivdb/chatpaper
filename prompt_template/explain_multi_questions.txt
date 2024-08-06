@@ -3,7 +3,7 @@ Read the paper in "Paper content" section, and answer a list of questions in "Qu
 ## For each question:
 
 Step 1: get the question, store as "question".
-Step 2: extract all evidence from the "paper content" that can be used to answer the question, separate evidence using '.', store as 'evidence'.
+Step 2: extract two or three sentences from the "paper content" that can be used to answer the question, separate them using '.', store as 'evidence'.
 Step 3: provide the rationale about how you found the answer from the content in details, store as 'rationale'.
 Step 4: answer the question, store as 'answer'.
 Step 5: format your answer in the format:

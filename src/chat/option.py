@@ -172,7 +172,7 @@ def select_chat_mode():
 CHAT_MODE_LIST = {
     ('one_question_per_req', 'all_content'): one_q_all_content,
     ('multi_questions', 'all_content'): multi_q_all_content,
-    ('one_question_per_req', 'embedding'): one_q_embedding,
+    # ('one_question_per_req', 'embedding'): one_q_embedding,
     # 'one_q_all_content;map_reduce': {
     #     'desc': 'Map reduce mode',
     #     'func': chat_map_reduce,

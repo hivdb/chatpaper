@@ -138,11 +138,10 @@ def gen_eval_file_by_model(file_path, report):
             'AI_NA',
             'AI_answer',
             'agree?',
-            'explain',
-            'correct_explain?',
-            'sentences',
-            'correct_sentences?',
-            'confidence',
+            'rationale',
+            'correct_rationale?',
+            'evidence',
+            'correct_evidence?',
         ])
 
     return report

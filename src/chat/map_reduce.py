@@ -3,13 +3,19 @@ from src.apis.embedding import get_token_length
 from .filter_question import get_unanswered
 from src.logs import logger
 from src.checksum import get_md5
-from openai import Timeout
+import openai
 import warnings
+from src.file_format import dump_json
 
 
 def try_map_reduce(questions, chat_context):
     # TODO dry run mode
-    segment_content(questions, chat_context)
+    # segment_content(questions, chat_context)
+    chat_context['batches'] = [{
+        'batch_content': chat_context['doc_parts'][0]['all_content'],
+        'content_length': get_token_length(chat_context['doc_parts'][0]['all_content']),
+        'num_parts': 1
+    }]
 
     resp_list = []
     # TODO, add batch number in report?
@@ -20,63 +26,65 @@ def try_map_reduce(questions, chat_context):
     return resp_list
 
 
-def segment_content(questions, chat_context):
-    # TODO, save prompt
+# def segment_content(questions, chat_context):
+#     # TODO, save prompt
 
-    prompts = []
+#     prompts = []
 
-    if chat_context['cheatsheet?']:
-        prompts.append(chat_context['cheatsheet'])
+#     if chat_context['cheatsheet?']:
+#         prompts.append(chat_context['cheatsheet'])
 
-    prompts.append(
-        chat_context['question_template'].format(
-            question=get_question_list_str(questions))
-    )
+#     prompts.append(
+#         chat_context['question_template'].format(
+#             paper_content=chat_context['doc_parts'][0]['all_content'],
+#             question=get_question_list_str(questions))
+#     )
 
-    doc_parts = chat_context['doc_parts']
+#     doc_parts = chat_context['doc_parts']
 
-    [
-        i.update({'token_length': get_token_length(i['all_content'])})
-        for i in doc_parts
-    ]
+#     [
+#         i.update({'token_length': get_token_length(i['all_content'])})
+#         for i in doc_parts
+#     ]
 
-    result = []
+#     result = []
 
-    one_batch = []
+#     one_batch = []
 
-    for i in doc_parts:
-        new_content = i['all_content']
+#     for i in doc_parts:
+#         new_content = i['all_content']
 
-        parts = '\n'.join(one_batch + [new_content])
+#         # parts = '\n'.join(one_batch + [new_content])
 
-        p_prompt = chat_context['paper_template'].format(
-            paper_content=parts)
+#         # p_prompt = chat_context['paper_template'].format(
+#         #     paper_content=parts)
+#         p_prompt = ''
 
-        prompt = '\n'.join(prompts + [p_prompt])
+#         prompt = '\n'.join(prompts + [p_prompt])
 
-        prompt_length = get_token_length(prompt, chat_context['model'])
+#         prompt_length = get_token_length(prompt, chat_context['model'])
 
-        if prompt_length < chat_context['req_token_limit']:
-            one_batch.append(new_content)
-        else:
-            one_batch_content = '\n'.join(one_batch)
-            result.append({
-                'batch_content': one_batch_content,
-                'content_length': get_token_length(one_batch_content),
-                'num_parts': len(one_batch),
-            })
-            one_batch = [new_content]
+#         if prompt_length < chat_context['req_token_limit']:
+#             one_batch.append(new_content)
+#         else:
+#             one_batch_content = '\n'.join(one_batch)
+#             result.append({
+#                 'batch_content': one_batch_content,
+#                 'content_length': get_token_length(one_batch_content),
+#                 'num_parts': len(one_batch),
+#             })
+#             one_batch = [new_content]
 
-    if one_batch:
-        one_batch_content = '\n'.join(one_batch)
-        result.append({
-            'batch_content': one_batch_content,
-            'content_length': get_token_length(one_batch_content),
-            'num_parts': len(one_batch),
-        })
+#     if one_batch:
+#         one_batch_content = '\n'.join(one_batch)
+#         result.append({
+#             'batch_content': one_batch_content,
+#             'content_length': get_token_length(one_batch_content),
+#             'num_parts': len(one_batch),
+#         })
 
-    chat_context['batches'] = result
-    return result
+#     chat_context['batches'] = result
+#     return result
 
 
 def process_one_batch(questions, part, chat_context):
@@ -84,7 +92,7 @@ def process_one_batch(questions, part, chat_context):
     if len(questions) > 1:
         try:
             process_multi_questions(questions, part, chat_context)
-        except Timeout:
+        except openai.Timeout as e:
             for qid, q in questions.items():
                 process_one_question({qid: q}, part, chat_context)
     else:
@@ -115,11 +123,11 @@ def process_one_question(unanswered, part, chat_context):
             question=get_question_list_str(unanswered))
     )
 
-    prompts.append(
-        chat_context['paper_template'].format(
-            paper_content=part['batch_content']
-        )
-    )
+    # prompts.append(
+    #     chat_context['paper_template'].format(
+    #         paper_content=part['batch_content']
+    #     )
+    # )
     prompt = '\n'.join(prompts)
     logger.debug(prompt)
 
@@ -169,7 +177,7 @@ def process_multi_questions(unanswered, part, chat_context, retry_time=10):
 def get_question_list_str(questions):
 
     return "\n".join([
-        f"{k}. {v}"
+        v
         for k, v in questions.items()
     ])
 
@@ -185,13 +193,14 @@ def process_questions(part, questions, chat_context):
 
     prompts.append(
         chat_context['question_template'].format(
+            paper_content=chat_context['doc_parts'][0]['all_content'],
             question=question_str)
     )
 
-    prompts.append(
-        chat_context['paper_template'].format(
-            paper_content=part['batch_content'])
-    )
+    # prompts.append(
+    #     chat_context['paper_template'].format(
+    #         paper_content=part['batch_content'])
+    # )
 
     prompt = '\n'.join(prompts)
     logger.debug(prompt)

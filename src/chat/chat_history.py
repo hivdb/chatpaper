@@ -50,10 +50,10 @@ class ChatHistory:
         for i in self.chatlog:
             log = (
                 f'Question: {i["question"]}\n\n'
+                f'Evidence: {i["evidence"]}\n\n'
+                f'Rationale: {i["rationale"]}\n\n'
                 f'Answer: {i["answer"]}\n\n'
-                f'Explain: {i["explain"]}\n\n'
-                f'Sentences: {i["sentences"]}\n\n'
-                f'Confidence: {i["confidence"]}\n\n'
+
             )
             chat_history.append(log)
         return '\n\n'.join(chat_history)
@@ -82,10 +82,10 @@ class ChatHistory:
                 k in a
                 for k in [
                     'question',
+                    'evidence',
+                    'rationale',
                     'answer',
-                    'explain',
-                    'sentences',
-                    'confidence']
+                    ]
             )
         ]
 
@@ -97,7 +97,6 @@ class ChatHistory:
                     'answer': '',
                     'explain': '',
                     'sentences': '',
-                    'confidence': '',
                 }
                 for qid, q in questions.items()
             ]
@@ -197,10 +196,9 @@ class ChatHistory:
         dump_csv(self.save_path, self.chatlog, headers=[
             'question_id',
             'question',
+            'evidence',
+            'rationale',
             'answer',
-            'explain',
-            'sentences',
-            'confidence',
             'completion_tokens',
             'prompt_tokens',
             'total_tokens',
@@ -237,10 +235,9 @@ def parse_one_answer(answer):
     result = {}
     keys = [
         'Question:',
+        'Evidence:',
+        'Rationale:',
         'Answer:',
-        'Explain:',
-        'Sentences:',
-        'Confidence:',
     ]
     for i in answer:
         for k in keys:

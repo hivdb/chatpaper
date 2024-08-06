@@ -10,7 +10,8 @@ def chat_openai(model, messages, temperature=0):
     response = client.chat.completions.create(
         model=model,
         messages=messages,
-        temperature=temperature
+        temperature=temperature,
+        # max_tokens=2000
     )
 
     return response

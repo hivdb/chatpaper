@@ -9,7 +9,7 @@ id,question,instruction
 8,What method was used for sequencing?,"Sequencing is performed using two main types of methods. Sanger (aka dideoxyterminator or dideoxynucleotide) sequencing was the only method used prior to 2007. Companies involved in Sanger sequencing included ABI (ViroSeq) and Visible Genetics (TruGene). Next-generation sequencing (NGS) is being increasingly used but is  less common than Sanger sequencing. The main NGS methods involve using Illumina, Nanopore, Ion Torrent, and PacBio. Select from the following options and begin your answer with this: Sanger sequencing; Illumina sequencing; PacBio sequencing; Oxford Nanopore sequencing; Unknown; Other"
 9,Were samples cloned prior to sequencing?,"Begin your answer with either 'Yes' or 'No' as the first word. If the information is not mentioned in the provided paper, then the answer is 'No'"
 10,Did samples undergo single genome sequencing?,"Begin your answer with either 'Yes' or 'No' as the first word. If not mentioned in paper, then the answer is 'No'"
-11,What specimens were sequenced?,Select from the following options and begin your answer with this: Plasma; PBMC; Whole Blood; Serum; Other; Unknown
+11,What clinical specimens were sequenced?,Select from the following options and begin your answer with this: Plasma; PBMC; Whole Blood; Serum; Other; Unknown
 12,Were any sequences obtained from individuals with virological failure on a treatment regimen?,Begin your answer with either 'Yes' or 'No' as the first word.
 13,Were any sequences obtained from the proviral DNA reservoir?,Begin your answer with either 'Yes' or 'No' or 'Unknown' as the first word.
 14,Were the patients in the study in a clinical trial?,Begin your answer with either 'Yes' or 'No' as the first word.

@@ -55,12 +55,12 @@ MODEL_RATE_LIMITS = {
         'MAX_TOKENS': 128000,
         'type': 'chat-model',
     },
-    # '': {
-    #     'RPM': 10000,
-    #     'TPM': 800000,
-    #     'MAX_TOKENS': 128000,
-    #     'type': 'chat-model',
-    # }
+    '': {
+        'RPM': 10000,
+        'TPM': 800000,
+        'MAX_TOKENS': 128000,
+        'type': 'chat-model',
+    }
     # 'gpt-4-32k-0613': {
     #     'RPM': 200,
     #     'TPM': 40000,

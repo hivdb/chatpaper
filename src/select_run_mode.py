@@ -22,6 +22,8 @@ from src.collect_pdf import collect_pdf
 from src.fine_tune.prepare_data import prepare_data
 from src.fine_tune.get_data_distribution import get_data_distribution
 from src.fine_tune.fine_tune_gpt4o import monitor_job, fine_tune_gpt4o
+from src.fine_tune.test_fine_tune import test_fine_tune
+from src.fine_tune.fine_tune_gpt4o import del_ft_job
 
 
 MODES = {
@@ -44,6 +46,8 @@ MODES = {
     'Get data distribution': get_data_distribution,
     'Fine tune GPT4o': fine_tune_gpt4o,
     'Monitor fine tune GPT4o': monitor_job,
+    'Delete fine tune GPT4o job': del_ft_job,
+    'Test fine tuned model': test_fine_tune,
     # 'Archive folder': archive_folder,
     # 'Clean up question': cleanup_question,
 }

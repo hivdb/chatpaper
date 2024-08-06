@@ -76,3 +76,18 @@ def monitor_job():
     # ]
     # )
     # print(completion.choices[0].message)
+
+
+def del_ft_job():
+    client = OpenAI()
+
+    # List 10 fine-tuning jobs
+    models = client.fine_tuning.jobs.list(limit=10)
+    for i in models.data:
+        print(i)
+
+    job_id = input('Monitor job id:')
+
+    result = client.models.delete(job_id)
+    print(result)
+

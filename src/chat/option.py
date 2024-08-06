@@ -67,6 +67,7 @@ def select_chat_mode():
         return {
             # TODO, table or not
             # TODO, cheat sheet for embedding or not
+            'test_set': test_set,
             'model': model,
             'questions': questions,
             'papers': papers,
@@ -146,6 +147,7 @@ def select_chat_mode():
     return {
         # TODO, table or not
         # TODO, cheat sheet for embedding or not
+        'test_set': test_set,
         'model': model,
         'questions': questions,
         'papers': papers,

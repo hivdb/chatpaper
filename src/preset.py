@@ -19,58 +19,64 @@ MODEL_RATE_LIMITS = {
     #     'MAX_TOKENS': 4096,
     #     'type': 'chat-model',
     # },
-    'gpt-3.5-turbo-16k': {
-        'RPM': 3000,
-        'TPM': 250000,
-        'MAX_TOKENS': 16384,
-        'type': 'chat-model',
-    },
-    'gpt-4': {
-        'RPM': 3000,
-        'TPM': 40000,
-        'MAX_TOKENS': 8192,
-        'type': 'chat-model',
-    },
-    'gpt-4-0314': {
-        'RPM': 3000,
-        'TPM': 40000,
-        'MAX_TOKENS': 8192,
-        'type': 'chat-model',
-    },
-    'gpt-4-32k': {
-        'RPM': 200,
-        'TPM': 40000,
-        'MAX_TOKENS': 32768,
-        'type': 'chat-model',
-    },
+    # 'gpt-3.5-turbo-16k': {
+    #     'RPM': 3000,
+    #     'TPM': 250000,
+    #     'MAX_TOKENS': 16384,
+    #     'type': 'chat-model',
+    # },
+    # 'gpt-4': {
+    #     'RPM': 3000,
+    #     'TPM': 40000,
+    #     'MAX_TOKENS': 8192,
+    #     'type': 'chat-model',
+    # },
+    # 'gpt-4-0314': {
+    #     'RPM': 3000,
+    #     'TPM': 40000,
+    #     'MAX_TOKENS': 8192,
+    #     'type': 'chat-model',
+    # },
+    # 'gpt-4-32k': {
+    #     'RPM': 200,
+    #     'TPM': 40000,
+    #     'MAX_TOKENS': 32768,
+    #     'type': 'chat-model',
+    # },
     'gpt-4o': {
         'RPM': 10000,
         'TPM': 800000,
         'MAX_TOKENS': 128000,
         'type': 'chat-model',
     },
-    'gpt-4o-mini': {
+    'gpt-4o-mini-2024-07-18': {
         'RPM': 10000,
         'TPM': 800000,
         'MAX_TOKENS': 128000,
         'type': 'chat-model',
     },
+    # '': {
+    #     'RPM': 10000,
+    #     'TPM': 800000,
+    #     'MAX_TOKENS': 128000,
+    #     'type': 'chat-model',
+    # }
     # 'gpt-4-32k-0613': {
     #     'RPM': 200,
     #     'TPM': 40000,
     #     'MAX_TOKENS': 32768,
     #     'type': 'chat-model',
     # },
-    'text-embedding-ada-002': {
-        'RPM': 3000,
-        'TPM': 2500000,
-        'type': 'embedding-model',
-    },
+    # 'text-embedding-ada-002': {
+    #     'RPM': 3000,
+    #     'TPM': 2500000,
+    #     'type': 'embedding-model',
+    # },
 }
 
 
 DEFAULT_OPTIONS = {
-    'model': 'gpt-4o-mini',
+    # 'model': 'gpt-4o-mini',
     'auto_mode': True,
     # 'papers': 'all',
     'file_format': 'checked.md',

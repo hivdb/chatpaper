@@ -34,7 +34,7 @@ def fine_tune_gpt4o():
         seed=73,
         hyperparameters={
             'batch_size': 1,
-            'n_epochs': 1,
+            'n_epochs': 3,
         }
     )
 

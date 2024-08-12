@@ -8,71 +8,27 @@ import random
 from src.table import group_records_by
 
 
-DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 3.xlsx'
+DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 12.xlsx'
 SYSTEM_PROMPT = open(PROMPT_TEMPLATE_PATH / 'system.txt').read()
 MAIN_PROMPT = open(PROMPT_TEMPLATE_PATH / 'explain_multi_questions.txt').read()
 QUESTIONS = QUESTION_PATH / 'HIV_Set1_Jul25.csv'
 ASSISTANT_PROMPT = open(PROMPT_TEMPLATE_PATH / 'assistant.txt').read()
 QUESTION_PROMPT = open(PROMPT_TEMPLATE_PATH / 'question_prompt.txt').read()
+PAPER_SPLIT = PAPER_PATH / 'Fine-tuning instruction set, Aug 12_split.csv'
 
 DATASET_PATH = PAPER_PATH / 'dataset'
 DATASET_PATH.mkdir(exist_ok=True)
 
 VAL_SET_PMID = [
-    20124001,
-    20300008,
-    20308382,
-    20438383,
-    20455758,
-    20507208,
-    20530226,
-    20660667,
-    20666602,
-    20718620,
-    21114823,
-    21189351,
-    21358627,
-    21765953,
-    25261422,
-    25273080,
-    25281399,
-    25642847,
-    25681380,
-    25694653,
-    26041893,
-    26082240,
-    29765018,
-    33055182,
-    34422316,
-]
-
+    int(i['PMID'])
+    for i in load_csv(PAPER_SPLIT)
+    if i['category'] == 'val'
+    ]
 TEST_SET_PMID = [
-    19686436,
-    19913270,
-    19917747,
-    19933171,
-    19933797,
-    19938977,
-    20008779,
-    20029816,
-    20345882,
-    20388636,
-    20398371,
-    20426823,
-    20430786,
-    20453629,
-    20643915,
-    20702636,
-    34422316,
-    35305571,
-    36082606,
-    36101479,
-    36347497,
-    36708743,
-    37293603,
-    38141637,
-    38376918
-]
+    int(i['PMID'])
+    for i in load_csv(PAPER_SPLIT)
+    if i['category'] == 'test'
+    ]
 
 
 def load_paper_markdown(papers=PAPER_PATH):
@@ -189,8 +145,6 @@ def prepare_data():
 
     show_one_example(table, DATASET_PATH / 'multi_question.txt')
 
-
-
     # for i in table:
     #     if str(i['PMID']) == '20004217' and str(i['QID']) == '17':
     #         print(i['system'])
@@ -213,9 +167,9 @@ def prepare_data():
     save_path.mkdir(exist_ok=True)
     split_by_paper(save_path, table)
 
-    save_path = DATASET_PATH / 'by_question'
-    save_path.mkdir(exist_ok=True)
-    split_by_question(save_path, table)
+    # save_path = DATASET_PATH / 'by_question'
+    # save_path.mkdir(exist_ok=True)
+    # split_by_question(save_path, table)
 
 
 def split_by_question(save_path, table):
@@ -234,12 +188,11 @@ def split_by_question(save_path, table):
 
 
 def split_by_paper(save_path, table):
-    pmid_list = list(set([
-        i['PMID']
-        for i in table
-    ]))
-
-    _, VAL_SET_PMID, TEST_SET_PMID = random_dataset_by_pmid(pmid_list)
+    # pmid_list = list(set([
+    #     i['PMID']
+    #     for i in table
+    # ]))
+    # _, VAL_SET_PMID, TEST_SET_PMID = random_dataset_by_pmid(pmid_list)
 
     train_set = [
         i

@@ -3,9 +3,11 @@ from src.excel2csv import load_excel
 from src.preset import PAPER_PATH
 from src.table import group_records_by
 from collections import Counter
+from sklearn.model_selection import train_test_split
+import pandas as pd
 
 
-DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 3.xlsx'
+DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 12.xlsx'
 
 
 def get_data_distribution():
@@ -73,3 +75,56 @@ def get_data_distribution():
 
     save_file = DATA_FILE.parent / f"{DATA_FILE.name.replace('.xlsx', '_pivot.csv')}"
     dump_csv(save_file, result, headers=['PMID'] + [str(i) for i in qids])
+
+    for row in result:
+        for k in row.keys():
+            if k == 'PMID':
+                continue
+            if str(row[k]).strip() in ['No', 'Not reported', 'None']:
+                row[k] = 'No'
+            if 'HIV-2' in str(row[k]):
+                row[k] = 'No'
+            else:
+                row[k] = 'Yes'
+
+    save_file = DATA_FILE.parent / f"{DATA_FILE.name.replace('.xlsx', '_pivot_stratify.csv')}"
+    dump_csv(save_file, result, headers=['PMID'] + [str(i) for i in qids])
+
+    for row in result:
+        row['combined'] = '_'.join([
+            str(row[k])
+            for k in row.keys()
+            if k != 'PMID'
+        ])
+
+    df = pd.DataFrame(result)
+
+    train_val, test = train_test_split(
+        df, test_size=0.15, stratify=df['combined'],
+        random_state=42)
+
+    train, val = train_test_split(
+        train_val, test_size=0.15/0.85, stratify=train_val['combined'],
+        random_state=42)
+
+    split_paper = []
+    for i in train["PMID"].tolist():
+        split_paper.append({
+            'PMID': i,
+            'category': 'train'
+        })
+
+    for i in val["PMID"].tolist():
+        split_paper.append({
+            'PMID': i,
+            'category': 'val'
+        })
+
+    for i in test["PMID"].tolist():
+        split_paper.append({
+            'PMID': i,
+            'category': 'test'
+        })
+
+    save_file = DATA_FILE.parent / f"{DATA_FILE.name.replace('.xlsx', '_split.csv')}"
+    dump_csv(save_file, split_paper)

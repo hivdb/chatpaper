@@ -55,7 +55,7 @@ MODEL_RATE_LIMITS = {
         'MAX_TOKENS': 128000,
         'type': 'chat-model',
     },
-    'ft:gpt-4o-mini-2024-07-18:hivdb-team:hivdb:9vts6gBF': {
+    '': {
         'RPM': 10000,
         'TPM': 800000,
         'MAX_TOKENS': 128000,

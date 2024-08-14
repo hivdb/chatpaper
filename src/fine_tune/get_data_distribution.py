@@ -94,17 +94,17 @@ def get_data_distribution():
         row['combined'] = '_'.join([
             str(row[k])
             for k in row.keys()
-            if k != 'PMID'
+            if str(k) not in ['PMID']
         ])
 
     df = pd.DataFrame(result)
 
-    train_val, test = train_test_split(
-        df, test_size=0.15, stratify=df['combined'],
+    train, val_test = train_test_split(
+        df, train_size=0.7, stratify=df['combined'],
         random_state=42)
 
-    train, val = train_test_split(
-        train_val, test_size=0.15/0.85, stratify=train_val['combined'],
+    val, test = train_test_split(
+        val_test, test_size=0.5, stratify=val_test['combined'],
         random_state=42)
 
     split_paper = []

@@ -8,13 +8,14 @@ import random
 from src.table import group_records_by
 
 
-DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 12.xlsx'
+DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 22.xlsx'
 SYSTEM_PROMPT = open(PROMPT_TEMPLATE_PATH / 'system.txt').read()
 MAIN_PROMPT = open(PROMPT_TEMPLATE_PATH / 'explain_multi_questions.txt').read()
-QUESTIONS = QUESTION_PATH / 'HIV_Set1_Jul25.csv'
+QUESTIONS = QUESTION_PATH / 'HIV_Set1_Aug19.csv'
 ASSISTANT_PROMPT = open(PROMPT_TEMPLATE_PATH / 'assistant.txt').read()
 QUESTION_PROMPT = open(PROMPT_TEMPLATE_PATH / 'question_prompt.txt').read()
-PAPER_SPLIT = PAPER_PATH / 'Fine-tuning instruction set, Aug 12_split.csv'
+PAPER_SPLIT = PAPER_PATH / 'Fine-tuning instruction set, Aug 22_split.csv'
+TEST_FILE = PAPER_PATH / 'Testset_Aug23.xlsx'
 
 DATASET_PATH = PAPER_PATH / 'dataset'
 DATASET_PATH.mkdir(exist_ok=True)
@@ -24,10 +25,10 @@ VAL_SET_PMID = [
     for i in load_csv(PAPER_SPLIT)
     if i['category'] == 'val'
     ]
+
 TEST_SET_PMID = [
     int(i['PMID'])
-    for i in load_csv(PAPER_SPLIT)
-    if i['category'] == 'test'
+    for i in load_excel(TEST_FILE)
     ]
 
 
@@ -84,12 +85,61 @@ def prepare_data():
 
     print('#Sample for fine tuning', len(table))
 
+    table = add_prompt_info(table, paper_content, questions)
+
+    dump_jsonl(DATASET_PATH / 'pre_dataset.jsonl', table)
+    show_one_example(table, DATASET_PATH / 'single_question.txt')
+
+    # multi question
+
+    table = format_dataset(table)
+
+    show_one_example(table, DATASET_PATH / 'multi_question.txt')
+
+    # for i in table:
+    #     if str(i['PMID']) == '20004217' and str(i['QID']) == '17':
+    #         print(i['system'])
+    #         print(i['user'])
+    #         print(i['assistant'])
+
+    dataset = [
+        {
+            'messages': [
+                {"role": "system", "content": i['system']},
+                {"role": "user", "content": i['user']},
+                {"role": "assistant", "content": i['assistant']},
+            ]
+        }
+        for i in table
+    ]
+    dump_jsonl(DATASET_PATH / 'dataset.jsonl', dataset)
+
+    save_path = DATASET_PATH / 'by_paper'
+    save_path.mkdir(exist_ok=True)
+
+    test_table = load_excel(TEST_FILE)
+    test_table = add_prompt_info(test_table, paper_content, questions)
+    test_table = format_dataset(test_table)
+    split_by_paper(save_path, table, test_table)
+
+    # save_path = DATASET_PATH / 'by_question'
+    # save_path.mkdir(exist_ok=True)
+    # split_by_question(save_path, table)
+
+
+def add_prompt_info(table, paper_content, questions):
     for i in table:
         pmid = str(i['PMID'])
         i['paper_content'] = paper_content[pmid]
 
     for i in table:
         i['system'] = SYSTEM_PROMPT
+
+    table = [
+        i
+        for i in table
+        if str(i['QID']) in questions.keys()
+    ]
 
     for i in table:
         qid = str(i['QID'])
@@ -115,15 +165,14 @@ def prepare_data():
         i['assistant'] = ASSISTANT_PROMPT.format(
             question=i['Question'],
             answer=i['Answer'],
-            rationale=i['Rationale'],
-            evidence=i['Evidence']
+            rationale=i.get('Rationale', ''),
+            evidence=i.get('Evidence', ''),
         )
 
-    dump_jsonl(DATASET_PATH / 'pre_dataset.jsonl', table)
-    show_one_example(table, DATASET_PATH / 'single_question.txt')
+    return table
 
-    # multi question
 
+def format_dataset(table):
     new_table = []
     for pmid, pmid_list in group_records_by(table, 'PMID').items():
         item = pmid_list[0]
@@ -141,35 +190,7 @@ def prepare_data():
         ])
         new_table.append(item)
 
-    table = new_table
-
-    show_one_example(table, DATASET_PATH / 'multi_question.txt')
-
-    # for i in table:
-    #     if str(i['PMID']) == '20004217' and str(i['QID']) == '17':
-    #         print(i['system'])
-    #         print(i['user'])
-    #         print(i['assistant'])
-
-    dataset = [
-        {
-            'messages': [
-                {"role": "system", "content": i['system']},
-                {"role": "user", "content": i['user']},
-                {"role": "assistant", "content": i['assistant']},
-            ]
-        }
-        for i in table
-    ]
-    dump_jsonl(DATASET_PATH / 'dataset.jsonl', dataset)
-
-    save_path = DATASET_PATH / 'by_paper'
-    save_path.mkdir(exist_ok=True)
-    split_by_paper(save_path, table)
-
-    # save_path = DATASET_PATH / 'by_question'
-    # save_path.mkdir(exist_ok=True)
-    # split_by_question(save_path, table)
+    return new_table
 
 
 def split_by_question(save_path, table):
@@ -187,7 +208,7 @@ def split_by_question(save_path, table):
     dump_dataset_jsonl(save_path, train_set, val_set, test_set)
 
 
-def split_by_paper(save_path, table):
+def split_by_paper(save_path, table, test_table):
     # pmid_list = list(set([
     #     i['PMID']
     #     for i in table
@@ -208,9 +229,10 @@ def split_by_paper(save_path, table):
         for i in table
         if (int(i['PMID']) in VAL_SET_PMID)
     ]
+
     test_set = [
         i
-        for i in table
+        for i in test_table
         if (int(i['PMID']) in TEST_SET_PMID)
     ]
 

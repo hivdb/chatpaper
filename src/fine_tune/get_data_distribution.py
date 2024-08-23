@@ -7,7 +7,8 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 
 
-DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 12.xlsx'
+DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 22.xlsx'
+DATA_FILE = PAPER_PATH / 'Testset_Aug23.xlsx'
 
 
 def get_data_distribution():
@@ -94,18 +95,20 @@ def get_data_distribution():
         row['combined'] = '_'.join([
             str(row[k])
             for k in row.keys()
-            if str(k) not in ['PMID']
+            if str(k) in ['1', '2', '3', '8', '11', '14', '16', '19']
         ])
 
     df = pd.DataFrame(result)
 
-    train, val_test = train_test_split(
-        df, train_size=0.7, stratify=df['combined'],
+    train, val = train_test_split(
+        df, train_size=0.8, stratify=df['combined'],
         random_state=42)
 
-    val, test = train_test_split(
-        val_test, test_size=0.5, stratify=val_test['combined'],
-        random_state=42)
+    # val, test = train_test_split(
+    #     val_test, test_size=0.5, stratify=val_test['combined'],
+    #     random_state=42)
+
+    # test = []
 
     split_paper = []
     for i in train["PMID"].tolist():
@@ -120,11 +123,11 @@ def get_data_distribution():
             'category': 'val'
         })
 
-    for i in test["PMID"].tolist():
-        split_paper.append({
-            'PMID': i,
-            'category': 'test'
-        })
+    # for i in test["PMID"].tolist():
+    #     split_paper.append({
+    #         'PMID': i,
+    #         'category': 'test'
+    #     })
 
     save_file = DATA_FILE.parent / f"{DATA_FILE.name.replace('.xlsx', '_split.csv')}"
     dump_csv(save_file, split_paper)

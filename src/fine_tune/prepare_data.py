@@ -6,6 +6,8 @@ from src.preset import PROMPT_TEMPLATE_PATH
 from src.preset import QUESTION_PATH
 import random
 from src.table import group_records_by
+import tiktoken
+from operator import itemgetter
 
 
 DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 22.xlsx'
@@ -108,7 +110,8 @@ def prepare_data():
                 {"role": "system", "content": i['system']},
                 {"role": "user", "content": i['user']},
                 {"role": "assistant", "content": i['assistant']},
-            ]
+            ],
+            # 'PMID': i['PMID']
         }
         for i in table
     ]
@@ -174,6 +177,8 @@ def add_prompt_info(table, paper_content, questions):
 
 def format_dataset(table):
     new_table = []
+    encoding = tiktoken.encoding_for_model('gpt-4o')
+
     for pmid, pmid_list in group_records_by(table, 'PMID').items():
         item = pmid_list[0]
         item['question_prompt'] = '\n'.join([
@@ -188,7 +193,15 @@ def format_dataset(table):
             i['assistant']
             for i in pmid_list
         ])
+
+        item['#input_token'] = len(
+            encoding.encode(item['system'])) + len(
+                encoding.encode(item['user']))
+        item['#output_token'] = len(encoding.encode(item['assistant']))
+        item['#total_token'] = item['#input_token'] + item['#output_token']
         new_table.append(item)
+
+    new_table.sort(key=lambda x: (-x['#total_token'], -x['#input_token']))
 
     return new_table
 
@@ -266,7 +279,8 @@ def dump_dataset_jsonl(save_path, train_set, val_set, test_set):
                 {"role": "system", "content": i['system']},
                 {"role": "user", "content": i['user']},
                 {"role": "assistant", "content": i['assistant']},
-            ]
+            ],
+            # 'PMID': i['PMID']
         }
         for i in train_set
     ]
@@ -279,7 +293,8 @@ def dump_dataset_jsonl(save_path, train_set, val_set, test_set):
                 {"role": "system", "content": i['system']},
                 {"role": "user", "content": i['user']},
                 {"role": "assistant", "content": i['assistant']},
-            ]
+            ],
+            # 'PMID': i['PMID']
         }
         for i in val_set
     ]

@@ -1,5 +1,5 @@
 from src.file_format import dump_jsonl
-from src.file_format import load_csv
+from src.file_format import load_csv, dump_csv
 from src.excel2csv import load_excel
 from src.preset import PAPER_PATH
 from src.preset import PROMPT_TEMPLATE_PATH
@@ -194,11 +194,11 @@ def format_dataset(table):
             for i in pmid_list
         ])
 
-        item['#input_token'] = len(
-            encoding.encode(item['system'])) + len(
-                encoding.encode(item['user']))
-        item['#output_token'] = len(encoding.encode(item['assistant']))
-        item['#total_token'] = item['#input_token'] + item['#output_token']
+        item['#system_token'] = len(encoding.encode(item['system']))
+        item['#user_token'] = len(encoding.encode(item['user']))
+        item['#input_token'] = item['#system_token'] + item['#user_token']
+        item['#assistant'] = len(encoding.encode(item['assistant']))
+        item['#total_token'] = item['#input_token'] + item['#assistant']
         new_table.append(item)
 
     new_table.sort(key=lambda x: (-x['#total_token'], -x['#input_token']))
@@ -248,6 +248,30 @@ def split_by_paper(save_path, table, test_table):
         for i in test_table
         if (int(i['PMID']) in TEST_SET_PMID)
     ]
+
+    dump_csv(save_path / 'train_token.csv', train_set, headers=[
+        'PMID', '#system_token', '#user_token', '#input_token',
+        '#assistant', '#total_token'], remain=False)
+
+    dump_csv(save_path / 'val_token.csv', val_set, headers=[
+        'PMID', '#system_token', '#user_token', '#input_token',
+        '#assistant', '#total_token'], remain=False)
+
+    dump_csv(save_path / 'test_token.csv', test_set, headers=[
+        'PMID', '#system_token', '#user_token', '#input_token',
+        '#assistant', '#total_token'], remain=False)
+
+    # train_set = [
+    #     i
+    #     for i in train_set
+    #     if i['#total_token'] < 10000
+    # ]
+
+    # val_set = [
+    #     i
+    #     for i in val_set
+    #     if i['#total_token'] < 10000
+    # ]
 
     dump_dataset_jsonl(save_path, train_set, val_set, test_set)
 

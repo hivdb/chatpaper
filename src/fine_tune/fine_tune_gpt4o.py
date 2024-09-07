@@ -9,9 +9,11 @@ DATASET_PATH = PAPER_PATH / 'dataset'
 
 def fine_tune_gpt4o():
 
+    sample_folder = DATASET_PATH / 'by_paper'
+
     client = OpenAI()
 
-    train_set = DATASET_PATH / 'by_paper' / 'train_set.jsonl'
+    train_set = sample_folder / 'train_set.jsonl'
 
     print('# Train set', len(load_jsonl(train_set)))
 
@@ -20,7 +22,7 @@ def fine_tune_gpt4o():
         purpose="fine-tune"
     )
 
-    val_set = DATASET_PATH / 'by_paper' / 'val_set.jsonl'
+    val_set = sample_folder / 'val_set.jsonl'
     val_file = client.files.create(
         file=open(val_set, "rb"),
         purpose="fine-tune"
@@ -90,4 +92,3 @@ def del_ft_job():
 
     result = client.models.delete(job_id)
     print(result)
-

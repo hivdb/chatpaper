@@ -8,6 +8,7 @@ import random
 from src.table import group_records_by
 import tiktoken
 from operator import itemgetter
+from collections import defaultdict
 
 
 DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 22.xlsx'
@@ -60,7 +61,7 @@ def load_paper_markdown(papers=PAPER_PATH):
 
                 paper_content[pmid.name] = open(f).read()
 
-    print('# Papers', len(paper_content))
+    print('# Processed Papers', len(paper_content))
 
     return paper_content
 
@@ -89,12 +90,19 @@ def prepare_data():
 
     table = add_prompt_info(table, paper_content, questions)
 
-    dump_jsonl(DATASET_PATH / 'pre_dataset.jsonl', table)
+    dump_jsonl(DATASET_PATH / 'single_question.jsonl', table)
     show_one_example(table, DATASET_PATH / 'single_question.txt')
+
+    test_table = load_excel(TEST_FILE)
+    test_table = add_prompt_info(test_table, paper_content, questions)
+
+    save_path = DATASET_PATH / 'by_question'
+    save_path.mkdir(exist_ok=True)
+    split_by_question(save_path, table, test_table)
 
     # multi question
 
-    table = format_dataset(table)
+    table = format_multi_ques_dataset(table)
 
     show_one_example(table, DATASET_PATH / 'multi_question.txt')
 
@@ -115,19 +123,12 @@ def prepare_data():
         }
         for i in table
     ]
-    dump_jsonl(DATASET_PATH / 'dataset.jsonl', dataset)
+    dump_jsonl(DATASET_PATH / 'multiple_question.jsonl', dataset)
 
     save_path = DATASET_PATH / 'by_paper'
     save_path.mkdir(exist_ok=True)
-
-    test_table = load_excel(TEST_FILE)
-    test_table = add_prompt_info(test_table, paper_content, questions)
-    test_table = format_dataset(test_table)
+    test_table = format_multi_ques_dataset(test_table)
     split_by_paper(save_path, table, test_table)
-
-    # save_path = DATASET_PATH / 'by_question'
-    # save_path.mkdir(exist_ok=True)
-    # split_by_question(save_path, table)
 
 
 def add_prompt_info(table, paper_content, questions):
@@ -172,12 +173,13 @@ def add_prompt_info(table, paper_content, questions):
             evidence=i.get('Evidence', ''),
         )
 
+    table = calc_prompt_token(table)
+
     return table
 
 
-def format_dataset(table):
+def format_multi_ques_dataset(table):
     new_table = []
-    encoding = tiktoken.encoding_for_model('gpt-4o')
 
     for pmid, pmid_list in group_records_by(table, 'PMID').items():
         item = pmid_list[0]
@@ -193,32 +195,91 @@ def format_dataset(table):
             i['assistant']
             for i in pmid_list
         ])
+        new_table.append(item)
 
+    new_table = calc_prompt_token(new_table)
+
+    return new_table
+
+
+def calc_prompt_token(table):
+
+    encoding = tiktoken.encoding_for_model('gpt-4o')
+
+    for item in table:
         item['#system_token'] = len(encoding.encode(item['system']))
         item['#user_token'] = len(encoding.encode(item['user']))
         item['#input_token'] = item['#system_token'] + item['#user_token']
         item['#assistant'] = len(encoding.encode(item['assistant']))
         item['#total_token'] = item['#input_token'] + item['#assistant']
-        new_table.append(item)
 
-    new_table.sort(key=lambda x: (-x['#total_token'], -x['#input_token']))
-
-    return new_table
+    table.sort(key=lambda x: (-x['#total_token'], -x['#input_token']))
+    return table
 
 
-def split_by_question(save_path, table):
-    random.shuffle(table)
+def split_by_question(save_path, table, test_table):
+    train_set = [
+        i
+        for i in table
+        if (
+                (int(i['PMID']) not in VAL_SET_PMID)
+                and
+                (int(i['PMID']) not in TEST_SET_PMID)
+        )
+    ]
 
-    # Calculate the size of each set
-    test_size = int(0.15 * len(table))
-    validation_size = int(0.15 * len(table))
-    # training_size = len(pmid_list) - test_size - validation_size
+    prob_question_number(train_set)
+    val_set = [
+        i
+        for i in table
+        if (int(i['PMID']) in VAL_SET_PMID)
+    ]
 
-    test_set = table[:test_size]
-    val_set = table[test_size:test_size + validation_size]
-    train_set = table[test_size + validation_size:]
+    prob_question_number(val_set)
+
+    test_set = [
+        i
+        for i in test_table
+        if (int(i['PMID']) in TEST_SET_PMID)
+    ]
+
+    prob_question_number(test_set)
+
+    dump_csv(save_path / 'train_token.csv', train_set, headers=[
+        'PMID', '#system_token', '#user_token', '#input_token',
+        '#assistant', '#total_token'], remain=False)
+
+    dump_csv(save_path / 'val_token.csv', val_set, headers=[
+        'PMID', '#system_token', '#user_token', '#input_token',
+        '#assistant', '#total_token'], remain=False)
+
+    dump_csv(save_path / 'test_token.csv', test_set, headers=[
+        'PMID', '#system_token', '#user_token', '#input_token',
+        '#assistant', '#total_token'], remain=False)
+
+    # train_set = [
+    #     i
+    #     for i in train_set
+    #     if i['#total_token'] < 10000
+    # ]
+
+    # val_set = [
+    #     i
+    #     for i in val_set
+    #     if i['#total_token'] < 10000
+    # ]
 
     dump_dataset_jsonl(save_path, train_set, val_set, test_set)
+
+
+def prob_question_number(table):
+    question_count = defaultdict(int)
+
+    for i in table:
+        question_count[i['QID']] += 1
+
+    for i, j in question_count.items():
+        print('Q:', i, j)
 
 
 def split_by_paper(save_path, table, test_table):

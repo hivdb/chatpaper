@@ -21,7 +21,9 @@ def test_fine_tune():
 
 def get_test_papers(chat_context):
 
-    test_set_file = DATASET_PATH / 'by_paper' / 'test_set.jsonl'
+    sample_folder = DATASET_PATH / 'by_paper'
+
+    test_set_file = sample_folder / 'test_set.jsonl'
     table = load_jsonl(test_set_file)
     pmids = list(set([
         str(i['PMID'])

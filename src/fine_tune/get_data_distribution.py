@@ -7,8 +7,8 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 
 
-DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Aug 22.xlsx'
-DATA_FILE = PAPER_PATH / 'Testset_Aug23.xlsx'
+DATA_FILE = PAPER_PATH / 'Fine-tuning instruction set, Step 4.xlsx'
+# DATA_FILE = PAPER_PATH / 'Testset_Aug23.xlsx'
 
 
 def get_data_distribution():

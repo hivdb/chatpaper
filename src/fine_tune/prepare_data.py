@@ -75,9 +75,35 @@ def load_question(quetions=QUESTIONS):
     return result
 
 
+QID_MAP = {
+    '1': '1',
+    '2': '2',
+    '3': '4',
+    '5': '9',
+    '6': '6',
+    '7': '7',
+    '8': '10',
+    '9': '8',
+    '11': '11',
+    '12': '12',
+    '14': '13',
+    '15': '5',
+    '16': '14',
+    '17': '15',
+    '18': '16',
+    '19': '3',
+}
+
+
 def prepare_data():
     paper_content = load_paper_markdown()
     questions = load_question()
+
+    questions = {
+        QID_MAP[k]: v
+        for k, v in questions.items()
+    }
+    print(questions.keys())
 
     table = load_excel(DATA_FILE)
 

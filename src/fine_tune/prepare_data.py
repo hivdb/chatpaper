@@ -19,6 +19,7 @@ ASSISTANT_PROMPT = open(PROMPT_TEMPLATE_PATH / 'assistant.txt').read()
 QUESTION_PROMPT = open(PROMPT_TEMPLATE_PATH / 'question_prompt.txt').read()
 PAPER_SPLIT = PAPER_PATH / 'Fine-tuning instruction set, Aug 22_split.csv'
 TEST_FILE = PAPER_PATH / 'Testset_Aug23.xlsx'
+TEST_FILE = PAPER_PATH / 'Testset_20251202.xlsx'
 
 DATASET_PATH = PAPER_PATH / 'dataset'
 DATASET_PATH.mkdir(exist_ok=True)
@@ -88,42 +89,42 @@ def prepare_data():
 
     print('#Sample for fine tuning', len(table))
 
-    table = add_prompt_info(table, paper_content, questions)
+    # table = add_prompt_info(table, paper_content, questions)
 
-    dump_jsonl(DATASET_PATH / 'single_question.jsonl', table)
-    show_one_example(table, DATASET_PATH / 'single_question.txt')
+    # dump_jsonl(DATASET_PATH / 'single_question.jsonl', table)
+    # show_one_example(table, DATASET_PATH / 'single_question.txt')
 
     test_table = load_excel(TEST_FILE)
     test_table = add_prompt_info(test_table, paper_content, questions)
 
-    save_path = DATASET_PATH / 'by_question'
-    save_path.mkdir(exist_ok=True)
-    split_by_question(save_path, table, test_table)
+    # save_path = DATASET_PATH / 'by_question'
+    # save_path.mkdir(exist_ok=True)
+    # split_by_question(save_path, table, test_table)
 
-    # multi question
+    # # multi question
 
-    table = format_multi_ques_dataset(table)
+    # table = format_multi_ques_dataset(table)
 
-    show_one_example(table, DATASET_PATH / 'multi_question.txt')
+    # show_one_example(table, DATASET_PATH / 'multi_question.txt')
 
-    # for i in table:
-    #     if str(i['PMID']) == '20004217' and str(i['QID']) == '17':
-    #         print(i['system'])
-    #         print(i['user'])
-    #         print(i['assistant'])
+    # # for i in table:
+    # #     if str(i['PMID']) == '20004217' and str(i['QID']) == '17':
+    # #         print(i['system'])
+    # #         print(i['user'])
+    # #         print(i['assistant'])
 
-    dataset = [
-        {
-            'messages': [
-                {"role": "system", "content": i['system']},
-                {"role": "user", "content": i['user']},
-                {"role": "assistant", "content": i['assistant']},
-            ],
-            # 'PMID': i['PMID']
-        }
-        for i in table
-    ]
-    dump_jsonl(DATASET_PATH / 'multiple_question.jsonl', dataset)
+    # dataset = [
+    #     {
+    #         'messages': [
+    #             {"role": "system", "content": i['system']},
+    #             {"role": "user", "content": i['user']},
+    #             {"role": "assistant", "content": i['assistant']},
+    #         ],
+    #         # 'PMID': i['PMID']
+    #     }
+    #     for i in table
+    # ]
+    # dump_jsonl(DATASET_PATH / 'multiple_question.jsonl', dataset)
 
     save_path = DATASET_PATH / 'by_paper'
     save_path.mkdir(exist_ok=True)
@@ -358,44 +359,44 @@ def dump_dataset_jsonl(save_path, train_set, val_set, test_set):
     print('#Val', len(val_set))
     print('#Test', len(test_set))
 
-    train_set = [
-        {
-            'messages': [
-                {"role": "system", "content": i['system']},
-                {"role": "user", "content": i['user']},
-                {"role": "assistant", "content": i['assistant']},
-            ],
-            # 'PMID': i['PMID']
-        }
-        for i in train_set
-    ]
-
-    dump_jsonl(save_path / 'train_set.jsonl', train_set)
-
-    val_set = [
-        {
-            'messages': [
-                {"role": "system", "content": i['system']},
-                {"role": "user", "content": i['user']},
-                {"role": "assistant", "content": i['assistant']},
-            ],
-            # 'PMID': i['PMID']
-        }
-        for i in val_set
-    ]
-
-    dump_jsonl(save_path / 'val_set.jsonl', val_set)
-
-    # test_set = [
+    # train_set = [
     #     {
     #         'messages': [
     #             {"role": "system", "content": i['system']},
     #             {"role": "user", "content": i['user']},
     #             {"role": "assistant", "content": i['assistant']},
-    #         ]
+    #         ],
+    #         # 'PMID': i['PMID']
     #     }
-    #     for i in test_set
+    #     for i in train_set
     # ]
+
+    # dump_jsonl(save_path / 'train_set.jsonl', train_set)
+
+    # val_set = [
+    #     {
+    #         'messages': [
+    #             {"role": "system", "content": i['system']},
+    #             {"role": "user", "content": i['user']},
+    #             {"role": "assistant", "content": i['assistant']},
+    #         ],
+    #         # 'PMID': i['PMID']
+    #     }
+    #     for i in val_set
+    # ]
+
+    # dump_jsonl(save_path / 'val_set.jsonl', val_set)
+
+    test_set = [
+        {
+            'messages': [
+                {"role": "system", "content": i['system']},
+                {"role": "user", "content": i['user']},
+                {"role": "assistant", "content": i['assistant']},
+            ]
+        }
+        for i in test_set
+    ]
 
     dump_jsonl(save_path / 'test_set.jsonl', test_set)
 

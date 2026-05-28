@@ -8,9 +8,10 @@
     - create or use existing `prompt_template` in `txt` format
     - update `questions.txt` to use your question list
 1. update your Xcode to newest version
-2. run `make init`
-3. copy *.env.example* to *.env* and enter your openai key
-4. run `make chat`, and have fun
+2. install `uv`
+3. run `make init`
+4. copy *.env.example* to *.env* and enter your openai key
+5. run `make chat`, and have fun
 
 
 ## deps

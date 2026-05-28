@@ -1,20 +1,22 @@
 init:
-	@python -m venv env
-	@./env/bin/pip3 install -r requirements.txt
+	@uv sync
 
-freeze:
-	@./env/bin/pip3 freeze > requirements.txt
+sync:
+	@uv sync
+
+lock:
+	@uv lock
 
 # check-ai-memory:
-# 	@./env/bin/python check_ai_memory/work.py
+# 	@uv run python check_ai_memory/work.py
 
 chat:
-	@./env/bin/python work.py
+	@uv run python work.py
 
 dump-encoding:
-	@./env/bin/python -c 'import tiktoken; tiktoken.get_encoding("cl100k_base")'
+	@uv run python -c 'import tiktoken; tiktoken.get_encoding("cl100k_base")'
 
 ipython:
-	@./env/bin/ipython
+	@uv run ipython
 
-.PHONY: init freeze check-ai-memory chat dump-encoding ipython
+.PHONY: init sync lock check-ai-memory chat dump-encoding ipython
